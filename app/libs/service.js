@@ -92,8 +92,9 @@ export const getProductById = async (id) => {
 
 export const getHistory = async () => {
    
-    return history
-}
+ const products = await fetchProducts()
+    const product = products.find((product) => product.sku === id)
+    return product}
 
 export const getNotifications = async () => {
     

@@ -1,12 +1,19 @@
-
-import React from 'react';
+"use client"
+import React, { useEffect, useState } from 'react';
 import DesktopRecordSale from '@/app/components/DesktopRecordSale';
 import MobileRecordSale from '@/app/components/MobileRecordSale';
-import { fetchProducts } from '@/app/libs/service';
+import getInventory from '@/libs/service';
 
-export default async function RecordSalePage() {
-  const products = await fetchProducts();
+export default function RecordSalePage() {
+  const [products, setProducts] = useState([]);
 
+  const loadData = async() => {
+    const res = await getInventory();
+    setProducts(res);
+  }
+  useEffect(() => {
+    loadData();
+  }, []);
 
   return (
     <div className="min-h-full">

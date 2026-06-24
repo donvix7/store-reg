@@ -5,14 +5,15 @@ import React, { useState, useMemo } from 'react';
 
 const DesktopInventory = ({initialInventory}) => {
 
-  const [inventory] = useState(initialInventory || []);
+  const inventory = initialInventory
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All Categories');
   const [statusFilter, setStatusFilter] = useState('All Statuses');
 
+  console.log(inventory)
   const totalCount = (inventory || []).length;
   const optimalStock = inventory.filter(item => item.status?.toLowerCase() === 'optimal').length;
-  const lowStock = inventory.filter(item => item.stock?.current < item.stock?.max && item.stock?.current > 0).length;
+  const lowStock = inventory.filter(item => item.stock?.current < (item.stock?.max * 0.5) && item.stock?.current > 0).length;
   const outOfStock = inventory.filter(item => item.stock?.current === 0).length;
 
   const filteredInventory = useMemo(() => {
@@ -25,7 +26,6 @@ const DesktopInventory = ({initialInventory}) => {
       return matchesSearch && matchesCategory && matchesStatus;
     });
   }, [inventory, searchQuery, categoryFilter, statusFilter]);
-
   const getStatusStyles = (status) => {
     switch (status) {
       case 'Optimal':

@@ -1,12 +1,23 @@
+"use client"
 import DesktopHistory from '@/app/components/DesktopHistory';
 import MobileHistory from '@/app/components/MobileHistory';
-import { getHistory } from '@/app/libs/service';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FileDown, RefreshCw } from 'lucide-react';
+import { getHistory } from '@/libs/service';
 
-export default async function HistoryPage() {
+export default function HistoryPage() {
+  const [history, setHistory] = useState([])
 
+  const loadHistory = async () => {
     const history = await getHistory()
+    console.log("history", history)
+    setHistory(history)
+  }
+  useEffect(() => {
+    loadHistory()
+  }, [])
+
+
   return (
     <div className="p-5 lg:p-10 space-y-8 font-body">
       {/* Header Section - Desktop only in this structure as layout has mobile header */}

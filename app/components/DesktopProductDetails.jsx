@@ -1,5 +1,6 @@
 "use client"
-import { Save, Pencil, Plus } from 'lucide-react';
+import { deleteProduct } from '@/libs/actions';
+import { Save, Pencil, Plus, Trash } from 'lucide-react';
 import Link from 'next/link';
 import React, { useState } from 'react';
 
@@ -23,6 +24,13 @@ const DesktopProductDetails = ({ product }) => {
         return { bg: 'bg-surface-container', text: 'text-on-surface-variant', dot: 'bg-outline' };
     }
   };
+  const handleDelete = async () => {
+    alert("Delete")
+    const res = await deleteProduct(displayProduct.name)
+    if(res){
+      router.push('/dashboard/admin/inventory')
+    }
+  }
 
   const statusStyles = getStatusStyles(displayProduct.status);
 
@@ -113,8 +121,13 @@ const DesktopProductDetails = ({ product }) => {
               >
                 <Pencil size={20} /> Edit Details
               </button>
-              <button className="px-6 py-3 bg-primary text-on-primary font-semibold rounded-xl hover:shadow-lg transition-all flex items-center gap-2">
+              <Link href="/dashboard/admin/inventory/reorder" className="px-6 py-3 bg-primary text-on-primary font-semibold rounded-xl hover:shadow-lg transition-all flex items-center gap-2">
                 <Plus size={20} /> Reorder Stock
+              </Link>
+                  <button 
+                  onClick={handleDelete}
+                  className="px-6 py-3 bg-error text-on-error font-semibold rounded-xl hover:shadow-lg transition-all flex items-center gap-2">
+                <Trash size={20} /> Delete Product
               </button>
             </>
           )}

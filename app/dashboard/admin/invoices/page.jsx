@@ -1,17 +1,28 @@
 
-
+"use client"
 import React from 'react';
 import { Wallet, AlertTriangle, Clock } from 'lucide-react';
-import { fetchInvoices } from '@/app/libs/service';
 import TabledInvoices from '@/app/components/TabledInvoices';
+import { useEffect, useState } from 'react';
+import { getInvoices } from '@/libs/service';
 
-export default async function InvoicesPage() {
+export default function InvoicesPage() {
 
-  const invoices = await fetchInvoices();
+  const [invoices, setInvoices] = useState([])
 
-  const totalOutstanding = invoices.filter(invoice => invoice.status === 'Unpaid').reduce((sum, inv) => sum + inv.amount, 0);
+  const loadInvoices = async() => {
+    const res = await getInvoices()
+    console.log(res)
+    setInvoices(res)
+  }
 
-  const totalOverdue = invoices.filter(invoice => invoice.status === 'Overdue').reduce((sum, inv) => sum + inv.amount, 0);
+  useEffect(() => {
+    loadInvoices()
+  }, [])
+
+  const totalOutstanding = invoices.filter(invoice => invoice.status === 'Unpaid').reduce((sum, inv) => sum + inv.items.price, 0);
+
+  const totalOverdue = invoices.filter(invoice => invoice.status === 'Overdue').reduce((sum, inv) => sum + inv.items.price, 0);
 
   const totalPaid = invoices.filter(invoice => invoice.status === 'Paid').reduce((sum, inv) => sum + inv.amount, 0);
 

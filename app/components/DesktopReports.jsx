@@ -152,8 +152,9 @@ const DesktopReports = ({initialInventory}) => {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-surface-container-low/50">
-              {[...new Set(inventory.map((item) => item.name))].map((name) => (
-                <th key={name} className="px-8 py-4 text-xs font-extrabold text-outline uppercase tracking-wider">{name}</th>
+
+              {["Item", "Stock", "Price", "Action"].map((item) => (
+                <th key={item} className="px-8 py-4 text-xs font-extrabold text-outline uppercase tracking-wider">{item}</th>
               ))}
               </tr>
             </thead>
@@ -163,11 +164,11 @@ const DesktopReports = ({initialInventory}) => {
                 <td className="px-8 py-6">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-xl bg-surface-container overflow-hidden">
-                      <img className="w-full h-full object-cover" alt="High quality studio headphones on stand" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0-j6GkxC_xhIn-mAtKIzfFbT9hvH-d-tgZVxeKJQByoaE2F7sDjSPcqzytceL9_Ny3aAG5amTjAnitkQVdv4gs7WM27E777Pd0otGoKimlmKOiit0MF0MIKrP9y0JwakrGOvqEOz8dz0jhBbEsttoZu5Ntkl4RiNPq0hfyMQ-iH8_THubHdU2-hcJid4R8Kwq_9KkXfExUsaqE9_nbAbPJTQqyVgNItKV6nx8hvLnSsqcYQN5AdjB91yNU_4pU2DU-OCxcuK_e3I"/>
+                      <img className="w-full h-full object-cover" alt="High quality studio headphones on stand" src={name.src}/>
                     </div>
                     <div>
-                      <div className="font-bold text-on-surface">Pro-X Wireless Headphones</div>
-                      <div className="text-xs text-on-surface-variant">Electronics</div>
+                      <div className="font-bold text-on-surface">{name}</div>
+                      <div className="text-xs text-on-surface-variant">{name.category}</div>
                     </div>
                   </div>
                 </td>

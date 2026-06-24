@@ -3,13 +3,13 @@
 import React, { useEffect, useState } from 'react';
 import DesktopReports from '@/app/components/DesktopReports';
 import MobileReports from '@/app/components/MobileReports';
-import { fetchProducts } from '@/app/libs/service';
+import getInventory from '@/libs/service';
 
 export default function ReportsPage() {
   const [inventory, setInventory] = useState([]);
   useEffect(() => {
     const loadData = async() => {
-      const inventory = await fetchProducts();
+      const inventory = await getInventory();
       setInventory(inventory);
     }
     loadData();

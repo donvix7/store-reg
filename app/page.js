@@ -11,17 +11,17 @@ export default function Home() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative pt-24 pb-32 px-24 overflow-hidden">
-          <div className="max-w-7xl mx-auto grid grid-cols-12 gap-12 items-center">
+        <section className="relative py-16 md:py-24 lg:py-32 px-6 md:px-12 lg:px-24 overflow-hidden">
+          <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8 md:gap-12 items-center">
             <div className="col-span-12 lg:col-span-6">
-              <h1 className="text-7xl font-headline font-extrabold text-on-surface leading-[1.1] mb-8">
+              <h1 className="text-4xl md:text-5xl lg:text-7xl font-headline font-extrabold text-on-surface leading-[1.1] mb-6 md:mb-8">
                 Precision in Every <span className="text-primary">Component</span>
               </h1>
-              <p className="text-on-surface-variant text-xl font-body leading-relaxed mb-10 max-w-lg">
+              <p className="text-on-surface-variant text-lg md:text-xl font-body leading-relaxed mb-8 md:mb-10 max-w-lg">
                 Experience an architectural approach to stock control. We provide the clarity and structural integrity required for modern enterprise ecosystems.
               </p>
               <div className="flex items-center gap-4">
-                <button className="bg-primary text-on-primary font-label text-md font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all">
+                <button className="bg-primary text-on-primary font-label text-md font-bold px-6 md:px-8 py-3 md:py-4 rounded-xl shadow-lg hover:shadow-xl transition-all">
                   Start Free Trial
                 </button>
                 <button className="text-on-surface font-label text-md font-semibold px-8 py-4 flex items-center gap-2 group">
@@ -43,7 +43,7 @@ export default function Home() {
 
 
         {/* Benefits Section (Bento Grid) */}
-        <section className="py-32 px-24">
+        <section className="py-32 p-6 sm:px-24">
           <div className="max-w-7xl mx-auto">
             <div className="mb-20 text-center">
               <span className="text-primary font-label font-bold text-sm tracking-widest uppercase mb-4 block">Core Competencies</span>
@@ -51,10 +51,10 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-12 gap-8">
               {/* Benefit 1 */}
-              <div className="col-span-12 md:col-span-7 bg-surface-container-lowest p-12 rounded-xl group hover:shadow-xl transition-shadow border border-outline-variant/10">
+              <div className="col-span-12 md:col-span-7 bg-surface-container-lowest p-6 rounded-xl group hover:shadow-xl transition-shadow border border-outline-variant/10">
                 <div className="flex flex-col h-full justify-between">
                   <div>
-                    <Activity className="text-primary mb-8" size={36} />
+                    <Activity className="text-primary my-10" size={36} />
                     <h3 className="text-3xl font-headline font-bold mb-4 text-on-surface">Real-time Visibility</h3>
                     <p className="text-on-surface-variant font-body text-lg leading-relaxed max-w-md">
                       Monitor every SKU across global warehouses with millisecond latency. Our precision engine ensures your data is never stale.
@@ -128,7 +128,7 @@ export default function Home() {
         </section>
 
         {/* Final CTA */}
-        <section className="py-24 px-24">
+        <section className="py-24 p-6 sm:px-24">
           <div className="max-w-7xl mx-auto bg-inverse-surface rounded-4xl p-20 relative overflow-hidden text-center">
             <div className="relative z-10">
               <h2 className="text-5xl font-headline font-bold text-inverse-on-surface mb-6">Ready to balance your inventory?</h2>

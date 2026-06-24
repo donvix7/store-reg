@@ -1,17 +1,30 @@
-import React from 'react';
+"use client"
+import React, { useEffect, useState } from 'react';
 import DesktopProductDetails from '@/app/components/DesktopProductDetails';
 import MobileProductDetails from '@/app/components/MobileProductDetails';
-import { getProductById } from '@/app/libs/service';
 import Link from 'next/link';
+import { getProductById } from '@/libs/service';
+import { useParams } from 'next/navigation';
 
-export default async function ProductDetailsPage({ params }) {
-  const { id } = await params;
-  const product = await getProductById(id);
+
+export default function ProductDetailsPage() {
+
+  const [product, setProduct] = useState(null);
+    const { id } =  useParams();
+
+  const loadData = async() => {
+    console.log(id)
+    const product = await getProductById(id);
+    setProduct(product);
+  } 
+  useEffect(() => {
+    loadData()
+  }, []);
 
   if (!product) {
     return (
       <div className="p-10 text-center space-y-4">
-        <h1 className="text-2xl font-extrabold font-headl.ine">Product not found</h1>
+        <h1 className="text-2xl font-extrabold font-headline">Product not found</h1>
         <p className="text-on-surface-variant">The product with SKU "{id}" could not be located.</p>
         <Link href="/dashboard/admin/inventory" className="inline-block px-6 py-2 bg-primary text-on-primary rounded-xl font-bold">
           Back to Inventory

@@ -5,7 +5,7 @@ import React, { useState, useMemo } from 'react';
 
 const MobileInventory = ({initialInventory}) => {
 
-  const [inventory] = useState(initialInventory || []);
+  const inventory = initialInventory
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All Categories');
   const [statusFilter, setStatusFilter] = useState('All Statuses');
