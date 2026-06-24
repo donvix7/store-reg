@@ -1,4 +1,4 @@
-import { Search, Bell, Settings } from 'lucide-react';
+import { Search, Bell, Settings, LogOut, LogOutIcon } from 'lucide-react';
 import Link from 'next/link'
 import { usePathname } from 'next/navigation';
 import React from 'react'
@@ -20,9 +20,9 @@ const DesktopTopNavBar = () => {
               <Bell size={22} fill={pathname.includes('notification') ? "currentColor" : "none"} />
             </button>
            </Link>
-           <Link href="/dashboard/admin/settings">
-            <button className="w-11 h-11 flex items-center justify-center rounded-xl bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-colors">
-              <Settings size={22} />
+           <Link href="/login">
+            <button className="flex items-center gap-2 w-fit px-4 py-2 rounded-xl bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-colors">
+              <LogOutIcon size={22} />
             </button>
            </Link>
           </div>

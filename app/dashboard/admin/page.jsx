@@ -25,66 +25,64 @@ export default function DashboardAdminPage() {
   
 
   return (
-    <div className="p-5 pb-12 space-y-10 flex flex-col gap-10">
+    <div className="p-5 pb-12 space-y-10 flex flex-col">
       {/* Welcome Section */}
       <section className='flex flex-col gap-4'>
-        <h2 className="text-5xl font-extrabold text-on-surface tracking-tight">System Overview</h2>
+        <h2 className="text-3xl font-extrabold text-on-surface tracking-tight">System Overview</h2>
         <p className="text-on-surface-variant ">Real-time logistics and warehouse analytics for the last 24 hours.</p>
       </section>
 
       {/* Stats Bento Grid */}
       <section className="grid grid-cols-12 gap-6">
         {/* Metric Card 1 */}
-        <div className="col-span-12 lg:col-span-4 bg-surface-container-lowest p-8 rounded-4xl flex flex-col justify-between group hover:shadow-xl hover:shadow-primary/5 transition-all duration-500 border border-outline-variant/5">
-          <div className="flex justify-between items-start">
+        <div className="col-span-12 lg:col-span-4 bg-surface-container-lowest p-4 rounded-2xl flex flex-col justify-between group hover:shadow-xl hover:shadow-primary/5 transition-all duration-500 border border-outline-variant/5">
+          <div className="flex gap-4 align-center">
             <div className="w-12 h-12 bg-primary-fixed rounded-2xl flex items-center justify-center text-on-primary-fixed-variant">
               <DollarSign size={24} />
             </div>
-          </div>
-          <div className="">
+             <div className="">
             <p className="text-outline text-sm font-medium uppercase tracking-widest">Total Inventory Value</p>
-            <h3 className="text-4xl font-extrabold mt-2 text-on-surface">₦{totalnventoryValue}</h3>
+            <h3 className="text-lg font-extrabold mt-2 text-on-surface">₦{totalnventoryValue}</h3>
           </div>
+          </div>
+         
         </div>
 
         {/* Metric Card 2 */}
-        <div className="col-span-12 lg:col-span-4 bg-surface-container-lowest p-8 rounded-4xl flex flex-col justify-between border border-outline-variant/5">
-          <div className="flex justify-between items-start">
+        <div className="col-span-12 lg:col-span-4 bg-surface-container-lowest p-4 rounded-2xl flex flex-col justify-between border border-outline-variant/5">
+          <div className="flex gap-4 align-center">
             <div className="w-12 h-12 bg-secondary-fixed rounded-2xl flex items-center justify-center text-on-secondary-fixed-variant">
               <Scan size={24} />
             </div>
-          </div>
-          <div className="mt-8">
+            <div className="">
             <p className="text-outline text-sm font-medium uppercase tracking-widest">Total Inventory</p>
-            <h3 className="text-4xl font-extrabold mt-2 text-on-surface">{totalInventory}</h3>
+            <h3 className="text-lg font-extrabold mt-2 text-on-surface">{totalInventory}</h3>
+          </div>
           </div>
         </div>
 
         {/* Metric Card 3 (Visual emphasis) */}
-        <div className="col-span-12 lg:col-span-4 bg-primary p-8 rounded-4xl text-on-primary relative overflow-hidden">
+        <div className="col-span-12 lg:col-span-4 bg-primary p-4 rounded-2xl text-on-primary relative overflow-hidden">
           <div className="relative z-10">
             <p className="text-on-primary/70 text-sm font-medium uppercase tracking-widest">Warehouse Capacity</p>
-            <h3 className="text-4xl font-extrabold mt-2">84.2%</h3>
-            <div className="mt-6 w-full h-2 bg-on-primary/20 rounded-full overflow-hidden">
-              <div className="h-full bg-on-primary w-[84.2%] rounded-full"></div>
-            </div>
-            <p className="mt-4 text-sm text-on-primary/80">15,000 / 18,000 Units filled</p>
+            <h3 className="text-lg font-extrabold">84.2%</h3>
+            <p className="text-sm text-on-primary/80">15,000 / 18,000 Units filled</p>
           </div>
-          <div className="absolute -right-10 -bottom-10 opacity-10">
-            <Warehouse size={160} />
+          <div className="absolute -right-5 -bottom-5 opacity-10">
+            <Warehouse size={100} />
           </div>
         </div>
       </section>
 
       <div className="grid grid-cols-12 gap-10">
         {/* Main Content Left */}
-        <div className="col-span-12 space-y-10">
+        <div className="col-span-8 space-y-10">
           {/* Active Inventory Overview */}
-          <div className="bg-surface-container-lowest rounded-[2.5rem] border border-outline-variant/5">
+          <div className="bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/5">
             <div className="grid grid-cols-12 items-center mb-10">
               <div className="col-span-12 xl:col-span-8">
-                <h3 className="text-2xl font-bold">Active Inventory Overview</h3>
-                <p className="text-outline text-sm mt-1">High velocity movements across all sectors.</p>
+                <h3 className="text-lg font-bold">Active Inventory Overview</h3>
+                <p className="text-outline mt-1">High velocity movements across all sectors.</p>
               </div>
               <Link className='col-span-12 xl:col-span-4 flex items-center justify-end' href={`/dashboard/admin/inventory`}>
             <button className="w-fit py-4 px-8  text-primary font-bold text-sm flex items-center justify-center gap-2 hover:opacity-70 transition-opacity">
@@ -98,14 +96,14 @@ export default function DashboardAdminPage() {
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="text-left border-b border-outline-variant/20">
-                  {["Product & SKU", "In Stock", "Status", "Price" ]?.map((item) => (
-                    <th className="pb-6 font-bold text-outline text-xs uppercase tracking-widest">{item}</th>
+                  {["Product & SKU", "In Stock", "Status", "Price" ]?.map((item, index) => (
+                    <th key={index} className="pb-6 font-bold text-outline text-xs uppercase tracking-widest">{item}</th>
                   ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-outline-variant/10">
-                  {inventory?.map((item) => (
-                    <tr key={item.name} className="group">
+                  {inventory?.map((item, index) => (
+                    <tr key={index} className="group">
                       <td className="py-6">
                       <div className="flex items-center gap-4">
                         <div className="w-14 h-14 bg-surface-container rounded-2xl overflow-hidden shrink-0">
@@ -133,16 +131,16 @@ export default function DashboardAdminPage() {
         </div>
 
         {/* Right Sidebar Content */}
-        <div className="col-span-12 -y-10">
+        <div className="col-span-4 space-y-10">
           {/* Urgent Replenishment Alert */}
-          <div className="bg-error-container col-span-12 sm:col-span-6 p-8 rounded-[2.5rem] relative overflow-hidden group">
+          <div className="bg-error-container col-span-12 sm:col-span-6 p-4 rounded-2xl relative overflow-hidden group">
             <div className="relative z-10">
               <div className="flex items-center gap-3 text-on-error-container mb-6">
                 <AlertTriangle size={20} />
                 <h3 className="font-extrabold uppercase tracking-widest text-sm">Urgent Replenishment</h3>
               </div>
               <div className="space-y-4">
-                <div className="bg-surface-container-lowest/40 backdrop-blur-sm p-5 rounded-2xl flex justify-between items-center border border-on-error-container/10">
+                <div className="bg-surface-container-lowest/40 backdrop-blur-sm p-4 rounded-2xl flex justify-between items-center border border-on-error-container/10">
                   <div>
                     <p className="text-sm font-bold text-on-error-container">SKU-2031-WHT</p>
                     <p className="text-xs text-on-error-container/70">Horizon Ceramic Watch</p>
@@ -164,7 +162,7 @@ export default function DashboardAdminPage() {
           </div>
 
           {/* Recent Activity Feed */}
-          <div className="bg-surface-container-low col-span-12 sm:col-span-6 rounded-[2.5rem] p-8 border border-outline-variant/15">
+          <div className="bg-surface-container-low col-span-12 sm:col-span-6 rounded-2xl p-4 border border-outline-variant/15">
             <h3 className="text-xl font-bold mb-8">Recent Activity</h3>
             <div className="space-y-8 relative before:absolute before:left-6 before:top-2 before:bottom-2 before:w-px before:bg-outline-variant/30">
               <div className="relative flex gap-6">

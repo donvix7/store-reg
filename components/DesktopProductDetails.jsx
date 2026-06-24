@@ -2,6 +2,7 @@
 import { deleteProduct } from '@/lib/actions';
 import { Save, Pencil, Plus, Trash } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 const DesktopProductDetails = ({ product }) => {
@@ -11,7 +12,7 @@ const DesktopProductDetails = ({ product }) => {
   const [editedProduct, setEditedProduct] = useState(product);
 
   const percentage = (displayProduct.stock?.current / displayProduct.stock?.max) * 100 || 0;
-
+  const router = useRouter()
   const getStatusStyles = (status) => {
     switch (status) {
       case 'Optimal':
@@ -25,10 +26,11 @@ const DesktopProductDetails = ({ product }) => {
     }
   };
   const handleDelete = async () => {
-    alert("Delete")
-    const res = await deleteProduct(displayProduct.name)
-    if(res){
-      router.push('/dashboard/admin/inventory')
+    if(confirm("Are you sure you want to delete this product?")){
+      const res = await deleteProduct(displayProduct.name)
+      if(res){
+        router.push('/dashboard/admin/inventory')
+      }
     }
   }
 

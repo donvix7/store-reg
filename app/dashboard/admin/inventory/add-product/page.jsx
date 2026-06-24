@@ -3,6 +3,7 @@
 import { saveProduct } from '@/lib/actions';
 import getInventory from '@/lib/service';
 import { Fingerprint, Grid, Factory, Truck, DollarSign, Info, CheckCircle2, BarChart3, Image as ImageIcon, Plus, FileStack } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 export default function AddProductPage() {
@@ -11,12 +12,9 @@ export default function AddProductPage() {
   const [productData, setProductData] = useState({img: '',  stock: {}, price: {}});
   const [inventory, setInventory] = useState([]);
   const [status, setStatus] = useState("");
-
+  const router = useRouter()
   const loadData = async() => {
     const res = await getInventory();
-    //console.log("inventory", res)
-    //console.log("lowStock:", lowStock)
-
     setInventory(res);
     setProductData(res[0])
     
@@ -26,9 +24,9 @@ export default function AddProductPage() {
   }, []);
 
   const handleSave = async() => {
-    console.log(("product saved"))
     const res = await saveProduct(productData);
-    console.log(res); 
+    alert(`Product ${productData.name} Added Successfully`)
+    router.push("/dashboard/admin/inventory")
   }
 useEffect(() => {
   //console.log("productData", productData)
@@ -42,16 +40,16 @@ useEffect(() => {
   return (
     <div className="p-4 max-w-6xl mx-auto w-full font-body">
       <div className="mb-12">
-        <h1 className="text-4xl font-extrabold text-on-surface tracking-tight mb-2 font-headline">New Product Registration</h1>
+        <h1 className="text-3xl font-extrabold text-on-surface tracking-tight mb-2 font-headline">New Product Registration</h1>
         <p className="text-on-surface-variant text-lg">Initialize a new SKU within the Precision Atelier ecosystem.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
         {/* Main Form Section */}
-        <div className="col-span-1 md:col-span-8 space-y-10">
+        <div className="col-span-1 md:col-span-8 space-y-10 overflow-y-scroll h-screen [&::-webkit-scrollbar]:hidden">
           
           {/* Product Media */}
-          <section className="bg-surface-container-lowest rounded-4xl p-10 shadow-sm border border-outline-variant/10">
+          <section className="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-outline-variant/10">
             <div className="flex items-center gap-4 mb-8">
               <div className="w-10 h-10 rounded-xl bg-primary-fixed flex items-center justify-center">
                 <ImageIcon className="text-primary" size={24} fill="currentColor" />
@@ -60,7 +58,7 @@ useEffect(() => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="col-span-1 md:col-span-1 aspect-square rounded-3xl bg-surface-container-low overflow-hidden relative group border-2 border-dashed border-outline-variant/30 hover:border-primary/50 transition-colors">
+              <div className="col-span-1 md:col-span-1 aspect-square rounded-2xl bg-surface-container-low overflow-hidden relative group border-2 border-dashed border-outline-variant/30 hover:border-primary/50 transition-colors">
                 <img 
                   src={productData.src || null} 
                   alt={productData.img || ""}
@@ -96,7 +94,7 @@ useEffect(() => {
           </section>
 
           {/* Product Identity */}
-          <section className="bg-surface-container-lowest rounded-4xl p-10 shadow-sm border border-outline-variant/10">
+          <section className="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-outline-variant/10">
             <div className="flex items-center gap-4 mb-8">
               <div className="w-10 h-10 rounded-xl bg-primary-fixed flex items-center justify-center">
                 <Fingerprint className="text-primary" size={24} fill="currentColor" />
@@ -134,7 +132,7 @@ useEffect(() => {
           </section>
 
           {/* Categorization & Supply */}
-          <section className="bg-surface-container-lowest rounded-4xl p-10 shadow-sm border border-outline-variant/10">
+          <section className="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-outline-variant/10">
             <div className="flex items-center gap-4 mb-8">
               <div className="w-10 h-10 rounded-xl bg-secondary-container flex items-center justify-center">
                 <Grid className="text-secondary" size={24} fill="currentColor" />
@@ -200,7 +198,7 @@ useEffect(() => {
           </section>
 
           {/* Logistics & Value */}
-          <section className="bg-surface-container-lowest rounded-4xl p-10 shadow-sm border border-outline-variant/10">
+          <section className="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-outline-variant/10">
             <div className="flex items-center gap-4 mb-8">
               <div className="w-10 h-10 rounded-xl bg-tertiary-fixed flex items-center justify-center">
                 <DollarSign className="text-tertiary" size={24} fill="currentColor" />
@@ -247,7 +245,7 @@ useEffect(() => {
         <div className="col-span-1 md:col-span-4 space-y-8">
           
           {/* Metadata Requirements */}
-          <div className="bg-primary text-on-primary rounded-4xl p-8 relative overflow-hidden">
+          <div className="bg-primary text-on-primary rounded-2xl p-4 relative overflow-hidden">
             <div className="relative z-10">
               <h4 className="text-lg font-bold mb-4 flex items-center gap-2 font-headline">
                 <FileStack size={18} />
@@ -265,7 +263,7 @@ useEffect(() => {
           </div>
 
           {/* Predictive Impact */}
-          <div className="bg-surface-container-high rounded-4xl p-8 border border-outline-variant/10">
+          <div className="bg-surface-container-high rounded-2xl p-4 border border-outline-variant/10">
             <h4 className="text-lg font-bold text-on-surface mb-6 flex items-center gap-2 font-headline">
               <BarChart3 className="text-primary" size={20} />
               Predictive Impact
@@ -304,7 +302,7 @@ useEffect(() => {
             className="w-full bg-primary text-on-primary py-5 rounded-xl font-bold text-lg shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform active:scale-[0.98]">
               Finalize Registration
             </button>
-            <button className="w-full bg-surface-container-low text-on-surface py-5 rounded-xl font-bold text-lg border border-outline-variant/20 hover:bg-surface-container transition-colors">
+            <button className="w-full bg-surface-container-low text-on-surface py-5 rounded-xl font-bold text-lg border border-outline-variant hover:bg-surface-container transition-colors">
               Save as Draft
             </button>
           </div>

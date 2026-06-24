@@ -1,11 +1,11 @@
 "use client"
-import { AlertTriangle, ArrowRight, Calendar, ChevronDown, ChevronLeft, ChevronRight, Download, FileStack, Package, Plus, Search, SquareCheck } from 'lucide-react';
+import { AlertTriangle, ArrowRight, Calendar, ChevronDown, Download, FileStack, Package, Plus, Search, SquareCheck } from 'lucide-react';
 import Link from 'next/link';
-import React, { useState, useMemo } from 'react';
+import React, { useMemo, useState } from 'react'
 
-const DesktopInventory = ({initialInventory}) => {
-
-  const inventory = initialInventory
+const page = () => {
+  
+  const inventory = []
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All Categories');
   const [statusFilter, setStatusFilter] = useState('All Statuses');
@@ -49,8 +49,8 @@ const DesktopInventory = ({initialInventory}) => {
        {/* Header Section */}
       <div className="hidden lg:flex justify-between items-end">
         <div>
-          <h2 className="font-headline text-2xl font-extrabold text-on-surface tracking-tight">Product Inventory</h2>
-          <p className="text-on-surface-variant">Manage and track your global warehouse stock levels.</p>
+          <h2 className="font-headline text-2xl font-extrabold text-on-surface tracking-tight">Store locations</h2>
+          <p className="text-on-surface-variant">Manage and track your global warehouse stock levels accross all branches.</p>
         </div>
         <div className="flex gap-4">
           <button className="flex items-center gap-2 px-5 py-2.5 bg-secondary-container text-on-secondary-container rounded-xl font-semibold text-sm hover:opacity-90 transition-opacity">
@@ -60,47 +60,13 @@ const DesktopInventory = ({initialInventory}) => {
           <Link href="/dashboard/admin/inventory/add-product">
             <button className="flex items-center gap-2 px-6 py-2.5 bg-primary text-on-primary rounded-xl font-semibold text-sm shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
               <Plus size={20} />
-              New Product
+              New Location
             </button>
           </Link>
         </div>
       </div>
 
-      {/* Stats Bento */}
-      <div className="grid grid-cols-12 gap-6 px-8">
-        
-        <div className="bg-surface-container-lowest col-span-4 p-4 rounded-xl flex  gap-4 border border-outline-variant/50">
-         <div className="bg-slate-500/20 p-2 rounded-full">
-          <FileStack className="text-slate-500" size={32}/>
-          </div>
-          <div className="flex flex-col items-baseline gap-2">
-            <p className="text-outline text-xs font-bold uppercase tracking-widest">Total SKUs</p>
-            <span className="text-lg font-headline font-bold text-on-surface">{totalCount}</span>
-          </div>
-        </div>
-        <div className="bg-surface-container-lowest col-span-4 p-4 rounded-xl flex  gap-4 border border-outline-variant/50">
-         <div className="bg-green-500/20 p-2 rounded-full">
-          <SquareCheck className="text-green-500" size={32}/>
-         </div>
-          <div className="flex flex-col items-baseline gap-2">
-          <p className="text-outline text-xs font-bold uppercase tracking-widest">Optimal Stock</p>
-
-            <span className="text-lg font-headline font-bold text-on-surface">{optimalStock}</span>
-          </div>
-        </div>
-        <div className="bg-tertiary-fixed col-span-4 p-4 rounded-xl flex  gap-4 border border-outline-variant/10">
-            <div className="border-2 border-outline-variant/20 p-2 rounded-full">
-              <AlertTriangle className="text-on-tertiary-fixed" size={32} />
-
-            </div>
-          <div className="items-baseline gap-2">
-          <p className="text-on-tertiary-fixed-variant text-xs font-bold uppercase tracking-widest">Low Stock Alerts</p>
-            <span className="text-lg font-headline font-bold text-on-tertiary-fixed">{lowStock}</span>
-          
-          </div>
-        </div>
-        
-      </div>
+     
 
       {/* Advanced Filter Bar */}
       <div className="mx-8 mb-6 bg-surface-container-low p-2 rounded-2xl flex items-center gap-2">
@@ -141,8 +107,8 @@ const DesktopInventory = ({initialInventory}) => {
 
       <table className="w-full text-left border-collapse">
         <thead>
-          <tr className="border-b border-outline-variant/10 bg-surface-container-low/30">
-            {['Product & SKU', 'Category', 'Stock Level', 'Unit Price', 'Status', 'Actions'].map((item, index) => (
+          <tr className="border-b border-outline-variant/10 bg-surface-container-low">
+            {['Location Name', 'Address', 'Country', 'State', 'City', 'Actions'].map((item, index) => (
               <th key={index} className={`py-5 text-xs font-bold text-outline uppercase tracking-wider ${index === 0 ? 'px-8' : index === 5 ? 'px-8 text-right' : 'px-6'}`}>{item}</th>
             ))}
           </tr>
@@ -213,7 +179,7 @@ const DesktopInventory = ({initialInventory}) => {
                     <Package className="text-outline" size={30} />
                   </div>
                   <div>
-                    <p className="font-bold text-on-surface">No products found</p>
+                    <p className="font-bold text-on-surface">No store found</p>
                     <p className="text-sm text-outline">Try adjusting your filters or search query.</p>
                   </div>
                   <button 
@@ -233,19 +199,9 @@ const DesktopInventory = ({initialInventory}) => {
         </tbody>
       </table>
 
-      {/* Pagination */}
-      <div className="px-8 py-5 border-t border-outline-variant/10 flex items-center justify-between bg-surface-container-low/10">
-        <p className="text-[10px] font-bold text-outline uppercase tracking-widest">
-          Showing {filteredInventory.length} of {totalCount} products
-        </p>
-        <div className="flex gap-2">
-          {["Previous"].map((item) => (<button key={item} className="px-3 py-1 hover:bg-surface-container rounded-lg text-xs font-bold transition-colors">{item}</button>))}
-          {["1", "2", "3", "4", "5"].map((item) => (<button key={item} className="px-3 py-1 hover:bg-surface-container rounded-lg text-xs font-bold transition-colors">{item}</button>))}
-          {["Next"].map((item) => (<button key={item} className="px-3 py-1 hover:bg-surface-container rounded-lg text-xs font-bold transition-colors">{item}</button>))}
-        </div>
-      </div>
+      
     </div>
   );
-};
+}
 
-export default DesktopInventory;
+export default page

@@ -19,11 +19,11 @@ export default function HistoryPage() {
 
 
   return (
-    <div className="p-5 lg:p-10 space-y-8 font-body">
+    <div className="p-4 space-y-8 font-body">
       {/* Header Section - Desktop only in this structure as layout has mobile header */}
       <header className="hidden lg:flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-headline font-extrabold text-on-surface tracking-tight mb-2">Activity History</h1>
+          <h1 className="text-3xl font-headline font-extrabold text-on-surface tracking-tight mb-2">Activity History</h1>
           <p className="text-on-surface-variant max-w-2xl">Audit trail and comprehensive logs for all inventory adjustments, stock movements, and SKU modifications within the Main Warehouse.</p>
         </div>
         <div className="flex gap-3">
@@ -41,7 +41,7 @@ export default function HistoryPage() {
      
 
       {/* Desktop Table View */}
-      <div className="hidden lg:block bg-surface-container-lowest rounded-3xl overflow-hidden shadow-[0_4px_20px_-4px_rgba(0,61,155,0.05)] border border-outline-variant/10">
+      <div className="hidden lg:block bg-surface-container-lowest rounded-3xl overflow-hidden  border border-outline-variant/10">
         <DesktopHistory history={history}/>
         
       </div>

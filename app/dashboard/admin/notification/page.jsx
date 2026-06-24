@@ -10,6 +10,7 @@ export default function NotificationPage() {
 
   const loadNotifications = async() => {
     const res = await getNotifications()
+    console.log(res)
     setNotifications(res)
 
   }
@@ -19,7 +20,7 @@ export default function NotificationPage() {
 
 
   return (
-    <div className="p-5 space-y-10 font-body">
+    <div className="space-y-10 font-body">
      <NotificationList notifications= {notifications}/>
     </div>
   );

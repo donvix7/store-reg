@@ -79,7 +79,7 @@ const TabledInvoices = ({invoices}) => {
             <tbody className="divide-y divide-outline-variant/10">
               {invoices.filter((inv) => inv.status === statusFilter || statusFilter === "All Statuses")
               .map((inv, idx) => (
-                <tr key={idx} className="hover:bg-surface-container-low transition-colors group">
+                <tr key={idx} className="hover:bg-surface-container-low transition-colors">
                   <td className="px-8 py-6 font-bold text-primary text-sm tracking-tight">#{inv.id}</td>
                   <td className="px-8 py-6">
                     <div className="flex items-center gap-3">

@@ -13,7 +13,6 @@ export default function ProductDetailsPage() {
     const { id } =  useParams();
 
   const loadData = async() => {
-    console.log(id)
     const product = await getProductById(id);
     setProduct(product);
   } 

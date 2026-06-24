@@ -1,10 +1,11 @@
 
 "use client"
 import React from 'react';
-import { Wallet, AlertTriangle, Clock } from 'lucide-react';
+import { Wallet, AlertTriangle, Clock, MailQuestionMark } from 'lucide-react';
 import TabledInvoices from '@/components/TabledInvoices';
 import { useEffect, useState } from 'react';
 import { getInvoices } from '@/lib/service';
+import InvoiceCard from '@/components/InvoiceCard';
 
 export default function InvoicesPage() {
 
@@ -29,50 +30,74 @@ export default function InvoicesPage() {
   const totalDrafts = invoices.filter((inv) => inv.status === 'Draft').length;
               
   return (
-    <div className="p-4 sm:p-10 font-body transition-all duration-300">
+    <div className="p-4 sm:p-10 flex flex-col gap-6 font-body transition-all duration-300">
+      <section className='flex flex-col gap-2'>
+        <h2 className="text-2xl font-extrabold text-on-surface tracking-tight">Sales Analytics</h2>
+        <p className="text-on-surface-variant ">Track your sales, invoices, and revenue.</p>
+      </section>
       {/* Quick Metrics Bento Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-10 text-on-surface">
-        <div className="col-span-1 md:col-span-4 bg-surface-container-lowest p-6 rounded-3xl shadow-sm flex flex-col justify-between border border-outline-variant/10 group hover:shadow-md transition-all">
-          <div className="flex justify-between items-start mb-6">
-            <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 text-on-surface">
+       
+        <div className="grid col-span-12 grid-cols-1 sm:grid-cols-12">
+          <div className="col-span-12 md:col-span-3 bg-surface-container-lowest p-4 rounded-2xl shadow-sm flex gap-4  border border-outline-variant/10 group hover:shadow-md transition-all">
+         
+           <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
               <Wallet size={24} fill="currentColor" />
             </div>
-            <span className="text-[11px] font-bold text-primary bg-primary/5 px-2.5 py-1 rounded-full">+12.5%</span>
+          <div>
+            <p className="text-sm font-medium text-outline mb-1">Total Sales</p>
+            <h3 className="font-headline font-bold text-lg">${totalPaid}</h3>
+          </div>
+          </div>
+          <div className="col-span-3 bg-surface-container-lowest p-4 rounded-2xl shadow-sm flex gap-4 border border-outline-variant/10 group hover:shadow-md transition-all">
+          <div className="flex justify-between items-start ">
+            <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+              <MailQuestionMark size={24} fill="currentColor" />
+            </div>
           </div>
           <div>
             <p className="text-sm font-medium text-outline mb-1">Total Outstanding</p>
-            <h3 className="font-headline font-bold text-3xl">${totalOutstanding}</h3>
+            <h3 className="font-headline font-bold text-lg">${totalOutstanding}</h3>
           </div>
         </div>
 
-        <div className="col-span-1 md:col-span-4 bg-surface-container-lowest p-6 rounded-3xl shadow-sm flex flex-col justify-between border border-outline-variant/10 group hover:shadow-md transition-all">
-          <div className="flex justify-between items-start mb-6">
+        <div className="col-span-3 bg-surface-container-lowest p-4 rounded-2xl shadow-sm flex gap-4 border border-outline-variant/10 group hover:shadow-md transition-all">
+          <div className="flex justify-between items-start ">
             <div className="w-12 h-12 bg-tertiary-fixed/30 rounded-2xl flex items-center justify-center text-tertiary group-hover:scale-110 transition-transform">
               <AlertTriangle size={24} fill="currentColor" />
             </div>
-            <span className="text-[11px] font-bold text-error bg-error/5 px-2.5 py-1 rounded-full">3 Overdue</span>
           </div>
           <div>
             <p className="text-sm font-medium text-outline mb-1">Overdue Amount</p>
-            <h3 className="font-headline font-bold text-3xl">${totalOverdue}</h3>
+            <h3 className="font-headline font-bold text-lg">${totalOverdue}</h3>
           </div>
         </div>
 
-        <div className="col-span-1 md:col-span-4 bg-surface-container-lowest p-6 rounded-3xl shadow-sm flex flex-col justify-between border border-outline-variant/10 group hover:shadow-md transition-all">
-          <div className="flex justify-between items-start mb-6">
+        <div className="col-span-3 bg-surface-container-lowest p-4 rounded-2xl shadow-sm flex gap-4 border border-outline-variant/10 group hover:shadow-md transition-all">
+          <div className="flex justify-between items-start ">
             <div className="w-12 h-12 bg-secondary-fixed/50 rounded-2xl flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
               <Clock size={24} fill="currentColor" />
             </div>
-            <span className="text-[11px] font-bold text-secondary bg-secondary/5 px-2.5 py-1 rounded-full">Avg. 4 Days</span>
           </div>
           <div>
-            <p className="text-sm font-medium text-outline mb-1">Pending Drafts</p>
-            <h3 className="font-headline font-bold text-3xl">{totalDrafts} Invoices</h3>
+            <p className="text-sm font-medium text-outline ">Pending Drafts</p>
+            <h3 className="font-headline font-bold text-lg">{totalDrafts} Invoices</h3>
           </div>
+        </div>
         </div>
       </div>
 
+
+      <div className='hidden sm:block'>
       <TabledInvoices invoices={invoices}/>
+      </div>
+
+      <div className='sm:hidden'>
+
+        <InvoiceCard invoices={invoices}/>
+      </div>
+
+
 
       {/* Footer Meta */}
       

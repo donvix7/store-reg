@@ -15,9 +15,9 @@ export default function LoginPage() {
         </div>
       </header>
 
-      <main className="h-full flex flex-col md:flex-row">
+      <main className="h-full grid grid-cols-1 sm:grid-cols-12">
         {/* Left Section: Architectural/Marketing Content */}
-        <section className="hidden md:flex relative w-1/2 h-full flex-col justify-end p-20 overflow-hidden bg-primary">
+        <section className="col-span-12 sm:col-span-4 h-full relative flex-col justify-end p-20 overflow-hidden bg-primary ">
           <div className="absolute inset-0 z-0 opacity-40">
             <img 
               alt="Modern logistics hub with architectural precision" 
@@ -28,7 +28,7 @@ export default function LoginPage() {
           {/* Atmospheric Gradient Overlay */}
           <div className="absolute inset-0 z-10 bg-linear-to-t from-primary via-primary/40 to-transparent"></div>
           
-          <div className="relative z-20 space-y-6 max-w-lg">
+          <div className=" relative z-20 space-y-6 max-w-lg">
             <div className="inline-flex px-3 py-1 rounded-full bg-primary-container/20 border border-on-primary-container/20 backdrop-blur-sm">
               <span className="text-primary-fixed-dim text-xs font-bold tracking-widest uppercase">The Precision Atelier</span>
             </div>
@@ -58,7 +58,7 @@ export default function LoginPage() {
         </section>
 
         {/* Right Section: Login Form */}
-        <section className="flex flex-col flex-1 h-full items-center justify-center p-8 lg:p-24 bg-surface">
+        <section className="col-span-12 sm:col-span-8 flex flex-col flex-1 h-full items-center justify-center p-8 lg:p-24 bg-surface">
           <div className="w-full max-w-md space-y-10">
             <div className="space-y-2">
               <h2 className="font-headline font-bold text-3xl text-on-surface">Welcome back</h2>

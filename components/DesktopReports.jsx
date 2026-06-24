@@ -11,7 +11,7 @@ const DesktopReports = ({initialInventory}) => {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <h2 className="font-headline text-3xl font-extrabold text-on-surface tracking-tight">Analytics Overview</h2>
-          <p className="text-on-surface-variant font-medium mt-1">Real-time inventory intelligence and movement tracking.</p>
+          <p className="text-on-surface-variant font-medium">Real-time inventory intelligence and movement tracking.</p>
         </div>
         <div className="flex items-center bg-surface-container p-1 rounded-xl">
           {["Date Range", "7 Days", "30 Days", "90 Days", "Custom"].map((item) => (
@@ -23,38 +23,33 @@ const DesktopReports = ({initialInventory}) => {
       </div>
 
       {/* Bento Grid Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="md:col-span-2 bg-surface-container-lowest p-8 rounded-2xl shadow-sm border border-outline-variant/10 flex flex-col justify-between group">
-          <div>
-            <div className="flex justify-between items-start mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+        <div className="md:col-span-4 bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-outline-variant/10 flex flex-col justify-center group">
+          <div className="flex align-center  justify-between">
+            <div className="flex flex-col gap-2 items-start">
               <span className="text-outline font-semibold text-sm tracking-wider uppercase">Total Inventory Value</span>
-              <div className="p-2 bg-primary-fixed rounded-lg text-primary">
+              <h3 className="text-lg font-headline font-extrabold text-on-surface">₦{inventory.reduce((acc, item) => acc + (item.stock?.current || 0) * (item.stock?.current || 0), 0)}</h3>
+             
+            </div>
+            <div className="flex items-baseline gap-3">
+               <div className="p-2 bg-primary-fixed rounded-lg text-primary">
                 <DollarSign size={20} />
               </div>
             </div>
-            <div className="flex items-baseline gap-3">
-              <h3 className="text-4xl font-headline font-extrabold text-on-surface">{inventory.reduce((acc, item) => acc + (item.stock?.current || 0) * (item.stock?.current || 0), 0)}</h3>
-              
-            </div>
           </div>
-          <div className="mt-8 h-20 w-full bg-surface-container-low rounded-xl relative overflow-hidden">
-            <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
-              <path d="M0 60 Q 50 20 100 45 T 200 10 T 300 35 T 400 50 T 500 15 T 600 40 L 600 80 L 0 80 Z" fill="rgba(0, 61, 155, 0.05)"></path>
-              <path d="M0 60 Q 50 20 100 45 T 200 10 T 300 35 T 400 50 T 500 15 T 600 40" fill="none" stroke="#003d9b" strokeWidth="3"></path>
-            </svg>
-          </div>
+         
         </div>
-        <div className="bg-surface-container-lowest p-8 rounded-2xl shadow-sm border border-outline-variant/10">
+        <div className="md:col-span-4 bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-outline-variant/10">
           <span className="text-outline font-semibold text-sm tracking-wider uppercase">Active SKUs</span>
-          <h3 className="text-4xl font-headline font-extrabold text-on-surface mt-4">{inventory.length}</h3>
-          <p className="text-on-surface-variant text-xs mt-2 font-medium">{inventory.filter(item => item.stock?.current < item.stock?.max && item.stock?.current > 0).length} Added this month</p>
+          <h3 className="text-lg font-headline font-extrabold text-on-surface">{inventory.length}</h3>
+          <p className="text-on-surface-variant text-xs font-medium">{inventory.filter(item => item.stock?.current < item.stock?.max && item.stock?.current > 0).length} Added this month</p>
           
         </div>
-        <div className="bg-surface-container-lowest p-8 rounded-2xl shadow-sm border border-outline-variant/10">
+        <div className="md:col-span-4 bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-outline-variant/10">
           <span className="text-outline font-semibold text-sm tracking-wider uppercase">Stock Alerts</span>
-          <h3 className="text-4xl font-headline font-extrabold text-error mt-4">{inventory.filter(item => item.stock?.current < item.stock?.max).length}</h3>
-          <p className="text-on-surface-variant text-xs mt-2 font-medium">Items requiring attention</p>
-          <Link href="/dashboard/admin/inventory" className="mt-6 text-sm font-bold text-primary flex items-center group">
+          <h3 className="text-lg font-headline font-extrabold text-error">{inventory.filter(item => item.stock?.current < item.stock?.max).length}</h3>
+          <p className="text-on-surface-variant text-xs font-medium">Items requiring attention</p>
+          <Link href="/dashboard/admin/inventory" className=" text-sm font-bold text-primary flex items-center group">
             Review Now 
             <ArrowRight className="ml-1 group-hover:translate-x-1 transition-transform" size={14} />
           </Link>
