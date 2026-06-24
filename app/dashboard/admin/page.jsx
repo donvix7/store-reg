@@ -24,7 +24,7 @@ export default function DashboardAdminPage() {
   
 
   return (
-    <div className="px-10 pb-12 space-y-10">
+    <div className="p-5 pb-12 space-y-10">
       {/* Welcome Section */}
       <section>
         <h2 className="text-3xl font-extrabold text-on-surface tracking-tight">System Overview</h2>

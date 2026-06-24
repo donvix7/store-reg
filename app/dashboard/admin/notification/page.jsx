@@ -19,7 +19,7 @@ export default function NotificationPage() {
 
 
   return (
-    <div className="p-10 space-y-10 font-body">
+    <div className="p-5 space-y-10 font-body">
      <NotificationList notifications= {notifications}/>
     </div>
   );
