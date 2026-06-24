@@ -3,7 +3,7 @@ import { ChevronRight, Eye, Lock, LogIn, Mail } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
-import loginAction from '../libs/actions';
+import loginAction from '../app/libs/actions';
 
 
 const LoginForm = () => {

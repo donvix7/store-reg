@@ -1,7 +1,7 @@
 "use client";
 
-import { saveProduct } from '@/libs/actions';
-import getInventory from '@/libs/service';
+import { saveProduct } from '@/lib/actions';
+import getInventory from '@/lib/service';
 import { Fingerprint, Grid, Factory, Truck, DollarSign, Info, CheckCircle2, BarChart3, Image as ImageIcon, Plus, FileStack } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 

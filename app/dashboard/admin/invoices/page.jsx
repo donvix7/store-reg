@@ -2,9 +2,9 @@
 "use client"
 import React from 'react';
 import { Wallet, AlertTriangle, Clock } from 'lucide-react';
-import TabledInvoices from '@/app/components/TabledInvoices';
+import TabledInvoices from '@/components/TabledInvoices';
 import { useEffect, useState } from 'react';
-import { getInvoices } from '@/libs/service';
+import { getInvoices } from '@/lib/service';
 
 export default function InvoicesPage() {
 

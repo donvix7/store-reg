@@ -1,10 +1,10 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import Sidebar from "@/app/components/Sidebar";
-import MobileHeader from "@/app/components/MobileHeader";
-import DesktopTopNavBar from "@/app/components/DesktopTopNavBar";
-import BottomNavigation from "@/app/components/BottomNavigation";
+import Sidebar from "@/components/Sidebar";
+import MobileHeader from "@/components/MobileHeader";
+import DesktopTopNavBar from "@/components/DesktopTopNavBar";
+import BottomNavigation from "@/components/BottomNavigation";
 import { 
   LayoutDashboard, 
   Bell, 

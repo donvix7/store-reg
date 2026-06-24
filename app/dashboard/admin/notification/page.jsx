@@ -1,6 +1,6 @@
 "use client"
-import NotificationList from '@/app/components/NotificationList';
-import { getNotifications } from '@/libs/service';
+import NotificationList from '@/components/NotificationList';
+import { getNotifications } from '@/lib/service';
 import { useEffect, useState } from 'react';
 import React from 'react';
 

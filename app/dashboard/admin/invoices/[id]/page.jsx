@@ -1,7 +1,7 @@
 import { SearchX } from 'lucide-react';
 import React from 'react';
 import { getInvoiceById } from '@/app/libs/service';
-import InvoiceDetailView from '@/app/components/InvoiceDetailView';
+import InvoiceDetailView from '@/components/InvoiceDetailView';
 import Link from 'next/link';
 
 export default async function InvoiceDetailsPage({ params }) {

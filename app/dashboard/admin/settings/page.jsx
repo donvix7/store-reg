@@ -1,6 +1,6 @@
 import React from 'react';
-import DesktopSettings from '@/app/components/DesktopSettings';
-import MobileSettings from '@/app/components/MobileSettings';
+import DesktopSettings from '@/components/DesktopSettings';
+import MobileSettings from '@/components/MobileSettings';
 
 export default function SettingsPage() {
   return (

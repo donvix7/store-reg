@@ -11,7 +11,8 @@ const MobileInventory = ({initialInventory}) => {
   const [statusFilter, setStatusFilter] = useState('All Statuses');
 
   const totalCount = (inventory || []).length;
-
+  const lowStockCount = (inventory || []).filter(item => item.stock?.current <= 10).length;
+  const outOfStockCount = (inventory || []).filter(item => item.stock?.current === 0).length;
   const filteredInventory = useMemo(() => {
     return inventory.filter(item => {
       const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -87,7 +88,7 @@ const MobileInventory = ({initialInventory}) => {
         </div>
 
         <div className="flex gap-3 pt-2">
-          <Link href="/dashboard/admin/add-product" className="flex-1">
+          <Link href="/dashboard/admin/inventory/add-product" className="flex-1">
             <button className="w-full bg-primary text-on-primary font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-primary/10 hover:opacity-90 transition-all">
               <Plus size={20} />
               New Item
@@ -102,14 +103,14 @@ const MobileInventory = ({initialInventory}) => {
           <p className="text-[10px] font-bold text-outline uppercase tracking-widest">Total SKUs</p>
           <p className="text-2xl font-headline font-bold">{totalCount}</p>
           <div className="h-1 w-full bg-surface-variant rounded-full overflow-hidden">
-            <div className="h-full bg-primary w-3/4"></div>
+            <div className={`h-full bg-primary w-${(totalCount / (totalCount || 1)) * 100}%`}></div>
           </div>
         </div>
         <div className="bg-tertiary-fixed p-5 rounded-2xl space-y-2 shadow-sm shadow-tertiary/5">
           <p className="text-on-tertiary-fixed-variant text-[10px] font-bold uppercase tracking-widest">Low Stock</p>
-          <p className="text-2xl font-headline font-bold text-on-tertiary-fixed">42</p>
+          <p className="text-2xl font-headline font-bold text-on-tertiary-fixed">{lowStockCount}</p>
           <div className="h-1 w-full bg-on-tertiary-fixed-variant/20 rounded-full overflow-hidden">
-            <div className="h-full bg-tertiary w-1/4"></div>
+            <div className={`h-full bg-tertiary w-${(lowStockCount / (totalCount || 1)) * 100}%`}></div>
           </div>
         </div>
       </section>

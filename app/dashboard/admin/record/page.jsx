@@ -1,8 +1,8 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import DesktopRecordSale from '@/app/components/DesktopRecordSale';
-import MobileRecordSale from '@/app/components/MobileRecordSale';
-import getInventory from '@/libs/service';
+import DesktopRecordSale from '@/components/DesktopRecordSale';
+import MobileRecordSale from '@/components/MobileRecordSale';
+import getInventory from '@/lib/service';
 
 export default function RecordSalePage() {
   const [products, setProducts] = useState([]);

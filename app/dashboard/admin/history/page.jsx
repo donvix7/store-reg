@@ -1,9 +1,9 @@
 "use client"
-import DesktopHistory from '@/app/components/DesktopHistory';
-import MobileHistory from '@/app/components/MobileHistory';
+import DesktopHistory from '@/components/DesktopHistory';
+import MobileHistory from '@/components/MobileHistory';
 import React, { useEffect, useState } from 'react';
 import { FileDown, RefreshCw } from 'lucide-react';
-import { getHistory } from '@/libs/service';
+import { getHistory } from '@/lib/service';
 
 export default function HistoryPage() {
   const [history, setHistory] = useState([])

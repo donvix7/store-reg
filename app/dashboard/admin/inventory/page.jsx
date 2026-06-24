@@ -1,9 +1,9 @@
 "use client"
 import { LineChart } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import DesktopInventory from '@/app/components/DesktopInventory';
-import MobileInventory from '@/app/components/MobileInventory';
-import getInventory from '@/libs/service';
+import DesktopInventory from '@/components/DesktopInventory';
+import MobileInventory from '@/components/MobileInventory';
+import getInventory from '@/lib/service';
 
 
 export default function InventoryPage() {

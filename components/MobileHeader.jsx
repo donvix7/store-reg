@@ -1,4 +1,4 @@
-import { Menu, UserCircle, User, Settings, LogOut } from 'lucide-react';
+import { Menu, UserCircle, User, Settings, LogOut, Home } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useState } from 'react'
@@ -17,7 +17,7 @@ const MobileHeader = ({navLinks}) => {
         <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-outline-variant/15 h-16 flex items-center justify-between px-5 lg:hidden">
           <div className="flex items-center gap-3">
             <button className="flex items-center justify-center w-10 h-10 text-on-surface">
-              <Menu size={24} />
+              <Home size={24} />
             </button>
             <h1 className="font-headline font-bold text-lg tracking-tight">{getPageTitle(pathname)}</h1>
           </div>
@@ -41,14 +41,7 @@ const MobileHeader = ({navLinks}) => {
                     <p className="text-xs font-bold text-outline uppercase tracking-wider">Account</p>
                     <p className="text-sm font-semibold text-on-surface truncate">Alex Thompson</p>
                   </div>
-                  <Link 
-                    href="/dashboard/admin/profile" 
-                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface hover:bg-surface-container transition-colors"
-                    onClick={() => setIsProfileMenuOpen(false)}
-                  >
-                    <User size={18} />
-                    <span>View Profile</span>
-                  </Link>
+                
                   <Link 
                     href="/dashboard/admin/settings" 
                     className="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface hover:bg-surface-container transition-colors"

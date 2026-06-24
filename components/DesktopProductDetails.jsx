@@ -1,5 +1,5 @@
 "use client"
-import { deleteProduct } from '@/libs/actions';
+import { deleteProduct } from '@/lib/actions';
 import { Save, Pencil, Plus, Trash } from 'lucide-react';
 import Link from 'next/link';
 import React, { useState } from 'react';

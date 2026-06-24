@@ -1,7 +1,8 @@
 "use client"
-import saveProduct from '@/libs/actions';
-import getInventory from '@/libs/service';
+import saveProduct from '@/lib/actions';
+import getInventory from '@/lib/service';
 import { DollarSign, TrendingUp, Scan, Warehouse, TrendingDown, AlertTriangle, Truck, FileEdit, UserPlus, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export default function DashboardAdminPage() {
@@ -24,11 +25,11 @@ export default function DashboardAdminPage() {
   
 
   return (
-    <div className="p-5 pb-12 space-y-10">
+    <div className="p-5 pb-12 space-y-10 flex flex-col gap-10">
       {/* Welcome Section */}
-      <section>
-        <h2 className="text-3xl font-extrabold text-on-surface tracking-tight">System Overview</h2>
-        <p className="text-on-surface-variant mt-1">Real-time logistics and warehouse analytics for the last 24 hours.</p>
+      <section className='flex flex-col gap-4'>
+        <h2 className="text-5xl font-extrabold text-on-surface tracking-tight">System Overview</h2>
+        <p className="text-on-surface-variant ">Real-time logistics and warehouse analytics for the last 24 hours.</p>
       </section>
 
       {/* Stats Bento Grid */}
@@ -40,7 +41,7 @@ export default function DashboardAdminPage() {
               <DollarSign size={24} />
             </div>
           </div>
-          <div className="mt-8">
+          <div className="">
             <p className="text-outline text-sm font-medium uppercase tracking-widest">Total Inventory Value</p>
             <h3 className="text-4xl font-extrabold mt-2 text-on-surface">₦{totalnventoryValue}</h3>
           </div>
@@ -77,15 +78,21 @@ export default function DashboardAdminPage() {
 
       <div className="grid grid-cols-12 gap-10">
         {/* Main Content Left */}
-        <div className="col-span-12 xl:col-span-8 space-y-10">
+        <div className="col-span-12 space-y-10">
           {/* Active Inventory Overview */}
-          <div className="bg-surface-container-lowest rounded-[2.5rem] p-10 border border-outline-variant/5">
-            <div className="flex items-center justify-between mb-10">
-              <div>
+          <div className="bg-surface-container-lowest rounded-[2.5rem] border border-outline-variant/5">
+            <div className="grid grid-cols-12 items-center mb-10">
+              <div className="col-span-12 xl:col-span-8">
                 <h3 className="text-2xl font-bold">Active Inventory Overview</h3>
                 <p className="text-outline text-sm mt-1">High velocity movements across all sectors.</p>
               </div>
-              <button className="px-6 py-2 rounded-xl bg-surface-container-high text-primary font-bold text-sm hover:bg-primary hover:text-on-primary transition-all">View Full List</button>
+              <Link className='col-span-12 xl:col-span-4 flex items-center justify-end' href={`/dashboard/admin/inventory`}>
+            <button className="w-fit py-4 px-8  text-primary font-bold text-sm flex items-center justify-center gap-2 hover:opacity-70 transition-opacity">
+                  View full list
+              <ArrowRight size={14} />
+
+                  </button>
+              </Link>           
             </div>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse">
@@ -126,9 +133,9 @@ export default function DashboardAdminPage() {
         </div>
 
         {/* Right Sidebar Content */}
-        <div className="col-span-12 xl:col-span-4 space-y-10">
+        <div className="col-span-12 -y-10">
           {/* Urgent Replenishment Alert */}
-          <div className="bg-error-container p-8 rounded-[2.5rem] relative overflow-hidden group">
+          <div className="bg-error-container col-span-12 sm:col-span-6 p-8 rounded-[2.5rem] relative overflow-hidden group">
             <div className="relative z-10">
               <div className="flex items-center gap-3 text-on-error-container mb-6">
                 <AlertTriangle size={20} />
@@ -150,12 +157,14 @@ export default function DashboardAdminPage() {
                   <span className="text-error font-extrabold">08 Left</span>
                 </div>
               </div>
-              <button className="w-full mt-6 py-4 bg-error text-on-error rounded-xl font-bold text-sm shadow-lg shadow-error/20 hover:scale-[1.02] transition-transform">Initiate Bulk Order</button>
+              <Link href={`/dashboard/admin/inventory/add-product`} className='flex justify-center align-center'>
+              <button className="w-fit mt-6 py-4 px-8 bg-error text-on-error rounded-xl font-bold text-sm shadow-lg shadow-error/20 hover:scale-[1.02] transition-transform">Initiate Bulk Order</button>
+              </Link>
             </div>
           </div>
 
           {/* Recent Activity Feed */}
-          <div className="bg-surface-container-low rounded-[2.5rem] p-8 border border-outline-variant/15">
+          <div className="bg-surface-container-low col-span-12 sm:col-span-6 rounded-[2.5rem] p-8 border border-outline-variant/15">
             <h3 className="text-xl font-bold mb-8">Recent Activity</h3>
             <div className="space-y-8 relative before:absolute before:left-6 before:top-2 before:bottom-2 before:w-px before:bg-outline-variant/30">
               <div className="relative flex gap-6">
@@ -186,9 +195,12 @@ export default function DashboardAdminPage() {
                 </div>
               </div>
             </div>
+            <Link href={`/dashboard/admin/reports`}>
             <button className="w-full mt-10 text-primary font-bold text-sm flex items-center justify-center gap-2 hover:opacity-70 transition-opacity">
-              View History <ArrowRight size={14} />
+              View History 
+              <ArrowRight size={14} />
             </button>
+            </Link>
           </div>
         </div>
       </div>

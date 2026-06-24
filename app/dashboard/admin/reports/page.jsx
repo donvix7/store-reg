@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import DesktopReports from '@/app/components/DesktopReports';
-import MobileReports from '@/app/components/MobileReports';
-import getInventory from '@/libs/service';
+import DesktopReports from '@/components/DesktopReports';
+import MobileReports from '@/components/MobileReports';
+import getInventory from '@/lib/service';
 
 export default function ReportsPage() {
   const [inventory, setInventory] = useState([]);

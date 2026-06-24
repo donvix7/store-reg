@@ -1,6 +1,6 @@
 import { ArrowRight, Activity, Bot, Network, Quote } from 'lucide-react';
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import Image from 'next/image';
 
 export default function Home() {

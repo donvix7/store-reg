@@ -1,9 +1,9 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import DesktopProductDetails from '@/app/components/DesktopProductDetails';
-import MobileProductDetails from '@/app/components/MobileProductDetails';
+import DesktopProductDetails from '@/components/DesktopProductDetails';
+import MobileProductDetails from '@/components/MobileProductDetails';
 import Link from 'next/link';
-import { getProductById } from '@/libs/service';
+import { getProductById } from '@/lib/service';
 import { useParams } from 'next/navigation';
 
 
