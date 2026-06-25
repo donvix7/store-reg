@@ -8,7 +8,7 @@ export default function RegisterPage() {
      
       <main className="grow grid grid-cols-12 lg:grid-cols-12">
         {/* Left Column: Marketing / Social Proof */}
-        <section className="col-span-4 sm:col-span-4 space-y-10 relative h-screen overflow-y-scroll [&::-webkit-scrollbar]:hidden bg-primary p-5 flex-col gap-10 justify-between text-on-primary">
+        <section className="hidden sm:col-span-4 space-y-10 relative h-screen overflow-y-scroll [&::-webkit-scrollbar]:hidden bg-primary p-5 flex-col gap-10 justify-between text-on-primary">
           {/* Decorative Background Element */}
            <header className=" text-white justify-start  border-b border-outline-variant/15 z-50">
             <div className="flex items-center gap-3">
@@ -79,7 +79,7 @@ export default function RegisterPage() {
           </div>
         </section>
         {/* Right Column: Signup Form */}
-        <section className="col-span-12 sm:col-span-8 flex items-center justify-center   bg-surface">
+        <section className="col-span-12 sm:col-span-8 p-4  flex items-center justify-center   bg-surface">
           <div className="w-120">
             <div className="mb-12">
               <h2 className="text-3xl font-headline font-extrabold text-on-surface mb-2">Create Account</h2>

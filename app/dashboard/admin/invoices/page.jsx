@@ -36,30 +36,31 @@ export default function InvoicesPage() {
         <p className="text-on-surface-variant ">Track your sales, invoices, and revenue.</p>
       </section>
       {/* Quick Metrics Bento Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 text-on-surface">
+      <div className="grid grid-cols-2 sm:grid-cols-12 gap-6 text-on-surface">
        
-        <div className="grid col-span-12 grid-cols-1 sm:grid-cols-12">
-          <div className="col-span-12 md:col-span-3 bg-surface-container-lowest p-4 rounded-2xl shadow-sm flex gap-4  border border-outline-variant/10 group hover:shadow-md transition-all">
-         
-           <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-              <Wallet size={24} fill="currentColor" />
+        <div className="grid grid-cols-2 sm:grid-cols-12 col-span-12">
+          <div className="col-span-1 bg-red-500 sm:col-span-3 bg-surface-container-lowest p-4 rounded-2xl shadow-sm flex gap-4 border border-outline-variant/10 group hover:shadow-md transition-all">
+            <div className="flex justify-between items-start ">
+              <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                <Wallet size={24} fill="currentColor" />
+              </div>
             </div>
-          <div>
-            <p className="text-sm font-medium text-outline mb-1">Total Sales</p>
-            <h3 className="font-headline font-bold text-lg">${totalPaid}</h3>
-          </div>
-          </div>
-          <div className="col-span-3 bg-surface-container-lowest p-4 rounded-2xl shadow-sm flex gap-4 border border-outline-variant/10 group hover:shadow-md transition-all">
-          <div className="flex justify-between items-start ">
-            <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-              <MailQuestionMark size={24} fill="currentColor" />
-            </div>
-          </div>
-          <div>
+           <div>
             <p className="text-sm font-medium text-outline mb-1">Total Outstanding</p>
             <h3 className="font-headline font-bold text-lg">${totalOutstanding}</h3>
+            </div>
           </div>
-        </div>
+          <div className="col-span-3 bg-surface-container-lowest p-4 rounded-2xl shadow-sm flex gap-4 border border-outline-variant/10 group hover:shadow-md transition-all">
+            <div className="flex justify-between items-start ">
+              <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                <MailQuestionMark size={24} fill="currentColor" />
+              </div>
+            </div>
+           <div>
+            <p className="text-sm font-medium text-outline mb-1">Total Outstanding</p>
+            <h3 className="font-headline font-bold text-lg">${totalOutstanding}</h3>
+            </div>
+          </div>
 
         <div className="col-span-3 bg-surface-container-lowest p-4 rounded-2xl shadow-sm flex gap-4 border border-outline-variant/10 group hover:shadow-md transition-all">
           <div className="flex justify-between items-start ">

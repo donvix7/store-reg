@@ -67,7 +67,7 @@ const NotificationList = ({ notifications }) => {
         </div>
 
         {/* Notification List */}
-        <div className="col-span-8 divide-y divide-outline-variant/10">
+        <div className="col-span-12 sm:col-span-8 divide-y mb-20 divide-outline-variant/10">
           
           {(notifications || [])
             .filter(n => activeTab === 'All' || (activeTab === 'Unread' && n.status === 'unread') || (activeTab === 'Urgent' && n.category === 'Urgent'))

@@ -17,7 +17,7 @@ export default function LoginPage() {
 
       <main className="h-full grid grid-cols-1 sm:grid-cols-12">
         {/* Left Section: Architectural/Marketing Content */}
-        <section className="col-span-12 sm:col-span-4 h-full relative flex-col justify-end p-20 overflow-hidden bg-primary ">
+        <section className="hidden sm:col-span-4 h-full relative flex-col justify-end p-20 overflow-hidden bg-primary ">
           <div className="absolute inset-0 z-0 opacity-40">
             <img 
               alt="Modern logistics hub with architectural precision" 

@@ -3,14 +3,14 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div className='w-full font-body h-full bg-gray-200 flex flex-col justify-center align-center items-center gap-6'>
-        <div className="flex align-center justify-between min-w-150">
+    <div className='w-full font-body h-full bg-gray-200 flex flex-col justify-center align-center items-center gap-6 p-4'>
+        <div className="flex align-center justify-between w-full sm:w-150">
             <h1 className="text-2xl font-bold text-[#1A1A1A]">Manage Your Bank Accounts</h1>
             <button className='flex gap-2 border font-bold border-primary text-sm text-primary p-2 px-6 self-end w-fit rounded-xl cursor-pointer' type="submit">
                 <Edit size={20}/>
                 Edit</button>
         </div>
-        <form className='flex flex-col gap-6 border min-w-150 py-8 border-slate-400 p-4 rounded-xl shadow-lg shadow-gray-400/50'>
+        <form className='flex flex-col gap-6 border w-full sm:w-150 py-8 border-slate-400 p-4 rounded-xl shadow-lg shadow-gray-400/50'>
         
             <div className="flex flex-col gap-2">
                 <label className='tracking-wider text-slate-700 text-sm font-bold' htmlFor="bankName">Bank Name</label>

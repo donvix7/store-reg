@@ -76,7 +76,7 @@ export default function DashboardAdminPage() {
 
       <div className="grid grid-cols-12 gap-10">
         {/* Main Content Left */}
-        <div className="col-span-8 space-y-10">
+        <div className="col-span-12 sm:col-span-8 space-y-10">
           {/* Active Inventory Overview */}
           <div className="bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/5">
             <div className="grid grid-cols-12 items-center mb-10">
@@ -131,7 +131,7 @@ export default function DashboardAdminPage() {
         </div>
 
         {/* Right Sidebar Content */}
-        <div className="col-span-4 space-y-10">
+        <div className="col-span-12 sm:col-span-4 space-y-10">
           {/* Urgent Replenishment Alert */}
           <div className="bg-error-container col-span-12 sm:col-span-6 p-4 rounded-2xl relative overflow-hidden group">
             <div className="relative z-10">
