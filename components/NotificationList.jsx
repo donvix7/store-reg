@@ -14,7 +14,7 @@ const NotificationList = ({ notifications }) => {
     };
 
   return (
-    <div>
+    <div className='p-4'>
          {/* Hero Stats / Summary Section (Asymmetric) */}
       <section className="grid grid-cols-1 md:grid-cols-12 gap-6">
         <div className="col-span-1 md:col-span-12 lg:col-span-8 bg-surface-container-low p-4 rounded-2xl flex justify-between items-center overflow-hidden relative">
