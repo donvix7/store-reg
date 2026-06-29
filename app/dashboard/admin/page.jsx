@@ -33,7 +33,10 @@ import {
   ArrowUpRight,
   Clock,
   Calendar,
-  Zap
+  Zap,
+  Search,
+  MapPin,
+  Bell
 } from 'lucide-react';
 
 export default function DashboardAdminPage() {
@@ -76,43 +79,45 @@ const [showBalance, setShowBalance] = useState(false);
     <div className="p-5 pb-12 space-y-10 flex flex-col">
       
       {/* Welcome Section */}
-      <header className="hidden lg:flex h-16 w-full  z-40 border-b border-[#c2c6d8] bg-white/80 backdrop-blur-md  justify-between items-center px-6">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 bg-[#eeeef0] px-3 py-1.5 rounded-full border border-[#c2c6d8]/50">
-            <span className="text-[14px] leading-[20px] text-[#424656]">Location: <span className="font-bold text-[#0050cb]">Headquarters</span></span>
-            <ChevronDown size={16} className="text-[#424656]" />
+            {/* Top Navigation Bar */}
+      <header className=" hidden lg:flex fixed top-0 right-0 w-[calc(100%-260px)] h-16 bg-[#f9f9fc] border-b border-[#c2c6d8] justify-between items-center px-6 z-40">
+        <div className="flex items-center flex-1 max-w-xl">
+          <div className="relative w-full">
+            <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#727687]" />
+            <input
+              className="w-full bg-[#f3f3f6] border-none rounded-lg pl-10 pr-4 py-2 text-[14px] leading-[20px] focus:ring-2 focus:ring-[#0050cb]/20 outline-none"
+              placeholder="Search orders, customers or alerts..."
+              type="text"
+            />
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <button className="flex items-center gap-2 text-[#424656] bg-[#f3f3f6] px-4 py-2 rounded-lg font-semibold hover:bg-[#e8e8ea] transition-all">
-            Point of Sale
-          </button>
-          <button className="bg-[#189241] text-white px-6 py-2 rounded-lg font-bold hover:brightness-110 transition-all">
-            View Store
-          </button>
-          <div className="w-10 h-10 rounded-full bg-[#eeeef0] flex items-center justify-center relative cursor-pointer">
-            <div className="relative">
-              <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#ba1a1a] rounded-full"></span>
-            </div>
+          <div className="flex items-center gap-2">
+            <button className="p-2 text-[#555f6c] hover:bg-[#f3f3f6] rounded-lg transition-all relative">
+              <MapPin size={20} />
+            </button>
+            <button className="p-2 text-[#0050cb] hover:bg-[#0050cb]/5 rounded-lg transition-all relative">
+              <Bell size={20} fill="#0050cb" />
+              <span className="absolute top-2 right-2 w-2 h-2 bg-[#ba1a1a] rounded-full border-2 border-white"></span>
+            </button>
           </div>
-          <div className="flex items-center gap-2 pl-2 border-l border-[#c2c6d8]">
-            <div className="w-10 h-10 rounded-full bg-[#0066ff] overflow-hidden border-2 border-[#0066ff]">
+          <div className="h-8 w-px bg-[#c2c6d8] mx-2"></div>
+          <div className="flex items-center gap-3">
+            <button className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#0050cb] font-bold hover:underline">View Store</button>
+            <button className="bg-[#0066ff] text-white px-4 py-2 rounded-lg text-[12px] leading-[16px] tracking-[0.05em] font-medium font-bold shadow-sm">Point of Sale</button>
+            <div className="w-8 h-8 rounded-full overflow-hidden border border-[#c2c6d8]">
               <img
                 className="w-full h-full object-cover"
                 alt="Profile"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxdMdSjbnuU7gOZn3rdwoOLVjLYp6NJmS65YsturS_2-2CX97Ax7Z6uXYDimodLTEwjIngA4W0OUAmyu5jnq-ll9KiAQPIxXZIS4_1VRw_E8qCcTkWFo_ENvYpGJgBM8vGyplFlmLqP4qFoU51dPuu-P2-w40V86Q0uHZo_Dw3BBdXLgX2bSzHNtAv55DviS2kRctZ-Y9ErBLEzPr4KR6HREo2alff30RGzLr16RBhPWQzsrQ6cpch-1_GX3540OEqoPHrhSbJ4W4f"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBiPD7QiBgKiNgjIo2wtf2_8g888MhOjBY2EAdJ7N4xvjWW5CHY_mh5RbeDJ0ug1qUjEpa4WAuiEURmnAvUIUFeMvIRKmLhGwxHpy1ZnCfyl0-tKq-Owvks1FfMFA8IqAkKw05B9D0FMtwaFfp6Tg9Ud4wi37_vkYrCd56kWY8oRzxFf2ZvNw15sm00VsLzDOGuIZsMIYcInoTcJ613n_XZti7WAUYtJ2PEJSU69K73_ariK4DYnfkRlKa1zDb-azj8o3lP-q-wA84"
               />
             </div>
-            <div className="hidden xl:block text-left">
-              <p className="text-[14px] leading-[20px] font-bold leading-none">Nnaemeka Uzuegbu</p>
-            </div>
-            <ChevronDown size={20} className="text-[#424656]" />
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="p-4 min-h-screen">
+      <main className="p-4 pt-16 min-h-screen">
         {/* Welcome Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
           <div>
@@ -123,10 +128,9 @@ const [showBalance, setShowBalance] = useState(false);
             inventory Trial
           </button>
         </div>
+        {/*
 
-        {/* Row 1: Wallets & To-dos */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
-          {/* Wallet Card */}
           <div className="lg:col-span-5 bg-white rounded-xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.04)] relative overflow-hidden flex flex-col justify-between h-full border border-[#c2c6d8]/30">
             <div className="flex justify-between items-start z-10">
               <div className="space-y-1">
@@ -152,7 +156,6 @@ const [showBalance, setShowBalance] = useState(false);
               </div>
             </div>
 
-            {/* Settlement Mini-Card */}
             <div className="bg-[#f3f3f6] p-4 rounded-lg border border-[#c2c6d8]/40 z-10 w-fit">
               <div className="flex items-center gap-2 text-[#424656] mb-1">
                 <span className="text-[11px] font-bold">Pending Settlement</span>
@@ -165,7 +168,6 @@ const [showBalance, setShowBalance] = useState(false);
               </div>
             </div>
 
-            {/* Abstract Decorative Background */}
             <div className="absolute right-0 bottom-0 w-48 h-48 opacity-10">
               <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -177,7 +179,8 @@ const [showBalance, setShowBalance] = useState(false);
             </div>
           </div>
 
-          {/* Account Details Card */}
+          
+
           <div className="lg:col-span-4 bg-white rounded-xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-[#c2c6d8]/30 flex flex-col gap-4 h-full">
               <button className="mt-2 text-[12px] font-bold text-[#189241] flex items-center justify-end gap-1 group">
               Copy full account details
@@ -219,7 +222,6 @@ const [showBalance, setShowBalance] = useState(false);
            
           </div>
 
-          {/* To-do List */}
           <div className="lg:col-span-3 bg-[#EBF7F0] rounded-xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-[#B3E1C8] flex flex-col h-full">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-[20px] leading-[28px] font-semibold text-[16px] font-bold text-[#0D5F2D]">To-do List</h3>
@@ -242,6 +244,7 @@ const [showBalance, setShowBalance] = useState(false);
             </div>
           </div>
         </div>
+        */}
 
         {/* Row 2: Business Overview */}
         <div className="bg-white rounded-xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-[#c2c6d8]/30 mb-6">
