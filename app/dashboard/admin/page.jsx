@@ -76,7 +76,7 @@ const [showBalance, setShowBalance] = useState(false);
     <div className="p-5 pb-12 space-y-10 flex flex-col">
       
       {/* Welcome Section */}
-      <header className="h-16 w-full  z-40 border-b border-[#c2c6d8] bg-white/80 backdrop-blur-md flex justify-between items-center px-6">
+      <header className="hidden lg:flex h-16 w-full  z-40 border-b border-[#c2c6d8] bg-white/80 backdrop-blur-md  justify-between items-center px-6">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 bg-[#eeeef0] px-3 py-1.5 rounded-full border border-[#c2c6d8]/50">
             <span className="text-[14px] leading-[20px] text-[#424656]">Location: <span className="font-bold text-[#0050cb]">Headquarters</span></span>
