@@ -11,10 +11,12 @@ export default function InventoryPage() {
   const [initialInventory, setinitialInventory] = useState([])
 
   const loadData = async() => {
-    const inventory = await getInventory()
-    setinitialInventory(inventory)
-    console.log(inventory)
-    
+    const inventory = await getInventory();
+    if(inventory.success){
+      setinitialInventory(inventory.data)
+    }else{
+      setinitialInventory([])
+    }
   }
   useEffect(() => {
     loadData()

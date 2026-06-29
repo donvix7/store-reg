@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import loginAction from '../app/libs/actions';
+import { Login } from '@/lib/actions';
 
 
 const LoginForm = () => {
@@ -19,16 +20,21 @@ const LoginForm = () => {
         
         try {
             // Using the imported loginAction to avoid recursive call to handleLogin
-            const res = await loginAction(data);
+            const res = await Login(formData);
             
             // Note: loginAction currently doesn't return anything but we keep this structure for future use
-            if (res && !res.ok) {
-                console.log("there was a problem")
+            if (!res.success) {
+                alert(res.message);
+            }
+            else{
+                alert(res.message);
+
+              router.push("/dashboard/admin");
             }
             
-            router.push("/dashboard/admin");
         } catch (error) {
             console.error("Login error:", error);
+            alert("An error occurred during login.");
         }
     }
 
@@ -94,7 +100,8 @@ const LoginForm = () => {
               </div>
 
               {/* Submit Button */}
-              <button className="group relative flex w-full justify-center items-center py-4 px-6 border border-transparent font-bold text-on-primary bg-primary hover:bg-primary-container rounded-xl shadow-lg shadow-primary/10 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 overflow-hidden" type="submit">
+              <button 
+              className="group relative flex w-full justify-center items-center py-4 px-6 border border-transparent font-bold text-on-primary bg-primary hover:bg-primary-container rounded-xl shadow-lg shadow-primary/10 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 overflow-hidden" type="submit">
                 <span className="relative z-10 flex items-center gap-2">
                   Sign In to Inventory Pro
                     <LogIn/>

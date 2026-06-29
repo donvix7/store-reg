@@ -16,8 +16,6 @@ const MobileRecordSale = ({ products }) => {
   const [paymentMethod, setPaymentMethod] = useState("card");
 
   useEffect(() => {
-    console.log(customer);
-    console.log(paymentMethod);
   }, [customer, paymentMethod]);
   return (
     <div className="flex flex-col min-h-screen bg-surface">

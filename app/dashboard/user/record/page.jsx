@@ -16,14 +16,14 @@ export default function RecordSalePage() {
   }, []);
 
   return (
-    <div className="min-h-full">
+    <div className="">
       {/* Mobile View */}
       <div className="lg:hidden h-full">
         <MobileRecordSale products={products}/>
       </div>
 
       {/* Desktop View */}
-      <div className="hidden lg:block h-full">
+      <div className="hidden lg:flex h-full">
         <DesktopRecordSale products={products}/>
       </div>
     </div>

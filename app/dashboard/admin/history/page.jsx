@@ -10,8 +10,11 @@ export default function HistoryPage() {
 
   const loadHistory = async () => {
     const history = await getHistory()
-    console.log("history", history)
-    setHistory(history)
+    if(history.success){
+      setHistory(history.data || history)
+    }else{
+      setHistory([])
+    }
   }
   useEffect(() => {
     loadHistory()

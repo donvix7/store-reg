@@ -34,11 +34,11 @@ const DesktopRecordSale = ({products}) => {
   const tax = (subtotal - discount) * 0.085;
   const total = subtotal - discount + tax;
   return (
-    <div className="h-full flex flex-col overflow-hidden font-body bg-surface p-4 sm:p-10">
-      <div className="flex-1 flex flex-col lg:flex-row gap-6 overflow-hidden">
+    <div className="">
+      <div className="grid lg:grid-cols-12 gap-4">
         
         {/* Left: Item Selection (Precision Atelier Style) */}
-        <div className="flex-[1.4] flex flex-col gap-6 overflow-hidden">
+        <div className=" col-span-12 lg:col-span-8">
           <div className="bg-surface-container-lowest rounded-3xl p-6 sm:p-8 flex flex-col h-full shadow-sm border border-outline-variant/10">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
               <div>
@@ -91,10 +91,10 @@ const DesktopRecordSale = ({products}) => {
         </div>
 
         {/* Right: Sale Summary & Checkout */}
-        <div className="flex-1 flex flex-col gap-6 overflow-hidden">
+        <div className="col-span-4 flex flex-col gap-4">
           
           {/* Customer Details Card */}
-          <div className="bg-surface-container-low rounded-3xl p-6 sm:p-8 shadow-sm border border-outline-variant/10">
+          <div className="bg-surface-container-low rounded-2xl p-4 shadow-sm border border-outline-variant/10">
             <div className="flex items-center gap-4 mb-6">
               <div className="w-12 h-12 bg-surface-container-lowest rounded-2xl flex items-center justify-center text-primary shadow-sm border border-outline-variant/10">
                 <User size={24} />

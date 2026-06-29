@@ -7,12 +7,17 @@ import React from 'react';
 export default function NotificationPage() {
 
   const [notifications, setNotifications] = useState([])
+  const [empty, setEmpty] = useState("")
 
   const loadNotifications = async() => {
     const res = await getNotifications()
-    console.log(res)
-    setNotifications(res)
-
+    if(res.success){
+      setNotifications(res?.data)
+      setEmpty(res.message)
+    }else{
+      setNotifications([])
+      setEmpty(res?.message)
+    }
   }
   useEffect(() => {
     loadNotifications()
@@ -21,7 +26,7 @@ export default function NotificationPage() {
 
   return (
     <div className="space-y-10 font-body">
-     <NotificationList notifications= {notifications}/>
+     <NotificationList notifications={notifications} empty={empty} onRefresh={loadNotifications}/>
     </div>
   );
 }

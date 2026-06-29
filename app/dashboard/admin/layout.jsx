@@ -23,8 +23,14 @@ import {
   CloudSync,
   WifiSync,
   Truck,
-  FileStack
+  FileStack,
+  User2Icon,
+  WalletCards,
+  StoreIcon,
+  ExternalLink,
+  UserSquare2
 } from 'lucide-react';
+import StoreList from './locations/page';
 
 export default function AdminLayout({ children }) {
   const pathname = usePathname();
@@ -50,7 +56,7 @@ export default function AdminLayout({ children }) {
     {
       title: "Record Sale",
       icon: <ShoppingCart size={20} />, // Changed from "shopping_cart_checkout" to ShoppingCart
-      href: "/dashboard/admin/record",
+      href: "/dashboard/admin/records",
     },
  
   ];
@@ -71,6 +77,11 @@ export default function AdminLayout({ children }) {
       icon: <FileText size={20} />, // Changed from Logs to FileText for better representation
       href: "/dashboard/admin/reports",
     },
+      {
+      title: "Sales",
+      icon: <WalletCards size={20} />, // Changed from Logs to FileText for better representation
+      href: "/dashboard/admin/sales",
+    },
     
   ]
   const inventoryLinks = [
@@ -89,6 +100,11 @@ export default function AdminLayout({ children }) {
       icon: <PackagePlus size={20} />, // Changed from "add_box" to PackagePlus
       href: "/dashboard/admin/inventory/add-product",
     },
+    {
+      title: "Customers",
+      icon: <UserSquare2 size={20} />, // Changed from "add_box" to PackagePlus
+      href: "/dashboard/admin/customers",
+    },
   ]
   const settingsLinks = [
 
@@ -102,10 +118,30 @@ export default function AdminLayout({ children }) {
       icon: <Map size={20} />, // Changed from "settings" to Settings
       href: "/dashboard/admin/locations",
     },
+    {
+       title: "Staffs",
+      icon: <User2Icon size={20} />, // Changed from "settings" to Settings
+      href: "/dashboard/admin/staffs",
+    },
         {
       title: "Connections",
       icon: <WifiSync size={20} />, // Changed from "settings" to Settings
       href: "/dashboard/admin/connections",
+    },
+     {
+      title: "Extensions",
+      icon: <ExternalLink size={20} />, // Changed from "settings" to Settings
+      href: "/dashboard/admin/extensions",
+    },
+      {
+      title: "Account Settings",
+      icon: <Settings size={20} />, // Changed from "settings" to Settings
+      href: "/dashboard/admin/account-settings",
+    },
+      {
+      title: " Store set up",
+      icon: <StoreIcon size={20} />, // Changed from "settings" to Settings
+      href: "/dashboard/admin/store-setup",
     },
       {
       title: "Subscriptions",
@@ -113,10 +149,11 @@ export default function AdminLayout({ children }) {
       href: "/dashboard/admin/subscriptions",
     },
     {
-      title: "Settings",
+      title: "Store settings",
       icon: <Settings size={20} />, // Changed from "settings" to Settings
       href: "/dashboard/admin/settings",
     },
+
 
   ]
 
@@ -129,9 +166,6 @@ export default function AdminLayout({ children }) {
       <main className={`flex-1 flex flex-col overflow-y-auto no-scrollbar relative ${isFocusMode ? 'lg:ml-0' : ''}`}>
        {!isFocusMode && <MobileHeader navLinks={financeLinks} inventoryLinks={inventoryLinks} quickLinks={quickLinks} settingsLinks={settingsLinks}/>}
 
-        {/* Desktop TopNavBar - Hidden on Mobile */}
-       {!isFocusMode && <DesktopTopNavBar/>}
-        
         {/* Content Container with Responsive Padding */}
         <div className={`${isFocusMode ? 'pt-0 pb-0' : 'pt-16 lg:pt-0 pb-20 lg:pb-0'} h-full`}>
           {children}

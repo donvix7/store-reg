@@ -13,11 +13,11 @@ export default function Navbar() {
         </div>
       </div>
       <div className="flex items-center gap-6">
-        <Link href="/login" className="flex text-primary items-center font-label text-sm font-medium hover:text-secondary transition-colors gap-2">
+        <Link href="/auth/login" className="flex text-primary items-center font-label text-sm font-medium hover:text-secondary transition-colors gap-2">
           <LogIn />
           Login
         </Link>
-        <Link href="/register" className="flex text-primary items-center font-label text-sm font-medium hover:text-secondary transition-colors gap-2">
+        <Link href="/auth/register" className="flex text-primary items-center font-label text-sm font-medium hover:text-secondary transition-colors gap-2">
           <User />
           Register
         </Link>

@@ -4,16 +4,12 @@ import MobileSettings from '@/components/MobileSettings';
 
 export default function SettingsPage() {
   return (
-    <div className="min-h-screen bg-surface font-body">
+    <div className="">
       {/* Desktop View Section */}
-      <section className="hidden lg:block">
+      <section className="">
         <DesktopSettings />
       </section>
 
-      {/* Mobile View Section */}
-      <section className="lg:hidden">
-        <MobileSettings />
-      </section>
     </div>
   );
 }

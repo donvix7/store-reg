@@ -1,205 +1,290 @@
 "use client"
-import { AlertTriangle, ArrowRight, Calendar, ChevronDown, Download, FileStack, Package, Plus, Search, SquareCheck } from 'lucide-react';
-import Link from 'next/link';
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react';
+import {
+  LayoutDashboard,
+  Package,
+  ShoppingCart,
+  Users,
+  BarChart3,
+  Wallet,
+  Puzzle,
+  Settings,
+  MessageCircle,
+  ChevronDown,
+  Bell,
+  User,
+  ShoppingBag,
+  CreditCard,
+  CheckCircle,
+  Clock,
+  Search,
+  Filter,
+  Truck,
+  Calendar,
+  RefreshCw,
+  Store,
+  Plus,
+  Eye,
+  FileText,
+  MoreVertical
+} from 'lucide-react';
 
 const page = () => {
-  
-  const inventory = []
-  const [searchQuery, setSearchQuery] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('All Categories');
-  const [statusFilter, setStatusFilter] = useState('All Statuses');
+ const [activeFilter, setActiveFilter] = useState('All');
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const totalCount = (inventory || []).length;
-  const optimalStock = inventory.filter(item => item.status?.toLowerCase() === 'optimal').length;
-  const lowStock = inventory.filter(item => item.stock?.current < (item.stock?.max * 0.5) && item.stock?.current > 0).length;
-  const outOfStock = inventory.filter(item => item.stock?.current === 0).length;
+  const navItems = [
+    { icon: LayoutDashboard, label: 'Dashboard' },
+    { icon: Package, label: 'Products' },
+    { icon: ShoppingCart, label: 'Orders', active: true },
+    { icon: Users, label: 'Customers' },
+    { icon: BarChart3, label: 'Analytics' },
+    { icon: Wallet, label: 'inventory Wallet' },
+    { icon: Puzzle, label: 'Extensions' }
+  ];
 
-  const filteredInventory = useMemo(() => {
-    return inventory.filter(item => {
-      const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                           item.sku.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = categoryFilter === 'All Categories' || item.category === categoryFilter;
-      const matchesStatus = statusFilter === 'All Statuses' || item.status === statusFilter;
-      
-      return matchesSearch && matchesCategory && matchesStatus;
-    });
-  }, [inventory, searchQuery, categoryFilter, statusFilter]);
-  const getStatusStyles = (status) => {
-    switch (status) {
-      case 'Optimal':
-        return { bg: 'bg-green-100', text: 'text-green-700', dot: 'bg-green-500' };
-      case 'Low Stock':
-        return { bg: 'bg-tertiary-fixed', text: 'text-on-tertiary-fixed-variant', dot: 'bg-tertiary' };
-      case 'Out of Stock':
-        return { bg: 'bg-error-container', text: 'text-on-error-container', dot: 'bg-error' };
-      default:
-        return { bg: 'bg-surface-container', text: 'text-on-surface-variant', dot: 'bg-outline' };
+  const filters = ['Paid', 'Partially Paid', 'Pending', 'Unpaid', 'All'];
+
+  const orders = [
+    {
+      id: '#00002',
+      name: 'Book',
+      total: '₦ 2,000.00',
+      status: 'Completed',
+      statusColor: 'bg-green-100 text-green-700',
+      payment: 'Paid',
+      paymentColor: 'bg-blue-100 text-blue-700',
+      shipping: 'Picked Up',
+      shippingColor: 'bg-blue-100 text-blue-700',
+      date: 'June 25, 2026 6:50 AM',
+      downloads: 0,
+      icon: Store,
+      iconBg: 'bg-blue-50 border-blue-100 text-blue-600'
+    },
+    {
+      id: '#00001',
+      name: 'Book',
+      total: '₦ 1,000.00',
+      status: 'Processing',
+      statusColor: 'bg-[#e2e2e5] text-[#424656]',
+      payment: 'Paid',
+      paymentColor: 'bg-blue-100 text-blue-700',
+      shipping: 'Unfulfilled',
+      shippingColor: 'bg-orange-100 text-orange-700',
+      date: 'June 24, 2026 4:57 PM',
+      downloads: 0,
+      icon: ShoppingBag,
+      iconBg: 'bg-pink-50 border-pink-100 text-pink-600'
     }
-  };
+  ];
 
-  const getProgressColor = (percent) => {
-    if (percent === 0) return 'bg-error';
-    if (percent < 25) return 'bg-tertiary';
-    return 'bg-green-500';
-  };
-
+  const kpis = [
+    { label: 'Total Orders', value: '2', icon: ShoppingBag, color: 'bg-green-50 text-green-600 border-green-100' },
+    { label: 'Amount Owed', value: '₦0.00', icon: CreditCard, color: 'bg-red-50 text-red-600 border-red-100' },
+    { label: 'Completed Orders', value: '1', icon: CheckCircle, color: 'bg-blue-50 text-blue-600 border-blue-100' },
+    { label: 'Unpaid Orders', value: '0', icon: Clock, color: 'bg-yellow-50 text-yellow-600 border-yellow-100' }
+  ];
   return (
     <div className="flex flex-col gap-8 rounded-2xl border border-outline-variant/10 overflow-hidden">
-       {/* Header Section */}
-      <div className="hidden lg:flex justify-between items-end">
-        <div>
-          <h2 className="font-headline text-2xl font-extrabold text-on-surface tracking-tight">Orders</h2>
-          <p className="text-on-surface-variant">Manage and track your global warehouse orders accross all branches.</p>
+     <header className="h-16 w-full fixed top-0 z-40 border-b border-[#c2c6d8] bg-white/80 backdrop-blur-md flex justify-between items-center px-6">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-[#f3f3f6] rounded-lg border border-[#c2c6d8] cursor-pointer hover:bg-[#e8e8ea] transition-colors">
+            <span className="text-[14px] leading-[20px] text-[#424656]">Location:</span>
+            <span className="text-[14px] leading-[20px] font-bold text-[#0050cb]">Headquarters</span>
+            <ChevronDown size={16} className="text-sm" />
+          </div>
         </div>
-        <div className="flex gap-4">
-          <button className="flex items-center gap-2 px-5 py-2.5 bg-secondary-container text-on-secondary-container rounded-xl font-semibold text-sm hover:opacity-90 transition-opacity">
-            <Download size={20} />
-            Export CSV
+        <div className="flex items-center gap-4">
+          <button className="flex items-center gap-2 px-4 py-2 text-[#1a1c1e] hover:bg-[#f3f3f6] rounded-lg transition-all border border-[#c2c6d8]">
+            Point of Sale
           </button>
-          <Link href="/dashboard/admin/inventory/add-product">
-            <button className="flex items-center gap-2 px-6 py-2.5 bg-primary text-on-primary rounded-xl font-semibold text-sm shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
-              <Plus size={20} />
-              New Request
-            </button>
-          </Link>
+          <button className="bg-[#0050cb] text-white px-6 py-2 rounded-lg text-[14px] leading-[20px] font-bold hover:brightness-110 transition-all shadow-sm">
+            View Store
+          </button>
+          <div className="w-px h-6 bg-[#c2c6d8] mx-2"></div>
+          <button className="p-2 text-[#424656] hover:bg-[#f3f3f6] rounded-full transition-all relative">
+            <Bell size={20} />
+            <span className="absolute top-2 right-2 w-2 h-2 bg-[#ba1a1a] rounded-full"></span>
+          </button>
+          <div className="flex items-center gap-3 pl-2 cursor-pointer group">
+            <div className="w-8 h-8 rounded-full bg-[#dae1ff] flex items-center justify-center text-[#0050cb] font-bold overflow-hidden">
+              <img
+                className="w-full h-full object-cover"
+                alt="Profile"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAytkmGNliXmf6t8hflzPfDCVat0brFBfHd4-e20AauVY7MUZT-kirQAFwbVxXDIsqlrdUoj0s0DUtR6G6ZxM8Wm6dHJBMxM4Nn02_KPaEr9fXww-0G2DJBiTRCV6FqiyxG1R2TmuM9eFsm8AXU6CYiKWQJtTwepgSUGHRLGsy_z_xSNpfxpq05Ive5TiB3oZ18BHBTyzDizK3X7BNxUsHVoViOLPvTsvqWv1kwlOnqs3g9tIlvWq9gzslRG0zOEQXx6hzkETisISpN"
+              />
+            </div>
+            <span className="text-[14px] leading-[20px] hidden lg:block font-semibold">Nnaemeka Uzuegbu</span>
+            <ChevronDown size={20} className="text-[#424656] group-hover:translate-y-0.5 transition-transform" />
+          </div>
         </div>
-      </div>
+      </header>
 
-     
+      {/* Main Content Canvas */}
+      <main className="pt-16 min-h-screen">
+        <div className="p-6 max-w-[1440px] mx-auto">
+          {/* Page Header */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <h1 className="text-[32px] leading-[40px] tracking-[-0.01em] font-bold text-[#1a1c1e]">Orders</h1>
+            <div className="flex items-center gap-3">
+              <div className="relative group">
+                <button className="flex items-center gap-2 px-4 py-2 border border-[#0050cb] text-[#0050cb] rounded-lg text-[14px] leading-[20px] font-semibold hover:bg-[#dae1ff] transition-colors">
+                  Actions
+                  <ChevronDown size={16} />
+                </button>
+              </div>
+              <button className="flex items-center gap-2 px-6 py-2.5 bg-[#0066ff] text-white rounded-lg text-[14px] leading-[20px] font-bold hover:brightness-110 transition-all shadow-md">
+                <Plus size={20} />
+                Create Order
+              </button>
+            </div>
+          </div>
 
-      {/* Advanced Filter Bar */}
-      <div className="mx-8 mb-6 bg-surface-container-low p-2 rounded-2xl flex items-center gap-2">
-        <div className="flex-2 flex items-center gap-2 px-4 border-r border-outline-variant/30">
-          <Search className="text-outline" size={18} />
-          <input 
-            type="text" 
-            placeholder="Search by name or SKU..." 
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="bg-transparent border-none text-sm font-medium text-on-surface focus:ring-0 w-full placeholder:text-outline/60"
-          />
-        </div>
-        <div className="flex-3 flex items-center gap-2 px-4">
-          <span className="text-[10px] font-bold text-outline uppercase whitespace-nowrap tracking-wider">Category</span>
-          <select 
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-            className="bg-transparent border-none text-sm font-semibold text-on-surface focus:ring-0 cursor-pointer"
-          >{["all", "Electronics", "Accessories", "Furniture", "Footwear"].map((item) => (<option key={item}>{item}</option>))}
-          </select>
-          <div className="w-px h-6 bg-outline-variant/30 mx-2"></div>
-          <span className="text-[10px] font-bold text-outline uppercase whitespace-nowrap tracking-wider">Status</span>
-          <select 
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-transparent border-none text-sm font-semibold text-on-surface focus:ring-0 cursor-pointer"
-          > {["all", "optimal", "low Stock", "Out of Stock"].map((item) => (<option key={item}>{item}</option>))}  
-          </select>
-          
-        </div>
-        <div className="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/10 cursor-pointer hover:bg-surface-variant/10 transition-colors">
-          <Calendar className="text-outline" size={14} />
-          <span className="text-sm font-medium text-on-surface">Last 30 Days</span>
-          <ChevronDown className="text-outline" size={14} />
-        </div>
-      </div>
-
-      <table className="w-full text-left border-collapse">
-        <thead>
-          <tr className="border-b border-outline-variant/10 bg-surface-container-low">
-            {['Order ID', 'Store', 'Location', 'Status', 'Date', 'Actions'].map((item, index) => (
-              <th key={index} className={`py-5 text-xs font-bold text-outline uppercase tracking-wider ${index === 0 ? 'px-8' : index === 5 ? 'px-8 text-right' : 'px-6'}`}>{item}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-outline-variant/10">
-          {filteredInventory.length > 0 ? (
-            filteredInventory.map((item, index) => {
-              const currentStock = item.stock?.current ?? 0;
-              const maxStock = item.stock?.max ?? 100;
-              const percent = (currentStock / maxStock) * 100;
-              const styles = getStatusStyles(item.status);
-              
+          {/* KPI Row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+            {kpis.map((kpi, index) => {
+              const Icon = kpi.icon;
               return (
-                <tr key={index} className="hover:bg-surface-container-low/20 transition-colors group">
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-surface-container rounded-lg overflow-hidden shrink-0 shadow-sm border border-outline-variant/10">
-                        <img 
-                          alt={item.name} 
-                          className="w-full h-full object-cover" 
-                          src={item.src}
-                        />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-on-surface text-sm">{item.name}</p>
-                        <p className="text-[10px] text-outline font-label uppercase tracking-wider">SKU: {item.sku}</p>
-                      </div>
+                <div key={index} className="bg-white p-5 rounded-xl border border-[#c2c6d8] shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex justify-between items-start mb-4">
+                    <span className="text-[14px] leading-[20px] text-[#424656]">{kpi.label}</span>
+                    <div className={`w-10 h-10 rounded-lg ${kpi.color} flex items-center justify-center border`}>
+                      <Icon size={20} />
                     </div>
-                  </td>
-                  <td className="px-6 py-6">
-                    <span className="text-xs text-on-surface-variant font-medium px-3 py-1 bg-surface-container rounded-full border border-outline-variant/10">{item.category}</span>
-                  </td>
-                  <td className="px-6 py-6">
-                    <div className="w-32">
-                      <div className="flex justify-between mb-1.5">
-                        <span className="text-xs font-bold text-on-surface">{currentStock}</span>
-                        <span className="text-[10px] text-outline font-bold">/ {maxStock}</span>
-                      </div>
-                      <div className="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
-                        <div className={`h-full ${getProgressColor(percent)} transition-all duration-500`} style={{ width: `${percent}%` }}></div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-6 font-headline font-bold text-on-surface text-base">${item.price}</td>
-                  <td className="px-6 py-6">
-                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 ${styles.bg} ${styles.text} rounded-full text-[10px] font-bold uppercase tracking-wider border border-outline-variant/10`}>
-                      <span className={`w-1.5 h-1.5 ${styles.dot} rounded-full`}></span>
-                      {item.status}
-                    </span>
-                  </td>
-                  <td className="px-8 py-6 text-right">
-                    <Link   
-                      className='inline-flex items-center gap-1.5 px-4 py-2 hover:bg-surface-container rounded-xl transition-colors text-primary font-bold text-xs'
-                      href={`/dashboard/admin/inventory/productDetails/${item.sku}`}
-                    >
-                      View Details
-                      <ArrowRight size={18} />
-                    </Link>
-                  </td>
-                </tr>
-              );
-            })
-          ) : (
-            <tr>
-              <td colSpan="6" className="py-20 text-center">
-                <div className="flex flex-col items-center gap-4">
-                  <div className="w-16 h-16 bg-surface-container rounded-full flex items-center justify-center">
-                    <Package className="text-outline" size={30} />
                   </div>
-                  <div>
-                    <p className="font-bold text-on-surface">No order found</p>
-                    <p className="text-sm text-outline">Try adjusting your filters or search query.</p>
-                  </div>
-                  <button 
-                    onClick={() => {
-                      setSearchQuery('');
-                      setCategoryFilter('All Categories');
-                      setStatusFilter('All Statuses');
-                    }}
-                    className="mt-2 text-primary text-xs font-bold hover:underline"
-                  >
-                    Clear all filters
-                  </button>
+                  <div className="text-[24px] leading-[32px] font-bold">{kpi.value}</div>
                 </div>
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+              );
+            })}
+          </div>
 
-      
+          {/* Filter Tabs & Content Section */}
+          <div className="bg-white rounded-xl border border-[#c2c6d8] shadow-sm overflow-hidden">
+            {/* Filter Pills Container */}
+            <div className="px-6 py-4 flex flex-wrap gap-2 border-b border-[#c2c6d8] bg-[#f3f3f6]">
+              {filters.map((filter) => (
+                <button
+                  key={filter}
+                  className={`px-4 py-1.5 rounded-full text-[14px] leading-[20px] hover:bg-[#eeeef0] transition-colors ${
+                    activeFilter === filter
+                      ? 'bg-[#0066ff] text-white shadow-sm font-bold'
+                      : 'text-[#424656]'
+                  }`}
+                  onClick={() => setActiveFilter(filter)}
+                >
+                  {filter}
+                </button>
+              ))}
+            </div>
+
+            {/* Table Controls */}
+            <div className="px-6 py-4 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+              <div className="flex items-center gap-2 text-[#424656]">
+                <RefreshCw size={20} />
+                <span className="text-[14px] leading-[20px]">Showing {orders.length} of {orders.length} Orders</span>
+              </div>
+              <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
+                {/* Search */}
+                <div className="relative flex-1 lg:w-64 min-w-[200px]">
+                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#727687]" />
+                  <input
+                    className="w-full pl-10 pr-4 py-2 border border-[#c2c6d8] rounded-lg focus:ring-2 focus:ring-[#dae1ff] focus:border-[#0050cb] outline-none transition-all text-[14px] leading-[20px] bg-white"
+                    placeholder="Search by order ID or name"
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+                {/* Filter Actions */}
+                <button className="flex items-center gap-2 px-4 py-2 border border-[#c2c6d8] rounded-lg text-[14px] leading-[20px] hover:bg-[#f3f3f6] transition-colors">
+                  <Filter size={16} />
+                  Filter
+                </button>
+                <button className="flex items-center gap-2 px-4 py-2 border border-[#c2c6d8] rounded-lg text-[14px] leading-[20px] hover:bg-[#f3f3f6] transition-colors">
+                  <Truck size={16} />
+                  Delivery
+                </button>
+                <button className="flex items-center gap-2 px-4 py-2 border border-[#c2c6d8] rounded-lg text-[14px] leading-[20px] hover:bg-[#f3f3f6] transition-colors">
+                  <Calendar size={16} />
+                  Select Date Range
+                </button>
+              </div>
+            </div>
+
+            {/* Data Table */}
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="bg-[#f3f3f6] border-y border-[#c2c6d8]">
+                    <th className="w-12 px-6 py-3 text-left">
+                      <input className="rounded text-[#0050cb] border-[#c2c6d8] focus:ring-[#0050cb]" type="checkbox" />
+                    </th>
+                    <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656]">Order Number &amp; Name</th>
+                    <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656]">Total</th>
+                    <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656]">Status</th>
+                    <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656]">Payment</th>
+                    <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656]">Shipping</th>
+                    <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656] whitespace-nowrap">Date</th>
+                    <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656]">Downloads</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#c2c6d8]">
+                  {orders.map((order, index) => {
+                    const Icon = order.icon;
+                    return (
+                      <tr key={index} className="hover:bg-[#f3f3f6] transition-colors group">
+                        <td className="px-6 py-4">
+                          <input className="rounded text-[#0050cb] border-[#c2c6d8] focus:ring-[#0050cb]" type="checkbox" />
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-10 h-10 rounded-lg ${order.iconBg} flex items-center justify-center border`}>
+                              <Icon size={20} />
+                            </div>
+                            <div>
+                              <div className="text-[14px] leading-[20px] font-bold text-[#1a1c1e]">{order.id}</div>
+                              <div className="text-[14px] leading-[20px] text-[#424656]">{order.name}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-[14px] leading-[20px] font-semibold text-[#1a1c1e]">{order.total}</td>
+                        <td className="px-6 py-4">
+                          <span className={`px-3 py-1 rounded-full text-[12px] font-bold ${order.statusColor}`}>
+                            {order.status}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`px-3 py-1 rounded-full text-[12px] font-bold ${order.paymentColor}`}>
+                            {order.payment}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`px-3 py-1 rounded-full text-[12px] font-bold ${order.shippingColor}`}>
+                            {order.shipping}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-[14px] leading-[20px] text-[#424656] whitespace-nowrap">{order.date}</td>
+                        <td className="px-6 py-4 text-center text-[14px] leading-[20px] text-[#424656]">{order.downloads}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination Footer */}
+            <div className="px-6 py-4 bg-[#f3f3f6] border-t border-[#c2c6d8] flex items-center gap-4">
+              <span className="text-[14px] leading-[20px] text-[#424656]">Show</span>
+              <select className="border border-[#c2c6d8] rounded-lg px-3 py-1.5 text-[14px] leading-[20px] focus:ring-[#0050cb] focus:border-[#0050cb] outline-none">
+                <option>25</option>
+                <option>50</option>
+                <option>100</option>
+              </select>
+              <span className="text-[14px] leading-[20px] text-[#424656]">Entries</span>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

@@ -1,179 +1,335 @@
-import React from 'react';
-import { DollarSign, TrendingUp, ArrowRight, Filter } from 'lucide-react';
-import Link from 'next/link';
+"use client"
+import {
+  LayoutDashboard,
+  Package,
+  ShoppingCart,
+  Users,
+  BarChart3,
+  Wallet,
+  Megaphone,
+  Puzzle,
+  MoreHorizontal,
+  Settings,
+  MessageCircle,
+  ChevronDown,
+  Bell,
+  User,
+  Calendar,
+  Download,
+  Info,
+  TrendingUp,
+  TrendingDown,
+  TrendingFlat,
+  X,
+  Menu,
+  ArrowUp,
+  ArrowDown,
+  Minus,
+  Eye,
+  EyeOff,
+  FlipHorizontal2
+} from 'lucide-react';
 
-const DesktopReports = ({initialInventory}) => {
+import React, { useState } from 'react';
 
-  const inventory = initialInventory || [];
+
+const DesktopReports = () => {
+  const [activeTab, setActiveTab] = useState('Sales');
+  const [showAlert, setShowAlert] = useState(true);
+
+  const navItems = [
+    { icon: LayoutDashboard, label: 'Dashboard' },
+    { icon: Package, label: 'Products' },
+    { icon: ShoppingCart, label: 'Orders' },
+    { icon: Users, label: 'Customers' },
+    { icon: BarChart3, label: 'Analytics', active: true },
+    { icon: Wallet, label: 'inventory Wallet' },
+    { icon: Megaphone, label: 'Sales & Marketing' },
+    { icon: Puzzle, label: 'Extensions' },
+    { icon: MoreHorizontal, label: 'More' }
+  ];
+
+  const tabs = ['Sales', 'Transactions', 'Products', 'Customers', 'Campaigns'];
+
+  const stats = [
+    {
+      label: 'Total Customers',
+      value: '1,248',
+      change: '-4% vs last month',
+      icon: Users,
+      trend: 'down',
+      color: 'text-tertiary'
+    },
+    {
+      label: 'Total Orders',
+      value: '84',
+      change: '+12% vs last month',
+      icon: ShoppingCart,
+      trend: 'up',
+      color: 'text-primary'
+    },
+    {
+      label: 'Conv. Rate',
+      value: '3.2%',
+      change: 'Stable',
+      icon: BarChart3,
+      trend: 'stable',
+      color: 'text-outline'
+    }
+  ];
+
+  const getTrendIcon = (trend) => {
+    switch (trend) {
+      case 'up':
+        return <TrendingUp size={14} />;
+      case 'down':
+        return <TrendingDown size={14} />;
+      default:
+        return <Minus size={14} />;
+    }
+  };
+
   return (
-    <section className="p-10 space-y-10 max-w-7xl mx-auto w-full font-body">
-      {/* Header & Filter Section */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div>
-          <h2 className="font-headline text-3xl font-extrabold text-on-surface tracking-tight">Analytics Overview</h2>
-          <p className="text-on-surface-variant font-medium">Real-time inventory intelligence and movement tracking.</p>
+    <div className="p-10 space-y-10 max-w-7xl mx-auto w-full font-body">
+       {/* Top Navigation Bar */}
+      <header className="h-16 w-full fixed top-0 z-40 border-b border-[#c2c6d8] bg-white/80 backdrop-blur-md flex justify-between items-center px-6">
+        <div className="flex items-center gap-4">
+          <div className="bg-[#f3f3f6] px-4 py-2 rounded-lg flex items-center gap-2 border border-[#c2c6d8]">
+            <span className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687]">Location:</span>
+            <span className="text-[14px] leading-[20px] font-semibold text-[#0050cb] flex items-center gap-1">
+              Headquarters
+              <ChevronDown size={18} />
+            </span>
+          </div>
         </div>
-        <div className="flex items-center bg-surface-container p-1 rounded-xl">
-          {["Date Range", "7 Days", "30 Days", "90 Days", "Custom"].map((item) => (
-            <button key={item} className="px-6 py-2 text-sm font-semibold text-on-surface-variant hover:text-on-surface transition-colors">
-              {item}
+        <div className="flex items-center gap-6">
+          <button className="flex items-center gap-2 px-4 py-2 rounded-lg border border-[#c2c6d8] hover:bg-[#f3f3f6] transition-all">
+            Point of Sale
+          </button>
+          <button className="bg-[#0050cb] text-white px-6 py-2 rounded-lg font-semibold hover:brightness-110 transition-all">
+            View Store
+          </button>
+          <div className="flex items-center gap-3 border-l border-[#c2c6d8] pl-6">
+            <button className="relative p-2 hover:bg-[#f3f3f6] rounded-full">
+              <Bell size={20} />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#ba1a1a] rounded-full"></span>
             </button>
-          ))}    
-        </div>
-      </div>
-
-      {/* Bento Grid Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-        <div className="md:col-span-4 bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-outline-variant/10 flex flex-col justify-center group">
-          <div className="flex align-center  justify-between">
-            <div className="flex flex-col gap-2 items-start">
-              <span className="text-outline font-semibold text-sm tracking-wider uppercase">Total Inventory Value</span>
-              <h3 className="text-lg font-headline font-extrabold text-on-surface">₦{inventory.reduce((acc, item) => acc + (item.stock?.current || 0) * (item.stock?.current || 0), 0)}</h3>
-             
+            <div className="flex items-center gap-2 pl-2">
+              <div className="w-10 h-10 rounded-full bg-[#dae1ff] flex items-center justify-center overflow-hidden">
+                <img
+                  className="w-full h-full object-cover"
+                  alt="Profile"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAk5c7lRBa2Dtyje3nmDEmp-yHKlFHhleuh1RCrgEY4DtZKV2C9KWRG0kch6j4_zNpQOlkd-ArPp1JVDwdw1qJR-jQdLd69Jq9KlwAS86N0oi3ddgHT8pqnbnhMz0NQN1pdW7Q9lnu3tAbH5z8bI0XqlanZmuVa4hm35VxiMPog096fGJYyNpBHXHpZMWfvjkKp3OwgHg9o7esDDmZSAvUg1iYoKQVETw7oenyIjdm8M1lM2syFD_orMcrj5KXy7wkdM1q7q9oGeqhk"
+                />
+              </div>
+              <div className="hidden lg:block text-left">
+                <p className="text-[14px] leading-[20px] font-semibold leading-none">Nnaemeka U.</p>
+                <p className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] leading-none mt-1">Admin</p>
+              </div>
+              <ChevronDown size={20} className="text-[#727687]" />
             </div>
-            <div className="flex items-baseline gap-3">
-               <div className="p-2 bg-primary-fixed rounded-lg text-primary">
-                <DollarSign size={20} />
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="pt-16 min-h-screen">
+        <div className="p-6 max-w-7xl mx-auto space-y-6">
+          {/* Page Header Area */}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <h1 className="text-[32px] leading-[40px] tracking-[-0.01em] font-bold text-[#1a1c1e]">Analytics</h1>
+              <div className="mt-2 flex items-center gap-2 bg-[#e8e8ea] px-3 py-1.5 rounded-lg border border-[#c2c6d8]">
+                <span className="text-[#0050cb] text-[20px]">✨</span>
+                <p className="text-[14px] leading-[20px]">Business report is ready for review.</p>
+                <button className="bg-[#0066ff] text-white p-1 rounded-md ml-2 hover:brightness-95 transition-all">
+                  <Download size={18} />
+                </button>
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase">Select date to filter:</span>
+              <div className="flex items-center gap-2 bg-white px-4 py-2.5 rounded-xl border border-[#c2c6d8] shadow-[0px_4px_20px_rgba(0,0,0,0.04)] cursor-pointer hover:border-[#0050cb] transition-all group">
+                <Calendar size={20} className="text-[#727687] group-hover:text-[#0050cb]" />
+                <span className="text-[14px] leading-[20px] font-medium">1/01/2026 - 31/12/2026</span>
+                <ChevronDown size={20} className="text-[#727687]" />
+              </div>
+              <div className="flex items-center gap-2 bg-white px-4 py-2.5 rounded-xl border border-[#c2c6d8] shadow-[0px_4px_20px_rgba(0,0,0,0.04)] cursor-pointer hover:border-[#0050cb] transition-all">
+                <span className="text-[14px] leading-[20px] font-medium">Compare</span>
+                <ChevronDown size={20} className="text-[#727687]" />
               </div>
             </div>
           </div>
-         
-        </div>
-        <div className="md:col-span-4 bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-outline-variant/10">
-          <span className="text-outline font-semibold text-sm tracking-wider uppercase">Active SKUs</span>
-          <h3 className="text-lg font-headline font-extrabold text-on-surface">{inventory.length}</h3>
-          <p className="text-on-surface-variant text-xs font-medium">{inventory.filter(item => item.stock?.current < item.stock?.max && item.stock?.current > 0).length} Added this month</p>
-          
-        </div>
-        <div className="md:col-span-4 bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-outline-variant/10">
-          <span className="text-outline font-semibold text-sm tracking-wider uppercase">Stock Alerts</span>
-          <h3 className="text-lg font-headline font-extrabold text-error">{inventory.filter(item => item.stock?.current < item.stock?.max).length}</h3>
-          <p className="text-on-surface-variant text-xs font-medium">Items requiring attention</p>
-          <Link href="/dashboard/admin/inventory" className=" text-sm font-bold text-primary flex items-center group">
-            Review Now 
-            <ArrowRight className="ml-1 group-hover:translate-x-1 transition-transform" size={14} />
-          </Link>
-        </div>
-      </div>
 
-      {/* Charts & Distribution */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Net Stock Movement */}
-        <div className="lg:col-span-2 bg-surface-container-lowest p-8 rounded-2xl shadow-sm border border-outline-variant/10">
-          <div className="flex justify-between items-center mb-10">
-            <h4 className="font-headline font-bold text-xl">Net Stock Movement</h4>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-primary"></span>
-                <span className="text-xs font-semibold text-on-surface-variant">Inbound</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-secondary"></span>
-                <span className="text-xs font-semibold text-on-surface-variant">Outbound</span>
-              </div>
-            </div>
-          </div>
-          <div className="aspect-16/7 relative w-full flex items-end gap-4 px-4">
-            {/* Simulated Bar Chart */}
-            {[
-              { label: 'MON', inbound: 60, outbound: 40 },
-              { label: 'TUE', inbound: 80, outbound: 30 },
-              { label: 'WED', inbound: 40, outbound: 50 },
-              { label: 'THU', inbound: 90, outbound: 20 },
-              { label: 'FRI', inbound: 75, outbound: 45 },
-              { label: 'SAT', inbound: 35, outbound: 15 },
-              { label: 'SUN', inbound: 25, outbound: 10 },
-            ].map((data, idx) => (
-              <div key={idx} className="flex-1 flex flex-col justify-end gap-1 group cursor-pointer">
-                <div className="w-full bg-secondary-container rounded-t-lg group-hover:opacity-80 transition-opacity" style={{ height: `${data.outbound}%` }}></div>
-                <div className="w-full bg-primary rounded-t-lg group-hover:opacity-80 transition-opacity" style={{ height: `${data.inbound}%` }}></div>
-                <span className="text-[10px] text-center mt-2 text-outline font-bold">{data.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Category Distribution */}
-        <div className="bg-surface-container-lowest p-8 rounded-2xl shadow-sm border border-outline-variant/10">
-          <h4 className="font-headline font-bold text-xl mb-8">Category Mix</h4>
-          <div className="space-y-6">
-            <div>
-              <div className="flex justify-between text-sm mb-2">
-                <span className="font-bold text-on-surface">Electronics</span>
-                <span className="text-outline">45%</span>
-              </div>
-              <div className="w-full h-2.5 bg-surface-container rounded-full overflow-hidden">
-                <div className="bg-primary h-full w-[45%]"></div>
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-between text-sm mb-2">
-                <span className="font-bold text-on-surface">Furniture</span>
-                <span className="text-outline">28%</span>
-              </div>
-              <div className="w-full h-2.5 bg-surface-container rounded-full overflow-hidden">
-                <div className="bg-secondary h-full w-[28%]"></div>
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-between text-sm mb-2">
-                <span className="font-bold text-on-surface">Supplies</span>
-                <span className="text-outline">18%</span>
-              </div>
-              <div className="w-full h-2.5 bg-surface-container rounded-full overflow-hidden">
-                <div className="bg-tertiary-container h-full w-[18%]"></div>
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-between text-sm mb-2">
-                <span className="font-bold text-on-surface">Other</span>
-                <span className="text-outline">9%</span>
-              </div>
-              <div className="w-full h-2.5 bg-surface-container rounded-full overflow-hidden">
-                <div className="bg-outline h-full w-[9%]"></div>
-              </div>
-            </div>
-          </div>
-          <Link href="/dashboard/admin/inventory" className="w-full mt-10 flex items-center justify-center py-3 border border-outline-variant/30 rounded-xl text-sm font-bold hover:bg-surface-container-low transition-colors">
-            Full Category Report
-          </Link>
-        </div>
-      </div>
-
-      {/* Most Popular Items Table */}
-      <div className="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/10 overflow-hidden">
-       
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-surface-container-low/50">
-
-              {["Item", "Stock", "Price", "Action"].map((item) => (
-                <th key={item} className="px-8 py-4 text-xs font-extrabold text-outline uppercase tracking-wider">{item}</th>
+          {/* Sub-Tabs Navigation */}
+          <div className="border-b border-[#c2c6d8]">
+            <nav className="flex gap-8">
+              {tabs.map((tab) => (
+                <button
+                  key={tab}
+                  className={`pb-4 px-1 border-b-2 transition-all text-[14px] leading-[20px] ${
+                    activeTab === tab
+                      ? 'border-[#0050cb] text-[#0050cb] font-semibold'
+                      : 'border-transparent text-[#424656] hover:text-[#1a1c1e]'
+                  }`}
+                  onClick={() => setActiveTab(tab)}
+                >
+                  {tab}
+                </button>
               ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-outline-variant/5">
-            {[...new Set(inventory.map((item) => item.name))].map((name) => (
-              <tr key={name} className="hover:bg-surface-container-low/30 transition-colors group">
-                <td className="px-8 py-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-surface-container overflow-hidden">
-                      <img className="w-full h-full object-cover" alt="High quality studio headphones on stand" src={name.src}/>
-                    </div>
-                    <div>
-                      <div className="font-bold text-on-surface">{name}</div>
-                      <div className="text-xs text-on-surface-variant">{name.category}</div>
-                    </div>
+            </nav>
+          </div>
+
+          {/* Warning Alert */}
+          {showAlert && (
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-4">
+              <div className="bg-amber-100 p-2 rounded-full text-amber-600">
+                <Info size={20} />
+              </div>
+              <div className="flex-1">
+                <p className="text-[20px] leading-[28px] font-semibold text-amber-900">Gross and net profit are not shown</p>
+                <p className="text-[14px] leading-[20px] text-amber-800 mt-1">
+                  This is because one or more products are missing a cost price. Please add a cost price to all products to see your full profit analytics.
+                </p>
+              </div>
+              <div className="flex gap-3 items-center">
+                <button className="bg-[#1a1c1e] text-white px-6 py-2 rounded-lg font-semibold shadow-md hover:opacity-90 transition-all">
+                  View Products
+                </button>
+                <button className="text-amber-900 p-1 hover:bg-amber-100 rounded-full" onClick={() => setShowAlert(false)}>
+                  <X size={20} />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Charts Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Chart 1: Total Sales */}
+            <div className="bg-white p-6 rounded-2xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-[#c2c6d8] flex flex-col gap-6 group hover:border-[#0050cb]/30 transition-all">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase">Total Sales</p>
+                  <h3 className="text-[48px] leading-[56px] tracking-[-0.02em] font-bold text-[#1a1c1e] mt-1">₦3,000.00</h3>
+                  <div className="flex items-center gap-1.5 text-[#0050cb] mt-1">
+                    <TrendingUp size={18} />
+                    <span className="text-[14px] leading-[20px] font-semibold">100% from last year</span>
                   </div>
-                </td>
-                </tr>
-            ))}
-            </tbody>
-          </table>
+                </div>
+                <div className="flex flex-col items-end gap-2 text-[#727687]">
+                  <div className="flex items-center gap-2 text-[12px] leading-[16px] tracking-[0.05em] font-medium">
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#0050cb]"></div>
+                    Jan 1, 2026 - Dec 31, 2026
+                  </div>
+                  <button className="p-1 hover:bg-[#eeeef0] rounded-md">
+                    <Menu size={20} />
+                  </button>
+                </div>
+              </div>
+              {/* SVG Chart Visualization */}
+              <div className="h-64 w-full relative pt-8">
+                {/* Y-axis labels */}
+                <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687]/50 pr-4">
+                  <span>3,200</span>
+                  <span>2,400</span>
+                  <span>1,600</span>
+                  <span>800</span>
+                  <span className="mb-6">0</span>
+                </div>
+                <div className="ml-12 h-full border-b border-l border-[#c2c6d8]/30 relative flex items-end">
+                  {/* Grid Lines */}
+                  <div className="absolute inset-0 flex flex-col justify-between">
+                    <div className="w-full border-t border-dashed border-[#c2c6d8]/20"></div>
+                    <div className="w-full border-t border-dashed border-[#c2c6d8]/20"></div>
+                    <div className="w-full border-t border-dashed border-[#c2c6d8]/20"></div>
+                    <div className="w-full border-t border-dashed border-[#c2c6d8]/20"></div>
+                    <div className="w-full"></div>
+                  </div>
+                  {/* Simple Line Path */}
+                  <svg className="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 400 200">
+                    <defs>
+                      <linearGradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stopColor="#0050cb" stopOpacity="0.2"></stop>
+                        <stop offset="100%" stopColor="#0050cb" stopOpacity="0"></stop>
+                      </linearGradient>
+                    </defs>
+                    <path d="M 0,200 L 150,200 L 175,50 L 200,200 L 400,200" fill="transparent" stroke="#0050cb" strokeLinejoin="round" strokeWidth="3"></path>
+                    <path d="M 0,200 L 150,200 L 175,50 L 200,200 L 400,200 L 400,200 L 0,200" fill="url(#chartGradient)"></path>
+                    {/* Active Point */}
+                    <circle cx="175" cy="50" fill="#0050cb" r="5"></circle>
+                    <circle cx="175" cy="50" fill="#0050cb" opacity="0.2" r="10"></circle>
+                  </svg>
+                </div>
+                {/* X-axis labels */}
+                <div className="flex justify-between ml-12 mt-2 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687]/50 px-2">
+                  <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+                  <span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Chart 2: Shipping Spend */}
+            <div className="bg-white p-6 rounded-2xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-[#c2c6d8] flex flex-col gap-6 group hover:border-[#0050cb]/30 transition-all">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase">Shipping Spend</p>
+                  <h3 className="text-[48px] leading-[56px] tracking-[-0.02em] font-bold text-[#1a1c1e] mt-1">₦0.00</h3>
+                  <div className="flex items-center gap-1.5 text-[#727687] mt-1 opacity-50">
+                    <FlipHorizontal2 size={18} />
+                    <span className="text-[14px] leading-[20px] font-semibold">No change from last year</span>
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-2 text-[#727687]">
+                  <div className="flex items-center gap-2 text-[12px] leading-[16px] tracking-[0.05em] font-medium">
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#555f6c]"></div>
+                    Jan 1, 2026 - Dec 31, 2026
+                  </div>
+                  <button className="p-1 hover:bg-[#eeeef0] rounded-md">
+                    <Menu size={20} />
+                  </button>
+                </div>
+              </div>
+              {/* Flat Chart Visualization */}
+              <div className="h-64 w-full relative pt-8">
+                <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687]/50 pr-4">
+                  <span>1</span>
+                  <span className="mb-6">0</span>
+                </div>
+                <div className="ml-12 h-full border-b border-l border-[#c2c6d8]/30 relative flex items-end">
+                  <div className="absolute top-0 w-full border-t border-dashed border-[#c2c6d8]/20"></div>
+                  {/* Flat Line Path */}
+                  <svg className="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 400 200">
+                    <path d="M 0,200 L 400,200" fill="transparent" stroke="#555f6c" strokeWidth="2"></path>
+                  </svg>
+                </div>
+                <div className="flex justify-between ml-12 mt-2 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687]/50 px-2">
+                  <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+                  <span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Dashboard Details - Bento Section */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {stats.map((stat, index) => {
+              const Icon = stat.icon;
+              return (
+                <div key={index} className="bg-[#f3f3f6] p-6 rounded-2xl border border-[#c2c6d8] group hover:bg-white transition-all">
+                  <Icon size={32} className="text-[#0050cb] mb-4" />
+                  <p className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase font-semibold">{stat.label}</p>
+                  <p className="text-[32px] leading-[40px] tracking-[-0.01em] font-bold mt-1">{stat.value}</p>
+                  <p className={`text-[14px] leading-[20px] mt-2 flex items-center gap-1 ${stat.color}`}>
+                    {getTrendIcon(stat.trend)}
+                    {stat.change}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
-    </section>
+      </main>
+    </div>
   );
 };
 

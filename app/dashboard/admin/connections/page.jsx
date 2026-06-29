@@ -45,14 +45,14 @@ const page = () => {
   };
 
   return (
-    <div className="flex flex-col gap-8 rounded-2xl border border-outline-variant/10 overflow-hidden">
+    <div className="flex flex-col gap-8 p-4 rounded-2xl border border-outline-variant/10 overflow-hidden">
        {/* Header Section */}
-      <div className="hidden lg:flex justify-between items-end">
+      <div className="flex justify-between items-end">
         <div>
           <h2 className="font-headline text-2xl font-extrabold text-on-surface tracking-tight">Connected Platforms</h2>
           <p className="text-on-surface-variant">Manage and track your global warehouse stock levels accross all platforms.</p>
         </div>
-        <div className="flex gap-4">
+        <div className="hidden sm:flex gap-4">
           <button className="flex items-center gap-2 px-5 py-2.5 bg-secondary-container text-on-secondary-container rounded-xl font-semibold text-sm hover:opacity-90 transition-opacity">
             <Download size={20} />
             Export CSV
@@ -107,7 +107,7 @@ const page = () => {
                             products: 120
                         },
                         {
-                            name: 'Jiji',
+                            name: 'Konga',
                             description: 'E-commerce Platform',
                             status: 'active',
                             location: 'Lagos, Nigeria',
@@ -121,8 +121,8 @@ const page = () => {
                             location: 'Lagos, Nigeria',
                             products: 120
                         }
-                    ].map((item) => (
-                  <div key={item.name} className="col-span-2 p-4 flex flex-col gap-4 border border-slate-200 rounded-2xl">
+                    ].map((item, index) => (
+                  <div key={index} className="col-span-2 p-4 flex flex-col gap-4 border border-slate-200 rounded-2xl">
                     <div className="flex items-center gap-2 ">
                         {item.image ?
                     <img src={item.image} alt={item.name} className="w-12 h-12 rounded-lg object-contain" />

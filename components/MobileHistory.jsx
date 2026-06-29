@@ -53,7 +53,7 @@ const MobileHistory = ({ history }) => {
             <span className="font-headline font-bold text-sm tracking-widest text-outline uppercase">Today — Oct 22</span>
           </div>
 
-          {history.filter(filterHistory).map((item, index) => (
+          {history ? history?.filter(filterHistory).map((item, index) => (
             <div key={index} className="relative flex gap-4">
               <div className="relative z-10 shrink-0 w-4 flex justify-center">
                 <div className={`w-3 h-3 rounded-full mt-5 ring-4 ring-background ${item.quantity.startsWith('+') ? 'bg-primary' : 'bg-error'}`}></div>
@@ -85,7 +85,12 @@ const MobileHistory = ({ history }) => {
                 </div>
               </div>
             </div>
-          ))}
+          )) : (
+            <div className="text-center py-4">
+              <History size={100}/>
+              <p className="text-sm text-outline">No history found</p>
+            </div>
+          )}
         </div>
       </div>
       {/* Load More CTA - Mobile only */}

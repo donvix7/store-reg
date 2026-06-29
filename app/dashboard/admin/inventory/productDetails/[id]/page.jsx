@@ -35,14 +35,11 @@ export default function ProductDetailsPage() {
   return (
     <div className="p-5 lg:p-10 max-w-7xl mx-auto space-y-10 font-body">
       {/* Desktop View Section */}
-      <section className="hidden lg:block">
+      <section className="">
         <DesktopProductDetails product={product} />
       </section>
 
-      {/* Mobile View Section */}
-      <section className="lg:hidden">
-        <MobileProductDetails product={product} />
-      </section>
+     
     </div>
   );
 }

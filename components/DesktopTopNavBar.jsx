@@ -1,10 +1,19 @@
+"use client"
+import { Logout } from '@/lib/actions';
 import { Search, Bell, Settings, LogOut, LogOutIcon } from 'lucide-react';
 import Link from 'next/link'
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React from 'react'
 
 const DesktopTopNavBar = () => {
     const pathname = usePathname();
+    const router = useRouter()
+
+    const handleLogOut = async () =>{
+        //await clearStorage();
+        await Logout();
+        router.push("/auth/login");
+    }
   return (
     <div>
          <header className="hidden lg:flex sticky top-0 z-10 bg-background/80 backdrop-blur-md px-10 py-6 items-center justify-between">
@@ -20,11 +29,12 @@ const DesktopTopNavBar = () => {
               <Bell size={22} fill={pathname.includes('notification') ? "currentColor" : "none"} />
             </button>
            </Link>
-           <Link href="/login">
-            <button className="flex items-center gap-2 w-fit px-4 py-2 rounded-xl bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-colors">
+            <button 
+            onClick={handleLogOut}
+            className="flex items-center gap-2 w-fit px-4 py-2 rounded-xl bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-colors">
               <LogOutIcon size={22} />
             </button>
-           </Link>
+
           </div>
         </header>
     </div>

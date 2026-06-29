@@ -3,7 +3,7 @@ import { Pencil, Mail, UserCheck, Building2, Award, BellRing, Shield, Info } fro
 
 const MobileSettings = () => {
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10 pb-32">
+    <div className="w-full  p-4 pb-32">
       <div className="flex flex-col gap-6">
         
         {/* Profile Section */}
