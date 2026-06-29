@@ -61,11 +61,7 @@ export default function AdminLayout({ children }) {
  
   ];
   const financeLinks = [
-    {
-      title: "Bank Details",
-      icon: <Receipt size={20} />,
-      href: "/dashboard/admin/bank",
-    },
+   
      {
       title: "Invoices",
       icon: <Receipt size={20} />,

@@ -1,384 +1,375 @@
 "use client";
-
-import React, { useEffect, useState } from 'react';
-import { 
-  Bell, 
-  CheckCircle2, 
-  ShoppingBag, 
-  ChevronLeft, 
-  ChevronRight, 
-  ArrowRight, 
-  MoreVertical, 
-  AlertTriangle,
-  Mail,
-  Check,
-  CheckCheck,
-  Filter,
-  Trash2,
+import React, { useState } from 'react';
+import {
+  LayoutDashboard,
+  Package,
+  ShoppingCart,
+  Users,
+  BarChart3,
+  Wallet,
   Store,
-  Pencil,
-  Trash,
-  MapPinMinusInside,
+  Search,
+  Bell,
+  Settings,
+  HelpCircle,
+  User,
   Plus,
-  MapPinPlusIcon,
-  Currency,
-  CurrencyIcon,
-  Banknote,
-  CoinsIcon,
-  LandmarkIcon,
-  PiggyBankIcon,
-  MoreVerticalIcon,
-  ChevronDownIcon
+  TrendingUp,
+  CheckCircle,
+  Clock,
+  Eye,
+  Download,
+  Mail,
+  Edit,
+  Trash2,
+  ChevronLeft,
+  ChevronRight,
+  FileText,
+  CreditCard,
+  AlertCircle,
+  Star
 } from 'lucide-react';
-import { updateNotification, markAllNotificationsAsRead } from '@/lib/actions';
-import { getInvoices, getLocations } from '@/lib/service';
-import Link from 'next/link';
-
-const formatDate = (dateVal) => {
-  if (!dateVal) return '';
-  try {
-    const d = new Date(dateVal);
-    if (isNaN(d.getTime())) return String(dateVal);
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  } catch (e) {
-    return String(dateVal);
-  }
-};
-
-const formatTime = (dateVal) => {
-  if (!dateVal) return '';
-  try {
-    const d = new Date(dateVal);
-    if (isNaN(d.getTime())) return '';
-    return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-  } catch (e) {
-    return '';
-  }
-};
-
-const getCategoryBadgeClass = (category) => {
-  const cat = category?.toLowerCase();
-  switch (cat) {
-    case 'order':
-    case 'sales':
-      return 'bg-blue-50 text-blue-700 border-blue-100';
-    case 'system':
-    case 'inventory':
-      return 'bg-purple-50 text-purple-700 border-purple-100';
-    case 'payment':
-    case 'bank':
-      return 'bg-green-50 text-green-700 border-green-100';
-    default:
-      return 'bg-slate-50 text-slate-700 border-slate-100';
-  }
-}; 
 
 const InvoiceList = () => {
-  const [showOnlyUnread, setShowOnlyUnread] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [activeMenuId, setActiveMenuId] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [invoices, setInvoices] = useState([])
-  const empty = "No invoices found"
-  const pageSize = 5;
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('All Statuses');
+  const [dateRange, setDateRange] = useState('Jan 01 - Jan 31');
 
-  const loadInvoices = async () => {
-    setLoading(true)
-    const res = await getInvoices()
-    console.log(res, "data")
-    if(res.success){
-      setInvoices(res.data)
+  const navItems = [
+    { icon: LayoutDashboard, label: 'Dashboard' },
+    { icon: Package, label: 'Products' },
+    { icon: ShoppingCart, label: 'Orders', active: true },
+    { icon: Users, label: 'Customers' },
+    { icon: BarChart3, label: 'Analytics' },
+    { icon: Wallet, label: 'Wallet' },
+    { icon: Store, label: 'Store Setup' }
+  ];
+
+  const stats = [
+    {
+      label: 'Total Amount Sent',
+      value: '₦4,250,000.00',
+      change: '+12%',
+      icon: CreditCard,
+      color: 'bg-primary/10 text-primary',
+      trend: 'up'
+    },
+    {
+      label: 'Total Paid',
+      value: '₦3,105,400.00',
+      change: '+8.4%',
+      icon: CheckCircle,
+      color: 'bg-secondary-fixed text-on-secondary-fixed',
+      trend: 'up'
+    },
+    {
+      label: 'Pending Invoices',
+      value: '₦1,144,600.00',
+      change: '24 Active',
+      icon: Clock,
+      color: 'bg-error-container text-on-error-container',
+      trend: 'neutral'
     }
-    setLoading(false)
-  }
-  useEffect(() => {
-    loadInvoices()
-  }, [])
-  
+  ];
 
-  // Compute dynamic stats
-  const unreadCount = invoices.length;
-  
+  const invoices = [
+    {
+      id: '#INV-8821',
+      customer: 'Adebayo Omokore',
+      email: 'ade.omokore@gmail.com',
+      initials: 'AO',
+      date: 'Oct 12, 2023',
+      dueDate: 'Oct 19, 2023',
+      amount: '₦120,000.00',
+      status: 'Paid',
+      statusColor: 'bg-tertiary-fixed text-tertiary',
+      avatarColor: 'bg-primary-fixed text-primary'
+    },
+    {
+      id: '#INV-8822',
+      customer: 'Chidinma Joy',
+      email: 'c.joy@outlook.com',
+      initials: 'CJ',
+      date: 'Oct 10, 2023',
+      dueDate: 'Oct 17, 2023',
+      amount: '₦45,000.00',
+      status: 'Overdue',
+      statusColor: 'bg-error-container text-error',
+      avatarColor: 'bg-secondary-fixed text-secondary'
+    },
+    {
+      id: '#INV-8823',
+      customer: 'Benson Egwueke',
+      email: 'begwueke@tech.ng',
+      initials: 'BE',
+      date: 'Oct 15, 2023',
+      dueDate: 'Oct 22, 2023',
+      amount: '₦280,500.00',
+      status: 'Unpaid',
+      statusColor: 'bg-secondary-container text-on-secondary-fixed-variant',
+      avatarColor: 'bg-tertiary-fixed text-tertiary'
+    },
+    {
+      id: '#INV-8824',
+      customer: 'Tayo Ajayi',
+      email: 'tayo@bumpa.com',
+      initials: 'TA',
+      date: 'Oct 18, 2023',
+      dueDate: '—',
+      amount: '₦12,000.00',
+      status: 'Draft',
+      statusColor: 'bg-surface-variant text-on-surface-variant',
+      avatarColor: 'bg-outline-variant text-on-surface-variant'
+    },
+    {
+      id: '#INV-8825',
+      customer: 'Seyi Olumide',
+      email: 'seyi.olu@me.com',
+      initials: 'SO',
+      date: 'Oct 19, 2023',
+      dueDate: 'Oct 26, 2023',
+      amount: '₦92,000.00',
+      status: 'Paid',
+      statusColor: 'bg-tertiary-fixed text-tertiary',
+      avatarColor: 'bg-primary-fixed text-primary'
+    }
+  ];
 
-  // Filter list
-  const filteredInvoices = invoices.filter(n => {
-    const matchesUnread = !showOnlyUnread || n.status === 'unread';
-    const matchesCategory = selectedCategory === 'All' || 
-      n.category?.toLowerCase() === selectedCategory.toLowerCase() ||
-      (selectedCategory === 'System' && n.category?.toLowerCase() === 'inventory') ||
-      (selectedCategory === 'Order' && n.category?.toLowerCase() === 'sales') ||
-      (selectedCategory === 'Payment' && n.category?.toLowerCase() === 'bank');
-    return matchesUnread && matchesCategory;
-  });
-
-  // Filter list
-  const filteredInvoicesWithStatus = invoices.filter(n => {
-    const matchesUnread = !showOnlyUnread || n.status === 'unread';
-    const matchesCategory = selectedCategory === 'All' || 
-      n.category?.toLowerCase() === selectedCategory.toLowerCase() ||
-      (selectedCategory === 'System' && n.category?.toLowerCase() === 'inventory') ||
-      (selectedCategory === 'Order' && n.category?.toLowerCase() === 'sales') ||
-      (selectedCategory === 'Payment' && n.category?.toLowerCase() === 'bank');
-    return matchesUnread && matchesCategory;
-  });
-  const TotalInvoiceCount = invoices.length;
-  const monthlyBudget = 100000;
-  const remainingBalance = monthlyBudget - TotalInvoiceCount;
-  const pendingPayments = invoices.filter(n => n.status === 'pending').length;
-  const paidInvoices = invoices.filter(n => n.status === 'paid').length;
-
-  // Pagination
-  const totalPages = Math.ceil(filteredInvoices.length / pageSize) || 1;
-  const activePage = Math.min(currentPage, totalPages);
-  const startIndex = (activePage - 1) * pageSize;
-  const paginatedInvoices = filteredInvoices.slice(startIndex, startIndex + pageSize);
-
-  const handleMarkAsRead = async (sku) => {
-    await updateNotification(sku);
-    if (loadStores) loadStores();
-  };
-
-  const handleMarkAllAsRead = async () => {
-    await markAllNotificationsAsRead();
-    if (loadStores) loadStores();
-  };
-
-  const handleDelete = async (sku) => {
-    const updated = notifications.filter(n => String(n.sku) !== String(sku));
-    localStorage.setItem('notification', JSON.stringify(updated));
-    if (loadStores) loadStores();
-    setActiveMenuId(null);
-  };
+  const statusOptions = ['All Statuses', 'Paid', 'Unpaid', 'Overdue', 'Draft'];
 
   return (
     <div className='p-4 sm:p-10 flex flex-col gap-8 max-w-6xl mx-auto'>
-      
-      {/* Page Header Section */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h2 className="font-headline text-3xl font-extrabold text-on-surface tracking-tight">Financial overview</h2>
-          <p className="text-sm text-secondary mt-1">Track and manage your business expenses in real time</p>
+    {/* Top Navigation Bar */}
+      <header className="fixed top-0 right-0 w-[calc(100%-260px)] h-16 bg-white border-b border-[#c2c6d8] flex justify-between items-center px-6 z-40">
+        <div className="flex items-center gap-4 flex-1">
+          <div className="relative w-full max-w-md">
+            <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#727687]" />
+            <input
+              className="w-full pl-10 pr-4 py-2 bg-[#f3f3f6] border-none rounded-full text-[14px] leading-[20px] focus:ring-2 focus:ring-[#0050cb]/20 outline-none"
+              placeholder="Search invoices, customers..."
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          <button 
-            onClick={() => { setShowOnlyUnread(!showOnlyUnread); setCurrentPage(1); }}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border font-bold text-sm transition-all cursor-pointer ${
-              showOnlyUnread 
-                ? 'bg-primary text-white border-primary shadow-sm' 
-                : 'border-outline-variant/60 text-secondary hover:bg-surface-container-low'
-            }`}
-          >
-            <Filter size={16} />
-            {showOnlyUnread ? 'Showing Unread' : 'Filter Unread'}
+        <div className="flex items-center gap-2">
+          <button className="hover:bg-[#eeeef0] rounded-full p-2 transition-transform scale-95 active:scale-90">
+            <Bell size={20} className="text-[#424656]" />
           </button>
-          <button 
-            onClick={handleMarkAllAsRead}
-            disabled={unreadCount === 0}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white font-bold text-sm hover:opacity-90 disabled:opacity-40 transition-all shadow-sm cursor-pointer"
-          >
-            <Plus size={16} />
-           Add Expenses
+          <button className="hover:bg-[#eeeef0] rounded-full p-2 transition-transform scale-95 active:scale-90">
+            <Settings size={20} className="text-[#424656]" />
           </button>
-        </div>
-      </div>
-
-      {/* Bento Layout Stats & Insights */}
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
-        {/* Stat 1 */}
-        <div className="bg-white p-6 rounded-2xl shadow-[0px_4px_20px_rgba(0,0,0,0.03)] border border-outline-variant/40 flex items-center justify-between group hover:border-primary/45 transition-colors cursor-default col-span-2">
-          <div className='flex gap-2 flex-col'>
-             <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-            <Banknote size={24} fill="currentColor" className="opacity-80" />
-          </div>
-            <p className="text-xs font-bold text-secondary uppercase tracking-wider mb-1">Total Expenses</p>
-            <h3 className="font-headline text-2xl font-extrabold text-on-surface">{TotalInvoiceCount}</h3>
-          </div>
-         
-        </div>
-        
-        {/* Stat 2 */}
-        <div className="bg-white p-6 rounded-2xl shadow-[0px_4px_20px_rgba(0,0,0,0.03)] border border-outline-variant/40 flex items-center justify-between group hover:border-primary/45 transition-colors cursor-default col-span-2">
-          <div className='flex gap-2 flex-col'>
-             <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-            <LandmarkIcon size={24} fill="currentColor" className="opacity-80" />
-          </div>
-            <p className="text-xs font-bold text-secondary uppercase tracking-wider mb-1">Monthly Bundget</p>
-            <h3 className="font-headline text-2xl font-extrabold text-on-surface">{TotalInvoiceCount}</h3>
-          </div>
-         
-        </div>
-
-        {/* Stat 3 */}
-        <div className="bg-white p-6 rounded-2xl shadow-[0px_4px_20px_rgba(0,0,0,0.03)] border border-outline-variant/40 flex flex-col gap-4 justify-between group hover:border-primary/45 transition-colors cursor-default col-span-2">
-          <div className='flex gap-2 flex-col'>
-            <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-            <PiggyBankIcon size={24} fill="currentColor" className="opacity-80" />
-          </div>
-            <p className="text-xs font-bold text-secondary uppercase tracking-wider mb-1">RRemaining Balance</p>
-            <p className="font-body text-sm  text-on-surface">
-             {TotalInvoiceCount > monthlyBudget ? `You are over budget by ${TotalInvoiceCount - monthlyBudget}` : `You are under budget by ${monthlyBudget - TotalInvoiceCount}`}
-            </p>
+          <button className="hover:bg-[#eeeef0] rounded-full p-2 transition-transform scale-95 active:scale-90">
+            <HelpCircle size={20} className="text-[#424656]" />
+          </button>
+          <div className="ml-4 flex items-center gap-3 cursor-pointer pl-4 border-l border-[#c2c6d8]">
+            <div className="w-8 h-8 rounded-full overflow-hidden border border-[#c2c6d8]">
+              <img
+                className="w-full h-full object-cover"
+                alt="Profile"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcpNK9tcRX4-uDuCKjpjvtN5tg5bBj8w4juI-C5YlHzU-CyKkQ76PgXBAEa1cWZiif4vAlgpZGQbdbOzxVMyeu6ZA1uteLBLUQqEMFv3sE4hwJKttwK3v85xPq5y48t4F0XBZiSxxj_lVZcLXY2f9kisyFYqSKabeXuiDO0GnBAm6nLwc99U-FniyOhxkwKoQvtAeICIBuiDmu0X0zvIRBtzqy3kfn5PIkbQGG32nRbqO5J-VjOg2qBx-S-Rh7RROD2AKcx75HsM_1"
+              />
+            </div>
+            <div className="hidden lg:block">
+              <p className="text-[14px] leading-[20px] font-semibold text-[#1a1c1e]">Store Admin</p>
+            </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* Notifications Table Card */}
-      <div className="bg-white rounded-2xl shadow-[0px_4px_20px_rgba(0,0,0,0.03)] border border-outline-variant/40 overflow-hidden flex flex-col gap-4 py-4">
-        
-      
+      {/* Main Content Canvas */}
+      <main className="pt-16  min-h-screen">
+        <div className="p-4 max-w-[1440px] mx-auto space-y-8">
+          {/* Header Section */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h2 className="text-[32px] leading-[40px] tracking-[-0.01em] font-bold text-[#1a1c1e]">Invoices</h2>
+              <p className="text-[14px] leading-[20px] text-[#555f6c] mt-1">
+                Managing <span className="font-bold text-[#0050cb]">128</span> total invoices issued this year.
+              </p>
+            </div>
+            <button className="bg-[#0050cb] text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 shadow-sm hover:shadow-md transition-all">
+              <Plus size={20} />
+              Create Invoice
+            </button>
+          </div>
 
-        {/* Table wrapper */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead className="bg-surface-container-low border-b border-outline-variant/60">
-              <tr>
-                {['Category', 'Description', 'Date', "Amount", ""].map((header) => (
-                  <th key={header} className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider w-1/2">
-                    {header}
-                  </th>
-                ))}  </tr>
-            </thead>
-            <tbody className="divide-y divide-outline-variant/30">
-              {paginatedInvoices.length === 0 ? (
-                <tr>
-                  <td colSpan={4} className="px-6 py-12 text-center">
-                    <div className="flex flex-col items-center justify-center gap-3 text-secondary">
-                      <Mail size={40} className="stroke-[1.5] text-outline-variant" />
-                      <p className="font-bold text-slate-500">{empty || 'No notifications found'}</p>
-                      <p className="text-xs text-slate-400">
-                        {showOnlyUnread 
-                          ? "You don't have any unread alerts matching this category." 
-                          : "No notifications recorded for this category."}
-                      </p>
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {stats.map((stat, index) => {
+              const Icon = stat.icon;
+              return (
+                <div key={index} className="bg-white p-6 rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-[#c2c6d8]/50 flex flex-col justify-between">
+                  <div className="flex justify-between items-start">
+                    <div className={`p-3 rounded-lg ${stat.color}`}>
+                      <Icon size={24} />
                     </div>
-                  </td>
-                </tr>
-              ) : (
-                paginatedInvoices.map((inv, index) => {
-                  const isUnread = inv.status === 'unread';
-                  const displayCategory = inv.badge || inv.category || 'General';
-                  const badgeClass = getCategoryBadgeClass(displayCategory);
-                  
-                  return (
-                    <tr 
-                      key={inv.id || index} 
-                      className={`hover:bg-surface-bright transition-colors group ${!isUnread ? 'opacity-70 grayscale-[0.4]' : ''}`}
-                    >
+                    <span className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#a33200] bg-[#ffdbd0] px-2 py-1 rounded flex items-center gap-1">
+                      <TrendingUp size={14} />
+                      {stat.change}
+                    </span>
+                  </div>
+                  <div className="mt-4">
+                    <p className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#555f6c] uppercase">{stat.label}</p>
+                    <h3 className="text-[24px] leading-[32px] font-bold text-[#1a1c1e] mt-1">{stat.value}</h3>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Filter Bar */}
+          <div className="bg-white p-4 rounded-xl shadow-sm border border-[#c2c6d8]/30 flex flex-wrap items-center gap-4">
+            <div className="relative flex-1 min-w-[280px]">
+              <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#727687]" />
+              <input
+                className="w-full pl-10 pr-4 py-2 border border-[#c2c6d8] rounded-lg text-[14px] leading-[20px] focus:ring-2 focus:ring-[#0050cb]/20 transition-all outline-none"
+                placeholder="Search invoice # or customer name..."
+                type="text"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#555f6c] uppercase whitespace-nowrap">Filter By:</span>
+              <select
+                className="bg-[#f3f3f6] border border-[#c2c6d8] rounded-lg px-4 py-2 text-[14px] leading-[20px] focus:ring-2 focus:ring-[#0050cb]/20 outline-none"
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+              >
+                {statusOptions.map((option) => (
+                  <option key={option}>{option}</option>
+                ))}
+              </select>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="relative">
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#727687] text-[18px]">calendar_today</span>
+                <input
+                  className="pl-10 pr-4 py-2 border border-[#c2c6d8] rounded-lg text-[14px] leading-[20px] focus:ring-2 focus:ring-[#0050cb]/20 outline-none w-48"
+                  placeholder="Jan 01 - Jan 31"
+                  type="text"
+                  value={dateRange}
+                  onChange={(e) => setDateRange(e.target.value)}
+                />
+              </div>
+            </div>
+            <button className="ml-auto text-[#0050cb] hover:bg-[#dae1ff] p-2 rounded-lg transition-colors flex items-center gap-2">
+              <Download size={20} />
+              <span className="text-[14px] leading-[20px] font-semibold">Export</span>
+            </button>
+          </div>
+
+          {/* Invoice Table Section */}
+          <div className="bg-white rounded-xl shadow-sm border border-[#c2c6d8]/30 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-[#f3f3f6] border-b border-[#c2c6d8]">
+                    <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#555f6c] uppercase tracking-wider">Invoice ID</th>
+                    <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#555f6c] uppercase tracking-wider">Customer</th>
+                    <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#555f6c] uppercase tracking-wider">Date Issued</th>
+                    <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#555f6c] uppercase tracking-wider">Due Date</th>
+                    <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#555f6c] uppercase tracking-wider">Total Amount</th>
+                    <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#555f6c] uppercase tracking-wider text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#c2c6d8]/30">
+                  {invoices.map((invoice, index) => (
+                    <tr key={index} className="hover:bg-white/50 transition-colors group cursor-pointer">
                       <td className="px-6 py-5">
-                        
-                          <div className='flex align-center gap-2 bg-primary/10 rounded-full py-1 px-3 w-fit text-primary '>
-                            <h4 className="font-body-lg font-bold  text-xs  text-on-surface">
-                              {inv.category}
-                            </h4>
+                        <div className="flex flex-col gap-1">
+                          <span className="text-[14px] leading-[20px] font-bold text-[#1a1c1e]">{invoice.id}</span>
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase ${invoice.statusColor} w-fit`}>
+                            {invoice.status}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-5">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-8 h-8 rounded-full ${invoice.avatarColor} flex items-center justify-center font-bold text-xs`}>
+                            {invoice.initials}
                           </div>
+                          <div>
+                            <p className="text-[14px] leading-[20px] font-semibold text-[#1a1c1e]">{invoice.customer}</p>
+                            <p className="text-[12px] text-[#555f6c]">{invoice.email}</p>
+                          </div>
+                        </div>
                       </td>
-                      <td className="px-6 py-5">
-                        <span className={`px-3 py-1 rounded-full font-medium text-xs`}>
-                          {inv.description}
-                        </span>
+                      <td className="px-6 py-5 text-[14px] leading-[20px] text-[#424656]">{invoice.date}</td>
+                      <td className={`px-6 py-5 text-[14px] leading-[20px] ${invoice.status === 'Overdue' ? 'font-semibold text-[#ba1a1a]' : 'text-[#424656]'}`}>
+                        {invoice.dueDate}
                       </td>
-                      <td className="px-6 py-5 flex align-center gap-2 whitespace-nowrap">
-                        <span className="  text-outline font-bold text-xs  ">
-                          {inv.date}
-                        </span>
-                       
-                     
-                      </td>
-                      <td className="px-6 py-5">
-                         <span className="font-body-md font-bold text-sm text-on-surface">
-                          {inv.amount}
-                        </span>
-                      </td>
-                      <td className="px-6 py-5">
-                        <MoreVerticalIcon className="cursor-pointer"/>
+                      <td className="px-6 py-5 text-[14px] leading-[20px] font-bold text-[#1a1c1e]">{invoice.amount}</td>
+                      <td className="px-6 py-5 text-right">
+                        <div className="flex justify-end gap-2">
+                          <button className="p-2 hover:bg-[#eeeef0] rounded-full text-[#555f6c] hover:text-[#0050cb] transition-all">
+                            <Eye size={20} />
+                          </button>
+                          {invoice.status === 'Paid' && (
+                            <button className="p-2 hover:bg-[#eeeef0] rounded-full text-[#555f6c] hover:text-[#0050cb] transition-all">
+                              <Download size={20} />
+                            </button>
+                          )}
+                          {invoice.status === 'Overdue' && (
+                            <button className="p-2 hover:bg-[#eeeef0] rounded-full text-[#555f6c] hover:text-[#0050cb] transition-all">
+                              <Mail size={20} />
+                            </button>
+                          )}
+                          {invoice.status === 'Unpaid' && (
+                            <button className="p-2 hover:bg-[#eeeef0] rounded-full text-[#555f6c] hover:text-[#0050cb] transition-all">
+                              <Edit size={20} />
+                            </button>
+                          )}
+                          {invoice.status === 'Draft' && (
+                            <>
+                              <button className="p-2 hover:bg-[#eeeef0] rounded-full text-[#555f6c] hover:text-[#0050cb] transition-all">
+                                <Edit size={20} />
+                              </button>
+                              <button className="p-2 hover:bg-[#eeeef0] rounded-full text-[#555f6c] hover:text-[#ba1a1a] transition-all">
+                                <Trash2 size={20} />
+                              </button>
+                            </>
+                          )}
+                        </div>
                       </td>
                     </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
-       
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-        {/* Pagination Footer */}
-        {filteredInvoices.length > 0 && (
-          <div className="px-6 py-4 bg-surface-container-low border-t border-outline-variant/60 flex flex-col sm:flex-row gap-4 justify-between items-center mt-2">
-            <p className="text-sm text-secondary">
-              Showing {startIndex + 1} to {Math.min(startIndex + pageSize, filteredInvoices.length)} of {filteredInvoices.length} stores
-            </p>
-            <div className="flex items-center gap-2">
-              <button 
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                disabled={activePage === 1}
-                className="p-2 rounded-xl border border-outline-variant/60 text-secondary disabled:opacity-30 hover:bg-surface-container transition-all cursor-pointer"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
-                <button 
-                  key={pageNum}
-                  onClick={() => setCurrentPage(pageNum)}
-                  className={`w-8 h-8 flex items-center justify-center rounded-xl font-bold text-sm transition-all cursor-pointer ${
-                    activePage === pageNum 
-                      ? 'bg-primary text-white shadow-md' 
-                      : 'text-secondary hover:bg-surface-container'
-                  }`}
-                >
-                  {pageNum}
+            {/* Pagination */}
+            <div className="p-4 border-t border-[#c2c6d8] flex items-center justify-between">
+              <p className="text-[14px] leading-[20px] text-[#555f6c]">Showing <span className="font-bold text-[#1a1c1e]">1-5</span> of 128 invoices</p>
+              <div className="flex items-center gap-2">
+                <button className="p-2 border border-[#c2c6d8] rounded-lg hover:bg-[#f3f3f6] transition-colors disabled:opacity-50" disabled>
+                  <ChevronLeft size={20} />
                 </button>
-              ))}
+                <button className="w-8 h-8 flex items-center justify-center bg-[#0050cb] text-white rounded-lg font-semibold text-sm">1</button>
+                <button className="w-8 h-8 flex items-center justify-center hover:bg-[#f3f3f6] rounded-lg font-semibold text-sm transition-colors">2</button>
+                <button className="w-8 h-8 flex items-center justify-center hover:bg-[#f3f3f6] rounded-lg font-semibold text-sm transition-colors">3</button>
+                <button className="p-2 border border-[#c2c6d8] rounded-lg hover:bg-[#f3f3f6] transition-colors">
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+            </div>
+          </div>
 
-              <button 
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                disabled={activePage === totalPages}
-                className="p-2 rounded-xl border border-outline-variant/60 text-secondary disabled:opacity-30 hover:bg-surface-container transition-all cursor-pointer"
-              >
-                <ChevronRight size={16} />
+          {/* Promotion / Help Footer Banner */}
+          <div className="relative overflow-hidden rounded-2xl bg-[#0050cb] h-48 flex items-center px-12 group">
+            <div className="relative z-10 max-w-lg">
+              <h4 className="text-[20px] leading-[28px] font-semibold text-white">Need help with custom invoice templates?</h4>
+              <p className="text-[#f8f7ff] text-[14px] leading-[20px] mt-2 opacity-90">Our premium plan allows you to add brand logos, personalized thank-you notes, and automated payment reminders.</p>
+              <button className="mt-4 bg-white text-[#0050cb] px-6 py-2.5 rounded-lg font-bold text-[14px] leading-[20px] hover:shadow-lg transition-all active:scale-95">
+                Upgrade Today
               </button>
             </div>
-          </div>
-        )}
-      </div>
-       <div className="grid grid-cols-12 gap-4 min-h-20 border-outline-variant/40 mt-3 rounded-lg">
-          <div className="col-span-8 border rounded-2xl bg-white border-outline-variant/40 p-4">
-            <div className='flex justify-between mb-3 gap-4'>
-              <p className="font-bold text-slate-500 ">Monthly Trend</p>
-              <p className="text-xs font-bold text-secondary bg-container-low rounded-full p-2  gap-2 flex items-center align-center justify-center">Last 6 months <ChevronDownIcon className="cursor-pointer text-secondary"/></p>
-            </div>
-            
-          </div>
-          <div className="col-span-4 border rounded-2xl bg-white border-outline-variant/40 p-4">
-            <div className='flex justify-between mb-3'>
-              <p className="font-bold text-slate-900 ">Upcoming </p>
-            </div>
-            <div>
-              
+            <div className="absolute right-12 top-1/2 -translate-y-1/2 hidden md:block">
+              <FileText size={120} className="text-white opacity-10" />
             </div>
           </div>
         </div>
-
-      {/* Contextual Help / Tips Card */}
-      <div className="bg-primary-container text-on-primary-container rounded-3xl p-8 relative overflow-hidden group shadow-lg">
-        <div className="relative z-10 max-w-2xl">
-          <h3 className="font-headline text-2xl font-bold text-white mb-2">Automate your store alerts</h3>
-          <p className="text-white/90 text-sm mb-6 leading-relaxed">
-            Connect your Telegram or WhatsApp to get real-time order notifications directly to your phone. Never miss a sale again.
-          </p>
-          <button className="px-6 py-3 bg-white text-primary rounded-xl font-bold text-sm hover:bg-surface-container-low transition-all shadow-md flex items-center gap-2 group-hover:-translate-y-0.5 cursor-pointer">
-            Configure Channels
-            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </button>
-        </div>
-        {/* Abstract Design Elements */}
-        <div className="absolute top-0 right-0 h-full w-1/3 opacity-20 pointer-events-none group-hover:scale-110 transition-transform duration-700">
-          <div className="absolute top-[-20%] right-[-10%] w-64 h-64 border-[32px] border-white rounded-full"></div>
-          <div className="absolute bottom-[-10%] left-[-20%] w-48 h-48 bg-white rounded-full"></div>
-        </div>
-      </div>
-
+      </main>
     </div>
   );
 };

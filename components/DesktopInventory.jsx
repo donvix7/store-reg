@@ -1,290 +1,402 @@
 "use client"
-
 import React, { useState } from 'react';
 import {
   LayoutDashboard,
   Package,
   ShoppingCart,
-  Users,
   BarChart3,
-  Wallet,
-  Puzzle,
+  Warehouse,
   Settings,
-  MessageCircle,
-  ChevronDown,
-  Bell,
-  User,
-  ShoppingBag,
-  CreditCard,
-  CheckCircle,
-  Clock,
-  Search,
-  Filter,
-  Truck,
-  Calendar,
-  RefreshCw,
-  Store,
   Plus,
-  Eye,
-  FileText,
-  MoreVertical,
-  ArrowDown,
-  ArrowUp
+  HelpCircle,
+  LogOut,
+  Search,
+  Bell,
+  Grid,
+  User,
+  Download,
+  RefreshCw,
+  Info,
+  Filter,
+  ArrowUpDown,
+  TrendingUp,
+  AlertTriangle,
+  XCircle,
+  DollarSign,
+  Edit,
+  ChevronLeft,
+  ChevronRight,
+  CheckCircle,
+  AlertCircle,
+  Store,
+  Layers
 } from 'lucide-react';
 
 const DesktopInventory = ({initialInventory}) => {
-const [activeFilter, setActiveFilter] = useState('All');
-  const [searchTerm, setSearchTerm] = useState('');
+ const [searchTerm, setSearchTerm] = useState('');
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const navItems = [
     { icon: LayoutDashboard, label: 'Dashboard' },
-    { icon: Package, label: 'Products' },
-    { icon: ShoppingCart, label: 'Orders', active: true },
-    { icon: Users, label: 'Customers' },
+    { icon: Package, label: 'Inventory', active: true },
+    { icon: ShoppingCart, label: 'Orders' },
     { icon: BarChart3, label: 'Analytics' },
-    { icon: Wallet, label: 'inventory Wallet' },
-    { icon: Puzzle, label: 'Extensions' }
+    { icon: Warehouse, label: 'Suppliers' },
+    { icon: Settings, label: 'Settings' }
   ];
 
-  const filters = ['Paid', 'Partially Paid', 'Pending', 'Unpaid', 'All'];
-
-  const orders = [
+  const inventoryItems = [
     {
-      id: '#00002',
-      name: 'Book',
-      total: '₦ 2,000.00',
-      status: 'Completed',
-      statusColor: 'bg-green-100 text-green-700',
-      payment: 'Paid',
-      paymentColor: 'bg-blue-100 text-blue-700',
-      shipping: 'Picked Up',
-      shippingColor: 'bg-blue-100 text-blue-700',
-      date: 'June 25, 2026 6:50 AM',
-      downloads: 0,
-      icon: Store,
-      iconBg: 'bg-blue-50 border-blue-100 text-blue-600'
+      id: 1,
+      name: 'iPhone 14 Pro Max',
+      sku: 'BMP-IP14-DP256',
+      category: 'Electronics',
+      stock: 42,
+      maxStock: 50,
+      status: 'In Stock',
+      statusColor: 'text-primary',
+      barColor: 'bg-primary',
+      variants: 8,
+      price: '₦950,000.00',
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuArxO4ogEGln8d9TEOdAmv0ni-6sdIydWodBax16Knp_m2miulp20X6tCXIR7Xp1LFtb-dkBOocInJoAHbFqCC3CwDwsjO2gI473nRtZO9hGFLSBSZ9y-b3GYjeYRCPReSO13gNfkpAdFIvqahbDxuA2qPMlYWKGER65vq_SKmNcdvNhZLHMnzUvmGRCNlUhh1r-JjwzL2-3IfPhVTbgpIVDOKtbsls_PnVniAQ-7mZxIzkoDXTf-CBLzMl4Bwjmil5shuobZPVNWTs'
     },
     {
-      id: '#00001',
-      name: 'Book',
-      total: '₦ 1,000.00',
-      status: 'Processing',
-      statusColor: 'bg-[#e2e2e5] text-[#424656]',
-      payment: 'Paid',
-      paymentColor: 'bg-blue-100 text-blue-700',
-      shipping: 'Unfulfilled',
-      shippingColor: 'bg-orange-100 text-orange-700',
-      date: 'June 24, 2026 4:57 PM',
-      downloads: 0,
-      icon: ShoppingBag,
-      iconBg: 'bg-pink-50 border-pink-100 text-pink-600'
+      id: 2,
+      name: 'Nike Air Zoom',
+      sku: 'BMP-NKAZ-OB44',
+      category: 'Footwear',
+      stock: 5,
+      maxStock: 25,
+      status: 'Low Stock',
+      statusColor: 'text-tertiary',
+      barColor: 'bg-tertiary',
+      variants: 3,
+      price: '₦85,000.00',
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAIqUAR6zq3DrQbU8mRbjiBf-OXJ7GL7vDJlqpkF9kzZ9bUejB6T2jmnLc3BvmZPPWzDBL9-OcB8ALxy7ZCQxkkVGw1GZCEbgRTeftZ5vdkWUNhzfnbdQET6LHiyBiUPp_1_EtabCBWmkoA3w2OG5sxNY6qCEcvih3nEB1qwcX7SpiGgVtcA1XIJ6BufbPmhJfeOwiJlmxpR7yK8umiNcxQuZbkI9_1fNCcBOp-0aSKCWXulNpVLzs1M0KYONo1D43Lq_OGjkXI4521'
+    },
+    {
+      id: 3,
+      name: 'Classic Tote Bag',
+      sku: 'BMP-TBAG-TBM',
+      category: 'Accessories',
+      stock: 0,
+      maxStock: 30,
+      status: 'Out of Stock',
+      statusColor: 'text-error',
+      barColor: 'bg-error',
+      variants: 2,
+      price: '₦45,000.00',
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCX6nWiLd1cXR_6uYbVWhIMzRs_wWIh9Ntx8ljXyyvC0S8qqpmBKHrRXG7yIUC5eM0FAheD3MfMK3LLxlNDCBVb686jjQI4eNXhqkPeDYCJgdMfMh8-a4gTGcg_myki4tNppEecU2yQaclDhc_aEI2TH2CJSaWUNE-l5EEr40Z8QSV_lcgak8oC53lDO4H-YjeuHeJ1PJ9HWjKYTtZU2ME_Afur7d6XdNgvuZQhTXpRhGqr-w0AglhbKn1LnfNlhKh2a-EXqGP95vCA'
+    },
+    {
+      id: 4,
+      name: 'Ceramic Mug Set',
+      sku: 'BMP-CMS-S4',
+      category: 'Kitchenware',
+      stock: 120,
+      maxStock: 120,
+      status: 'In Stock',
+      statusColor: 'text-primary',
+      barColor: 'bg-primary',
+      variants: 1,
+      price: '₦12,500.00',
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBi3CVfTN-4s36scKniGZpMvln2xwrCoGi28AUEysQRTk1aBSMF2EogitQDk9PZvFafKFLVgrrRG-CWnoVXYm321lAXJTGcosBIR7x33OuPu9FUvG-vk_YVuvbka_nbjlQs4hEwNEFH42KOCVb0av57OlptYFoXN5_DeburLBn-odyn6lcz2yVd04RrlODPyreeIrDkngjX3GS6IBNHgnL8HkQM_FlgGqsORSZ46q_rBpFbgeS3skzFqV9D0fVMHy4yj96LmDZb-o64'
+    },
+    {
+      id: 5,
+      name: 'Noise Cancelling XL',
+      sku: 'BMP-NCXL-MB',
+      category: 'Electronics',
+      stock: 8,
+      maxStock: 25,
+      status: 'Low Stock',
+      statusColor: 'text-tertiary',
+      barColor: 'bg-tertiary',
+      variants: 1,
+      price: '₦180,000.00',
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBktttkpU-Cq1-_IrJEpZo7KTeKLQDF64E0N9_YE_Y9KOjN2c3TTjbhg4l-JPXVeu0LiQS44xENIPtxSGHOGPsDJ3x2SV5cnDsEBfkVGP_LJFbbnYNNfP8l_Son9npY_eXUdXclug3XzXxoPqKtVN7tYlNili5fxZShn7lLXpQxVRQfClgbfvxiTNBJapoTLJGJYIlUotaZpxWctWBbOwDANbpu63tiCg_YFSfdxj2fE2sPC__ObqzkOT1c-nKVpIaNAGzYtT8t1oEp'
     }
   ];
 
-  const kpis = [
-    { label: 'Total Orders', value: '2', icon: ShoppingBag, color: 'bg-green-50 text-green-600 border-green-100' },
-    { label: 'Amount Owed', value: '₦0.00', icon: CreditCard, color: 'bg-red-50 text-red-600 border-red-100' },
-    { label: 'Completed Orders', value: '1', icon: CheckCircle, color: 'bg-blue-50 text-blue-600 border-blue-100' },
-    { label: 'Unpaid Orders', value: '0', icon: Clock, color: 'bg-yellow-50 text-yellow-600 border-yellow-100' }
+  const stats = [
+    {
+      label: 'Total Items',
+      value: '1,240',
+      change: '+4.5% vs last month',
+      icon: Package,
+      color: 'text-primary bg-secondary-container'
+    },
+    {
+      label: 'Low Stock Alerts',
+      value: '12',
+      change: 'Requires urgent attention',
+      icon: AlertTriangle,
+      color: 'text-tertiary bg-tertiary-fixed'
+    },
+    {
+      label: 'Out of Stock',
+      value: '4',
+      change: 'Impacts conversion rates',
+      icon: XCircle,
+      color: 'text-error bg-error-container'
+    },
+    {
+      label: 'Total Inventory Value',
+      value: '₦4,500,000.00',
+      change: 'Estimated retail value',
+      icon: DollarSign,
+      color: 'text-primary bg-secondary-container'
+    }
   ];
+
+  const getStockPercentage = (stock, maxStock) => {
+    return Math.min((stock / maxStock) * 100, 100);
+  };
+
+  const getRowBg = (status) => {
+    return status === 'Out of Stock' ? 'bg-error/5' : '';
+  };
+
+  const toggleSelectAll = (e) => {
+    if (e.target.checked) {
+      setSelectedItems(inventoryItems.map(item => item.id));
+    } else {
+      setSelectedItems([]);
+    }
+  };
+
+  const toggleSelectItem = (id) => {
+    if (selectedItems.includes(id)) {
+      setSelectedItems(selectedItems.filter(itemId => itemId !== id));
+    } else {
+      setSelectedItems([...selectedItems, id]);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-8 rounded-2xl border border-outline-variant/10 overflow-hidden">
-       <header className="h-16 w-full fixed top-0 z-40 pl-[260px] border-b border-[#c2c6d8] bg-white/80 backdrop-blur-md flex justify-between items-center px-6">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-[#f3f3f6] rounded-lg border border-[#c2c6d8] cursor-pointer hover:bg-[#e8e8ea] transition-colors">
-            <span className="text-[14px] leading-[20px] text-[#424656]">Location:</span>
-            <span className="text-[14px] leading-[20px] font-bold text-[#0050cb]">Headquarters</span>
-            <ChevronDown size={16} className="text-sm" />
+        <main className="min-h-screen">
+        {/* Top Navigation Shell */}
+        <header className="fixed top-0 right-0 w-[calc(100%-260px)] h-16 bg-[#f9f9fc] border-b border-[#c2c6d8] flex justify-between items-center px-6 z-40">
+          <div className="flex items-center gap-6">
+            <h2 className="text-[20px] leading-[28px] font-bold text-[#1a1c1e]">Inventory Dashboard</h2>
+            <div className="relative w-80">
+              <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#727687]" />
+              <input
+                className="w-full pl-10 pr-4 py-1.5 bg-[#f3f3f6] border border-[#c2c6d8] rounded-full text-[14px] leading-[20px] focus:ring-2 focus:ring-[#0050cb] focus:border-transparent outline-none transition-all"
+                placeholder="Search orders, SKU, products..."
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
           </div>
-        </div>
-        <div className="flex items-center gap-4">
-          <button className="flex items-center gap-2 px-4 py-2 text-[#1a1c1e] hover:bg-[#f3f3f6] rounded-lg transition-all border border-[#c2c6d8]">
-            Point of Sale
-          </button>
-          <button className="bg-[#0050cb] text-white px-6 py-2 rounded-lg text-[14px] leading-[20px] font-bold hover:brightness-110 transition-all shadow-sm">
-            View Store
-          </button>
-          <div className="w-px h-6 bg-[#c2c6d8] mx-2"></div>
-          <button className="p-2 text-[#424656] hover:bg-[#f3f3f6] rounded-full transition-all relative">
-            <Bell size={20} />
-            <span className="absolute top-2 right-2 w-2 h-2 bg-[#ba1a1a] rounded-full"></span>
-          </button>
-          <div className="flex items-center gap-3 pl-2 cursor-pointer group">
-            <div className="w-8 h-8 rounded-full bg-[#dae1ff] flex items-center justify-center text-[#0050cb] font-bold overflow-hidden">
+          <div className="flex items-center gap-4">
+            <button className="bg-[#0066ff] text-white px-4 py-1.5 rounded-lg font-semibold text-[14px] leading-[20px] hover:bg-[#0050cb] transition-colors active:scale-95">
+              Sync Store
+            </button>
+            <button className="text-[#555f6c] hover:text-[#0050cb] px-4 py-1.5 font-semibold text-[14px] leading-[20px] transition-colors">
+              Export CSV
+            </button>
+            <div className="h-8 w-[1px] bg-[#c2c6d8] mx-2"></div>
+            <button className="text-[#424656] hover:bg-[#e8e8ea] p-2 rounded-full transition-colors relative">
+              <Bell size={20} />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#ba1a1a] rounded-full"></span>
+            </button>
+            <button className="text-[#424656] hover:bg-[#e8e8ea] p-2 rounded-full transition-colors">
+              <Grid size={20} />
+            </button>
+            <div className="w-8 h-8 rounded-full overflow-hidden bg-[#e2e2e5]">
               <img
                 className="w-full h-full object-cover"
                 alt="Profile"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAytkmGNliXmf6t8hflzPfDCVat0brFBfHd4-e20AauVY7MUZT-kirQAFwbVxXDIsqlrdUoj0s0DUtR6G6ZxM8Wm6dHJBMxM4Nn02_KPaEr9fXww-0G2DJBiTRCV6FqiyxG1R2TmuM9eFsm8AXU6CYiKWQJtTwepgSUGHRLGsy_z_xSNpfxpq05Ive5TiB3oZ18BHBTyzDizK3X7BNxUsHVoViOLPvTsvqWv1kwlOnqs3g9tIlvWq9gzslRG0zOEQXx6hzkETisISpN"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhv9ocpwxRuKsnzw9z7VPc_slnnHZMa9-gJJ1xZOeu121xi-POYuzjxwA_h9OTBEG_F4yaDJZkCx3NbW8b0VTJh2lCqc1VuHHRUCNG9P9khRt0KQ8eg8tnfOr42zM70Mi-zaGH-UQ0WxirZwmGBg2Wr9ML-WZUxh6UF48IvioaXTC1nhENeGLEf7JjP2Fq3RMgpdBfCgb0MCDlhBfnaAZSlNevaBvunBwJyBdJNty5WFfdiOKDaoXoaW15Dm8Wn0jGv31-f86Ch6r2"
               />
             </div>
-            <span className="text-[14px] leading-[20px] hidden lg:block font-semibold">Nnaemeka Uzuegbu</span>
-            <ChevronDown size={20} className="text-[#424656] group-hover:translate-y-0.5 transition-transform" />
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Main Content Canvas */}
-      <main className="pt-16 min-h-screen">
-        <div className="p-6 max-w-[1440px] mx-auto">
+        {/* Content Canvas */}
+        <div className="pt-24 px-6 pb-6 max-w-[1600px] mx-auto">
           {/* Page Header */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-            <h1 className="text-[32px] leading-[40px] tracking-[-0.01em] font-bold text-[#1a1c1e]">Orders</h1>
-            <div className="flex items-center gap-3">
-              <div className="relative group">
-                <button className="flex items-center gap-2 px-4 py-2 border border-[#0050cb] text-[#0050cb] rounded-lg text-[14px] leading-[20px] font-semibold hover:bg-[#dae1ff] transition-colors">
-                  Actions
-                  <ChevronDown size={16} />
-                </button>
+          <div className="flex justify-between items-end mb-6">
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-[32px] leading-[40px] tracking-[-0.01em] font-bold text-[#1a1c1e]">Inventory</h1>
+                <Info size={20} className="text-[#727687] cursor-help" title="Manage your product stock levels and variants across all store locations." />
               </div>
-              <button className="flex items-center gap-2 px-6 py-2.5 bg-[#0066ff] text-white rounded-lg text-[14px] leading-[20px] font-bold hover:brightness-110 transition-all shadow-md">
-                <Plus size={20} />
-                Create Order
+              <nav className="flex text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] gap-2 mt-1">
+                <span className="hover:text-[#0050cb] cursor-pointer">Dashboard</span>
+                <span>/</span>
+                <span className="text-[#0050cb] font-bold">Inventory</span>
+              </nav>
+            </div>
+            <div className="flex gap-4">
+              <button className="flex items-center gap-2 px-6 py-3 border border-[#c2c6d8] text-[#0050cb] font-bold rounded-lg hover:bg-[#f3f3f6] transition-colors">
+                <Download size={20} />
+                Export Inventory
+              </button>
+              <button className="flex items-center gap-2 px-6 py-3 bg-[#0066ff] text-white font-bold rounded-lg hover:shadow-lg hover:-translate-y-0.5 transition-all active:scale-95">
+                <RefreshCw size={20} />
+                + Update Stock
               </button>
             </div>
           </div>
 
-          {/* KPI Row */}
+          {/* KPI Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-            {kpis.map((kpi, index) => {
-              const Icon = kpi.icon;
+            {stats.map((stat, index) => {
+              const Icon = stat.icon;
               return (
-                <div key={index} className="bg-white p-5 rounded-xl border border-[#c2c6d8] shadow-sm hover:shadow-md transition-shadow">
-                  <div className="flex justify-between items-start mb-4">
-                    <span className="text-[14px] leading-[20px] text-[#424656]">{kpi.label}</span>
-                    <div className={`w-10 h-10 rounded-lg ${kpi.color} flex items-center justify-center border`}>
+                <div key={index} className="bg-white p-6 rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-[#c2c6d8]/30">
+                  <div className="flex justify-between items-start mb-2">
+                    <span className="text-[#424656] font-medium">{stat.label}</span>
+                    <span className={`${stat.color} p-1 rounded`}>
                       <Icon size={20} />
-                    </div>
+                    </span>
                   </div>
-                  <div className="text-[24px] leading-[32px] font-bold">{kpi.value}</div>
+                  <div className="text-[24px] leading-[32px] font-bold text-[#1a1c1e]">{stat.value}</div>
+                  <div className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#424656] mt-2 flex items-center gap-1">
+                    {stat.change.includes('+') && <TrendingUp size={14} className="text-[#0050cb]" />}
+                    {stat.change}
+                  </div>
                 </div>
               );
             })}
           </div>
 
-          {/* Filter Tabs & Content Section */}
-          <div className="bg-white rounded-xl border border-[#c2c6d8] shadow-sm overflow-hidden">
-            {/* Filter Pills Container */}
-            <div className="px-6 py-4 flex flex-wrap gap-2 border-b border-[#c2c6d8] bg-[#f3f3f6]">
-              {filters.map((filter) => (
-                <button
-                  key={filter}
-                  className={`px-4 py-1.5 rounded-full text-[14px] leading-[20px] hover:bg-[#eeeef0] transition-colors ${
-                    activeFilter === filter
-                      ? 'bg-[#0066ff] text-white shadow-sm font-bold'
-                      : 'text-[#424656]'
-                  }`}
-                  onClick={() => setActiveFilter(filter)}
-                >
-                  {filter}
-                </button>
-              ))}
-            </div>
-
-            {/* Table Controls */}
-            <div className="px-6 py-4 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-              <div className="flex items-center gap-2 text-[#424656]">
-                <RefreshCw size={20} />
-                <span className="text-[14px] leading-[20px]">Showing {orders.length} of {orders.length} Orders</span>
+          {/* Inventory Controls */}
+          <div className="bg-white p-4 rounded-t-xl border border-[#c2c6d8] border-b-0 flex flex-wrap gap-4 items-center justify-between">
+            <div className="flex items-center gap-3 flex-1 min-w-[300px]">
+              <div className="relative flex-1 max-w-md">
+                <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#727687]" />
+                <input
+                  className="w-full pl-10 pr-4 py-2 border border-[#c2c6d8] rounded-lg focus:ring-2 focus:ring-[#0050cb] focus:border-transparent outline-none"
+                  placeholder="Search by name, SKU or ID..."
+                  type="text"
+                />
               </div>
-              <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
-                {/* Search */}
-                <div className="relative flex-1 lg:w-64 min-w-[200px]">
-                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#727687]" />
-                  <input
-                    className="w-full pl-10 pr-4 py-2 border border-[#c2c6d8] rounded-lg focus:ring-2 focus:ring-[#dae1ff] focus:border-[#0050cb] outline-none transition-all text-[14px] leading-[20px] bg-white"
-                    placeholder="Search by order ID or name"
-                    type="text"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-                {/* Filter Actions */}
-                <button className="flex items-center gap-2 px-4 py-2 border border-[#c2c6d8] rounded-lg text-[14px] leading-[20px] hover:bg-[#f3f3f6] transition-colors">
-                  <Filter size={16} />
-                  Filter
-                </button>
-                <button className="flex items-center gap-2 px-4 py-2 border border-[#c2c6d8] rounded-lg text-[14px] leading-[20px] hover:bg-[#f3f3f6] transition-colors">
-                  <Truck size={16} />
-                  Delivery
-                </button>
-                <button className="flex items-center gap-2 px-4 py-2 border border-[#c2c6d8] rounded-lg text-[14px] leading-[20px] hover:bg-[#f3f3f6] transition-colors">
-                  <Calendar size={16} />
-                  Select Date Range
-                </button>
-              </div>
+              <button className="flex items-center gap-2 px-4 py-2 border border-[#c2c6d8] rounded-lg hover:bg-[#f3f3f6] transition-colors text-[#1a1c1e] font-medium">
+                <Filter size={20} />
+                Filter
+              </button>
+              <button className="flex items-center gap-2 px-4 py-2 border border-[#c2c6d8] rounded-lg hover:bg-[#f3f3f6] transition-colors text-[#1a1c1e] font-medium">
+                <ArrowUpDown size={20} />
+                Sort By
+              </button>
             </div>
+            <div className="flex items-center gap-2 text-[#424656]">
+              <span className="text-[12px] leading-[16px] tracking-[0.05em] font-medium">Bulk Actions:</span>
+              <button className="px-3 py-1.5 border border-[#c2c6d8] rounded-lg hover:bg-[#f3f3f6] text-[14px] leading-[20px] opacity-50 cursor-not-allowed">Edit Price</button>
+              <button className="px-3 py-1.5 border border-[#c2c6d8] rounded-lg hover:bg-[#f3f3f6] text-[14px] leading-[20px] opacity-50 cursor-not-allowed">Delete</button>
+            </div>
+          </div>
 
-            {/* Data Table */}
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="bg-[#f3f3f6] border-y border-[#c2c6d8]">
-                    <th className="w-12 px-6 py-3 text-left">
-                      <input className="rounded text-[#0050cb] border-[#c2c6d8] focus:ring-[#0050cb]" type="checkbox" />
-                    </th>
-                    <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656]">Order Number &amp; Name</th>
-                    <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656]">Total</th>
-                    <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656]">Status</th>
-                    <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656]">Payment</th>
-                    <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656]">Shipping</th>
-                    <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656] whitespace-nowrap">Date</th>
-                    <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656]">Downloads</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#c2c6d8]">
-                  {orders.map((order, index) => {
-                    const Icon = order.icon;
-                    return (
-                      <tr key={index} className="hover:bg-[#f3f3f6] transition-colors group">
-                        <td className="px-6 py-4">
-                          <input className="rounded text-[#0050cb] border-[#c2c6d8] focus:ring-[#0050cb]" type="checkbox" />
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-lg ${order.iconBg} flex items-center justify-center border`}>
-                              <Icon size={20} />
-                            </div>
-                            <div>
-                              <div className="text-[14px] leading-[20px] font-bold text-[#1a1c1e]">{order.id}</div>
-                              <div className="text-[14px] leading-[20px] text-[#424656]">{order.name}</div>
-                            </div>
+          {/* Inventory Table */}
+          <div className="bg-white rounded-b-xl border border-[#c2c6d8] overflow-hidden shadow-[0px_4px_20px_rgba(0,0,0,0.04)]">
+            <table className="w-full text-left">
+              <thead className="bg-[#f3f3f6] border-b border-[#c2c6d8]">
+                <tr>
+                  <th className="p-4 w-10">
+                    <input
+                      className="w-4 h-4 rounded border-[#c2c6d8] text-[#0050cb] focus:ring-[#0050cb]"
+                      type="checkbox"
+                      onChange={toggleSelectAll}
+                      checked={selectedItems.length === inventoryItems.length && inventoryItems.length > 0}
+                    />
+                  </th>
+                  <th className="p-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase tracking-wider">Product</th>
+                  <th className="p-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase tracking-wider">SKU</th>
+                  <th className="p-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase tracking-wider">Category</th>
+                  <th className="p-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase tracking-wider">Stock Level</th>
+                  <th className="p-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase tracking-wider">Variants</th>
+                  <th className="p-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase tracking-wider">Unit Price</th>
+                  <th className="p-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase tracking-wider text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#c2c6d8]/30">
+                {inventoryItems.map((item) => {
+                  const isSelected = selectedItems.includes(item.id);
+                  const stockPercentage = getStockPercentage(item.stock, item.maxStock);
+                  const isOutOfStock = item.status === 'Out of Stock';
+
+                  return (
+                    <tr
+                      key={item.id}
+                      className={`hover:bg-[#f9f9fc] transition-colors group ${getRowBg(item.status)}`}
+                      onClick={(e) => {
+                        if (e.target.type !== 'checkbox' && !e.target.closest('button')) {
+                          toggleSelectItem(item.id);
+                        }
+                      }}
+                    >
+                      <td className="p-4">
+                        <input
+                          className="w-4 h-4 rounded border-[#c2c6d8] text-[#0050cb] focus:ring-[#0050cb]"
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => toggleSelectItem(item.id)}
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      </td>
+                      <td className="p-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-[#eeeef0] overflow-hidden">
+                            <img className="w-full h-full object-cover" alt={item.name} src={item.image} />
                           </div>
-                        </td>
-                        <td className="px-6 py-4 text-[14px] leading-[20px] font-semibold text-[#1a1c1e]">{order.total}</td>
-                        <td className="px-6 py-4">
-                          <span className={`px-3 py-1 rounded-full text-[12px] font-bold ${order.statusColor}`}>
-                            {order.status}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4">
-                          <span className={`px-3 py-1 rounded-full text-[12px] font-bold ${order.paymentColor}`}>
-                            {order.payment}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4">
-                          <span className={`px-3 py-1 rounded-full text-[12px] font-bold ${order.shippingColor}`}>
-                            {order.shipping}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-[14px] leading-[20px] text-[#424656] whitespace-nowrap">{order.date}</td>
-                        <td className="px-6 py-4 text-center text-[14px] leading-[20px] text-[#424656]">{order.downloads}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                          <div>
+                            <div className="font-bold text-[#1a1c1e]">{item.name}</div>
+                            <div className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687]">Deep Purple, 256GB</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="p-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium">{item.sku}</td>
+                      <td className="p-4">
+                        <span className="bg-[#eeeef0] px-2 py-1 rounded text-[12px] leading-[16px] tracking-[0.05em] font-medium">{item.category}</span>
+                      </td>
+                      <td className="p-4">
+                        <div className="w-full max-w-[120px]">
+                          <div className="flex justify-between text-xs mb-1">
+                            <span className={`font-bold ${item.statusColor}`}>{item.stock} left</span>
+                            <span className={`${item.statusColor}`}>{item.status}</span>
+                          </div>
+                          <div className="w-full h-1.5 bg-[#d9e3f2] rounded-full overflow-hidden">
+                            <div className={`h-full ${item.barColor}`} style={{ width: `${stockPercentage}%` }}></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="p-4 text-center font-medium">{item.variants}</td>
+                      <td className="p-4 font-semibold">{item.price}</td>
+                      <td className="p-4 text-right">
+                        <button className="p-2 hover:bg-[#e8e8ea] rounded-full text-[#727687] hover:text-[#0050cb] transition-colors">
+                          <Edit size={20} />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
 
-            {/* Pagination Footer */}
-            <div className="px-6 py-4 bg-[#f3f3f6] border-t border-[#c2c6d8] flex items-center gap-4">
-              <span className="text-[14px] leading-[20px] text-[#424656]">Show</span>
-              <select className="border border-[#c2c6d8] rounded-lg px-3 py-1.5 text-[14px] leading-[20px] focus:ring-[#0050cb] focus:border-[#0050cb] outline-none">
-                <option>25</option>
-                <option>50</option>
-                <option>100</option>
-              </select>
-              <span className="text-[14px] leading-[20px] text-[#424656]">Entries</span>
+            {/* Pagination */}
+            <div className="p-4 bg-[#f9f9fc] border-t border-[#c2c6d8] flex items-center justify-between">
+              <span className="text-[14px] leading-[20px] text-[#424656]">Showing <span className="font-semibold">1-10</span> of <span className="font-semibold">1,240</span> items</span>
+              <div className="flex gap-2">
+                <button className="px-4 py-2 border border-[#c2c6d8] rounded-lg text-[#1a1c1e] font-medium hover:bg-[#f3f3f6] transition-colors disabled:opacity-30 disabled:cursor-not-allowed" disabled>
+                  Previous
+                </button>
+                <div className="flex items-center">
+                  <button className="w-10 h-10 flex items-center justify-center bg-[#0050cb] text-white rounded-lg font-bold">1</button>
+                  <button className="w-10 h-10 flex items-center justify-center text-[#1a1c1e] font-medium hover:bg-[#f3f3f6] rounded-lg">2</button>
+                  <button className="w-10 h-10 flex items-center justify-center text-[#1a1c1e] font-medium hover:bg-[#f3f3f6] rounded-lg">3</button>
+                  <span className="px-2 text-[#727687]">...</span>
+                  <button className="w-10 h-10 flex items-center justify-center text-[#1a1c1e] font-medium hover:bg-[#f3f3f6] rounded-lg">124</button>
+                </div>
+                <button className="px-4 py-2 border border-[#c2c6d8] rounded-lg text-[#1a1c1e] font-medium hover:bg-[#f3f3f6] transition-colors">
+                  Next
+                </button>
+              </div>
             </div>
           </div>
         </div>
