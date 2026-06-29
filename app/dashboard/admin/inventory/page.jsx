@@ -28,14 +28,11 @@ export default function InventoryPage() {
      
 
       {/* Desktop View Section */}
-      <section className="hidden lg:block space-y-8">
+      <section className=" space-y-8">
         <DesktopInventory initialInventory={initialInventory}/>
       </section>
 
-      {/* Mobile View Section */}
-      <section className="lg:hidden">
-        <MobileInventory initialInventory={initialInventory} />
-      </section>
+     
 
      
     </div>

@@ -44,16 +44,11 @@ export default function HistoryPage() {
      
 
       {/* Desktop Table View */}
-      <div className="hidden lg:block bg-surface-container-lowest rounded-3xl overflow-hidden  border border-outline-variant/10">
+      <div className="">
         <DesktopHistory history={history}/>
         
       </div>
 
-      {/* Mobile Timeline View */}
-      <section className="lg:hidden relative">
-       <MobileHistory history={history}/>
-      </section>
-      
       
     </div>
   );
