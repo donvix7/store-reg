@@ -122,7 +122,7 @@ const page = () => {
                             products: 120
                         }
                     ].map((item, index) => (
-                  <div key={index} className="col-span-2 p-4 flex flex-col gap-4 border border-slate-200 rounded-2xl">
+                  <div key={index} className="bg-white col-span-2 p-4 flex flex-col gap-4 border-[1px] border-outline-variant rounded-2xl">
                     <div className="flex items-center gap-2 ">
                         {item.image ?
                     <img src={item.image} alt={item.name} className="w-12 h-12 rounded-lg object-contain" />
@@ -133,7 +133,7 @@ const page = () => {
                     </div>
                     <p>Connect to your {item.name} store</p>                  
                     <div className="flex justify-end ">
-                    <div className={` flex items-center gap-2 w-fit  p-1.5 px-3 rounded-full ${item.status === 'active' ? 'bg-error/15 text-error/90' : 'bg-primary/30 text-primary'}`}>
+                    <div className={` flex items-center gap-2 w-fit  p-1.5 px-3 rounded-full ${item.status === 'active' ? 'bg-error/15 text-error/90' : 'bg-outline-variant/30 text-primary'}`}>
                         <Link2 size={14}/>
                     <button className="text-xs font-bold hover:underline">{item.status === 'active' ? 'Disconnect' : 'Connect'}</button>
                     </div>

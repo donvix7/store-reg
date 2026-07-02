@@ -174,9 +174,11 @@ const StoreList = () => {
       </div>
 
       {/* Bento Layout Stats & Insights */}
-      <div className="grid grid-cols-1 md:grid-cols-7 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Stat 1 */}
-        <div className="bg-white p-6 rounded-2xl shadow-[0px_4px_20px_rgba(0,0,0,0.03)] border border-outline-variant/40 flex items-center justify-between group hover:border-primary/45 transition-colors cursor-default col-span-2">
+        <div
+          className="bg-white p-4 px-6  border border-[#c2c6d8] flex  gap-2 justify-between items-center group  transition-colors cursor-default"
+        >              
           <div>
             <p className="text-xs font-bold text-secondary uppercase tracking-wider mb-1">Total branches</p>
             <h3 className="font-headline text-2xl font-extrabold text-on-surface">{unreadCount}</h3>
@@ -187,12 +189,14 @@ const StoreList = () => {
         </div>
         
         {/* Stat 2 */}
-        <div className="bg-white p-6 rounded-2xl shadow-[0px_4px_20px_rgba(0,0,0,0.03)] border border-outline-variant/40 flex items-center justify-between group hover:border-primary/45 transition-colors cursor-default col-span-2">
+          <div
+              className="bg-white p-4 px-6  border border-[#c2c6d8] flex gap-2 justify-between items-center group  transition-colors cursor-default"
+            >                 
           <div>
             <p className="text-xs font-bold text-secondary uppercase tracking-wider mb-1">Active Status</p>
             <h3 className="font-headline text-2xl font-extrabold text-on-surface">{activeCount}</h3>
-          </div>
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform ${
+            </div>
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform ${
             activeCount < 1 ? 'bg-amber-50 text-amber-600' : 'bg-green-50 text-green-600'
           }`}>
             {activeCount < 1 ? <AlertTriangle size={24} /> : <CheckCircle2 size={24} />}
@@ -200,14 +204,16 @@ const StoreList = () => {
         </div>
 
         {/* Stat 3 */}
-        <div className="bg-white p-6 rounded-2xl shadow-[0px_4px_20px_rgba(0,0,0,0.03)] border border-outline-variant/40 flex flex-col gap-4 justify-between group hover:border-primary/45 transition-colors cursor-default col-span-3">
+        <div
+          className="bg-white p-4 px-6  border border-[#c2c6d8] flex flex-col gap-2 justify-between group  transition-colors cursor-default"
+        >              
           <div>
             <p className="text-xs font-bold text-secondary uppercase tracking-wider mb-1">Regional coverage</p>
             <p className="font-body text-sm  text-on-surface">
               You currently have locations accross {activeCount} major regions.
             </p>
           </div>
-          <Link href="/dashboard/admin/locations/map" className='flex gap-2 text-primary p-3 '>
+          <Link href="/dashboard/admin/locations/map" className='flex gap-2 text-primary self-end p-3 '>
             <p className='font-body text-sm font-bold  text-primary'>Open Map view</p>
             <ArrowRight className='text-primary' size={20} />
           </Link>
@@ -220,19 +226,21 @@ const StoreList = () => {
       
 
         {/* Table wrapper */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <div className="bg-white rounded-xl shadow-sm border border-[#c2c6d8]/30 overflow-hidden">
+              <table className="w-full text-left border-collapse">
             <thead className="bg-surface-container-low border-b border-outline-variant/60">
-              <tr>
-                {['Branch Name', 'Address', 'Manager', "Status", 'Actions'].map((header) => (
-                  <th key={header} className="px-6 py-4 text-xs font-bold text-secondary uppercase tracking-wider w-1/2">
-                    {header}
-                  </th>
-                ))}  </tr>
+                {['Branch Name', 'Address', 'Manager', "Status", 'Actions'].map((header, index) => (
+
+                <td key={index} className="bg-[#f3f3f6] border-b border-[#c2c6d8]">
+                      <td className="px-6 py-5">
+                      {header}
+                  </td>
+                </td>
+                 ))} 
             </thead>
-            <tbody className="divide-y divide-outline-variant/30">
+                <tbody className="divide-y divide-[#c2c6d8]/30">
               {paginatedStores.length === 0 ? (
-                <tr>
+                    <tr  className="hover:bg-white/50 transition-colors group cursor-pointer">
                   <td colSpan={4} className="px-6 py-12 text-center">
                     <div className="flex flex-col items-center justify-center gap-3 text-secondary">
                       <Mail size={40} className="stroke-[1.5] text-outline-variant" />
@@ -258,7 +266,7 @@ const StoreList = () => {
                     >
                       <td className="px-6 py-5">
                         
-                          <div className='flex align-center gap-2'>
+                          <div className='flex align-center items-center gap-2'>
                               <span className=" bg-surface-container text-outline rounded-xl p-2"><Store size={24}/></span>
                             <h4 className="font-body-lg  text-sm  text-on-surface">
                               {store.name}
@@ -270,7 +278,7 @@ const StoreList = () => {
                           {store.address}
                         </span>
                       </td>
-                      <td className="px-6 py-5 flex align-center gap-2 whitespace-nowrap">
+                      <td className="px-6 py-5 flex items-center gap-2 whitespace-nowrap">
                         <span className=" bg-surface-container text-outline font-bold text-sm rounded-full p-2">
                           {store.managerInitials}
                         </span>

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   LayoutDashboard,
   Package,
@@ -32,48 +32,26 @@ import {
   Clock,
   UserPlus
 } from 'lucide-react';
+import { getStaffs } from '@/lib/service';
 
 const page = () => {
     const [searchTerm, setSearchTerm] = useState('');
+    const [staffMembers, setStaffMembers] = useState([])
 
-  const staffMembers = [
-    {
-      id: 1,
-      name: 'Chidimma Okafor',
-      email: 'chidimma@inventorystore.com',
-      role: 'Admin',
-      status: 'Active',
-      lastLogin: '2 mins ago',
-      avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAKXdybdaVdWKfaNXgJMrdKCcRCY0yC0MdP0tb5ek45ruh9ZCMNS2UbNXq1ZBQhSydoRXrQV7xusp6KF6cEQ45aNh2SMasqNX2I0z1XQSIyD018w0oqKmJHCJToMiTffY9fpRZBwjCwOpcA1wsktCrFAGmyIQfVvy50c2K06cBuyHvaWzLeTk18cM-JpvRoGxtcA6Vr_FnrAT5fHzMpQwOQWRE3XI4DzHI3P3to8fCPcrrND21Q3x46u3jOl4c24FFJutf2hXkv5P4N'
-    },
-    {
-      id: 2,
-      name: 'Tunde Adebayor',
-      email: 'tunde@inventorystore.com',
-      role: 'Manager',
-      status: 'Active',
-      lastLogin: '4 hours ago',
-      avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAXn-iYSaKKJkYbLj4WbP7Vg-Hd8lNthw0lf2vsqjFzJ4oE44vIZX0BY1lqp3HKZQ4hVSa65StUjKAFfEfQ2tRP5gJld_4tzKEFcB64PF8Y4bPGkKYqQ0PjbFfUEReWJul175sU5TP6_9CkRMc8a9FZL13DtRo8-cyhVph1oitN65SAEMJBo88Fh6pLiol-qBjvMvBfEF8XvGmnb-M1ZvV49pDehlLVWsnThkNqlLuPG5F3dNmy6noWbMP80ZgJ0pHXoDFllx544plU'
-    },
-    {
-      id: 3,
-      name: 'Kemi Animashaun',
-      email: 'kemi@inventorystore.com',
-      role: 'Sales',
-      status: 'Inactive',
-      lastLogin: '2 days ago',
-      avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD1KsOMZPkotapYT_tflgyNAJiugRQbLfQc7hG1MVFTbesdOQhOWmYHHGJyWwDAMZ5d73bkSXVyN4cJW_ERo3VW0cdAEwbl_OsLRpWOYoyLqKpvM0UlwSDK6ZSVAid7nBl076W2MsvEwLtwV-zcQsXAKWret1AEbGisGzvJjYnALqZVdJ7a1qIvTqbOZn9wPZNXSi6VoiyfG7Lt3qpcgYqfi3tFpxOM_YcG25E9vNGYLuWaPx7mCEOTrRgxbozNRTPNnbyhiFl-hGYM'
-    },
-    {
-      id: 4,
-      name: 'Emeka Nwosu',
-      email: 'emeka@gmail.com',
-      role: 'Sales',
-      status: 'Pending',
-      lastLogin: 'Never',
-      avatar: null
+    const loadStaffs = async()=>{
+        const res = await getStaffs()
+        if(res.success){
+            setStaffMembers(res.data)
+        }
+        else{
+            console.log(res.message)
+        }
     }
-  ];
+
+    useEffect(() => {
+        loadStaffs();
+    }, []);
+  
 
   const roles = [
     {
@@ -172,30 +150,26 @@ const page = () => {
 
           {/* KPI Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white p-6 rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-[#c2c6d8]/30 flex items-center justify-between">
-              <div>
+                <div
+                  className="bg-white p-4 px-6  border border-[#c2c6d8] flex items-center gap-2 justify-between group  transition-colors cursor-default"
+                >                  
+                <div>
                 <p className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase">Total Staff</p>
                 <h3 className="text-[24px] leading-[32px] font-bold text-[#1a1c1e] mt-1">4</h3>
-                <p className="text-xs text-green-600 font-medium mt-2 flex items-center gap-1">
-                  <TrendingUp size={14} />
-                  +1 this month
-                </p>
+                
               </div>
               <div className="w-12 h-12 bg-[#0066ff]/10 rounded-full flex items-center justify-center text-[#0050cb]">
                 <UsersIcon size={24} />
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-[#c2c6d8]/30 flex items-center justify-between">
-              <div>
+                <div
+                  className="bg-white p-4 px-6  border border-[#c2c6d8] flex items-center gap-2 justify-between group  transition-colors cursor-default"
+                >      
+                <div>
                 <p className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase">Active Now</p>
                 <h3 className="text-[24px] leading-[32px] font-bold text-[#1a1c1e] mt-1">2</h3>
                 <div className="flex items-center gap-2 mt-3">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                  </span>
-                  <span className="text-xs text-[#424656]">Real-time status</span>
                 </div>
               </div>
               <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600">
@@ -203,11 +177,13 @@ const page = () => {
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-[#c2c6d8]/30 flex items-center justify-between">
-              <div>
+                <div
+                  className="bg-white p-4 px-6  border border-[#c2c6d8] flex  gap-2 justify-between group  transition-colors cursor-default"
+                >      
+                <div>
                 <p className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase">Pending Invites</p>
                 <h3 className="text-[24px] leading-[32px] font-bold text-[#1a1c1e] mt-1">1</h3>
-                <p className="text-xs text-[#424656] mt-2 italic">Awaiting confirmation</p>
+                <p className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] mt-2 italic">Awaiting confirmation</p>
               </div>
               <div className="w-12 h-12 bg-[#cc4204]/10 rounded-full flex items-center justify-center text-[#a33200]">
                 <Mail size={24} />
@@ -216,8 +192,8 @@ const page = () => {
           </div>
 
           {/* Data Table Section */}
-          <div className="bg-white rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-[#c2c6d8] overflow-hidden">
-            <div className="px-6 py-4 border-b border-[#c2c6d8] flex items-center justify-between bg-[#f3f3f6]">
+          <div className=" rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] overflow-hidden">
+            <div className="px-6 py-4 border-b border-[#c2c6d8] flex items-center justify-between ">
               <h4 className="text-[20px] leading-[28px] font-semibold text-[#1a1c1e]">Staff List</h4>
               <div className="flex gap-2">
                 <div className="relative">
@@ -235,16 +211,14 @@ const page = () => {
                 </button>
               </div>
             </div>
-            <div className="overflow-x-auto">
+          <div className="bg-white rounded-xl shadow-sm border border-[#c2c6d8]/30 overflow-hidden">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-[#f3f3f6] border-b border-[#c2c6d8]">
-                    <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase tracking-wider">Staff Member</th>
-                    <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase tracking-wider">Role</th>
-                    <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase tracking-wider">Last Login</th>
-                    <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase tracking-wider text-right">Actions</th>
-                  </tr>
+                  {["Staff Member", "Role", "Status", "Last Login", "Actions"].map((header, index) => (
+                  <td key={index} className="bg-[#f3f3f6] border-b border-[#c2c6d8]">
+                    <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase tracking-wider">{header}</th>
+                  </td>
+                  ))}
                 </thead>
                 <tbody className="divide-y divide-[#c2c6d8]/40">
                   {staffMembers.map((member) => (
@@ -344,22 +318,6 @@ const page = () => {
           </section>
         </div>
 
-        {/* Footer */}
-        <footer className="mt-auto px-8 py-6 bg-[#eeeef0] border-t border-[#c2c6d8] flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex gap-8">
-            <a className="flex items-center gap-2 text-[#424656] text-[14px] leading-[20px] hover:text-[#0050cb] transition-colors" href="#">
-              <HelpCircle size={20} />
-              Support Center
-            </a>
-            <a className="flex items-center gap-2 text-[#424656] text-[14px] leading-[20px] hover:text-[#0050cb] transition-colors" href="#">
-              <FileText size={20} />
-              Privacy Policy
-            </a>
-          </div>
-          <div className="text-[#424656] text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider">
-            © 2024 inventory TECHNOLOGIES. ALL RIGHTS RESERVED.
-          </div>
-        </footer>
       </main>
     </div>
   )

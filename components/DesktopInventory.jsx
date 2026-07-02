@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   LayoutDashboard,
   Package,
@@ -31,131 +31,74 @@ import {
   Store,
   Layers
 } from 'lucide-react';
+import getProducts from '@/lib/service';
 
-const DesktopInventory = ({initialInventory}) => {
+const DesktopInventory = () => {
  const [searchTerm, setSearchTerm] = useState('');
   const [selectedItems, setSelectedItems] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+//  const [currentPage, setCurrentPage] = useState(1);
+  const [inventoryItems, setInventoryItems] = useState([]);
 
-  const navItems = [
-    { icon: LayoutDashboard, label: 'Dashboard' },
-    { icon: Package, label: 'Inventory', active: true },
-    { icon: ShoppingCart, label: 'Orders' },
-    { icon: BarChart3, label: 'Analytics' },
-    { icon: Warehouse, label: 'Suppliers' },
-    { icon: Settings, label: 'Settings' }
-  ];
+  const loadData = async() => {
+    const inventory = await getProducts();
+    if(inventory.success){
+      setInventoryItems(inventory.data)
+      console.log(inventory)
 
-  const inventoryItems = [
-    {
-      id: 1,
-      name: 'iPhone 14 Pro Max',
-      sku: 'BMP-IP14-DP256',
-      category: 'Electronics',
-      stock: 42,
-      maxStock: 50,
-      status: 'In Stock',
-      statusColor: 'text-primary',
-      barColor: 'bg-primary',
-      variants: 8,
-      price: '₦950,000.00',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuArxO4ogEGln8d9TEOdAmv0ni-6sdIydWodBax16Knp_m2miulp20X6tCXIR7Xp1LFtb-dkBOocInJoAHbFqCC3CwDwsjO2gI473nRtZO9hGFLSBSZ9y-b3GYjeYRCPReSO13gNfkpAdFIvqahbDxuA2qPMlYWKGER65vq_SKmNcdvNhZLHMnzUvmGRCNlUhh1r-JjwzL2-3IfPhVTbgpIVDOKtbsls_PnVniAQ-7mZxIzkoDXTf-CBLzMl4Bwjmil5shuobZPVNWTs'
-    },
-    {
-      id: 2,
-      name: 'Nike Air Zoom',
-      sku: 'BMP-NKAZ-OB44',
-      category: 'Footwear',
-      stock: 5,
-      maxStock: 25,
-      status: 'Low Stock',
-      statusColor: 'text-tertiary',
-      barColor: 'bg-tertiary',
-      variants: 3,
-      price: '₦85,000.00',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAIqUAR6zq3DrQbU8mRbjiBf-OXJ7GL7vDJlqpkF9kzZ9bUejB6T2jmnLc3BvmZPPWzDBL9-OcB8ALxy7ZCQxkkVGw1GZCEbgRTeftZ5vdkWUNhzfnbdQET6LHiyBiUPp_1_EtabCBWmkoA3w2OG5sxNY6qCEcvih3nEB1qwcX7SpiGgVtcA1XIJ6BufbPmhJfeOwiJlmxpR7yK8umiNcxQuZbkI9_1fNCcBOp-0aSKCWXulNpVLzs1M0KYONo1D43Lq_OGjkXI4521'
-    },
-    {
-      id: 3,
-      name: 'Classic Tote Bag',
-      sku: 'BMP-TBAG-TBM',
-      category: 'Accessories',
-      stock: 0,
-      maxStock: 30,
-      status: 'Out of Stock',
-      statusColor: 'text-error',
-      barColor: 'bg-error',
-      variants: 2,
-      price: '₦45,000.00',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCX6nWiLd1cXR_6uYbVWhIMzRs_wWIh9Ntx8ljXyyvC0S8qqpmBKHrRXG7yIUC5eM0FAheD3MfMK3LLxlNDCBVb686jjQI4eNXhqkPeDYCJgdMfMh8-a4gTGcg_myki4tNppEecU2yQaclDhc_aEI2TH2CJSaWUNE-l5EEr40Z8QSV_lcgak8oC53lDO4H-YjeuHeJ1PJ9HWjKYTtZU2ME_Afur7d6XdNgvuZQhTXpRhGqr-w0AglhbKn1LnfNlhKh2a-EXqGP95vCA'
-    },
-    {
-      id: 4,
-      name: 'Ceramic Mug Set',
-      sku: 'BMP-CMS-S4',
-      category: 'Kitchenware',
-      stock: 120,
-      maxStock: 120,
-      status: 'In Stock',
-      statusColor: 'text-primary',
-      barColor: 'bg-primary',
-      variants: 1,
-      price: '₦12,500.00',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBi3CVfTN-4s36scKniGZpMvln2xwrCoGi28AUEysQRTk1aBSMF2EogitQDk9PZvFafKFLVgrrRG-CWnoVXYm321lAXJTGcosBIR7x33OuPu9FUvG-vk_YVuvbka_nbjlQs4hEwNEFH42KOCVb0av57OlptYFoXN5_DeburLBn-odyn6lcz2yVd04RrlODPyreeIrDkngjX3GS6IBNHgnL8HkQM_FlgGqsORSZ46q_rBpFbgeS3skzFqV9D0fVMHy4yj96LmDZb-o64'
-    },
-    {
-      id: 5,
-      name: 'Noise Cancelling XL',
-      sku: 'BMP-NCXL-MB',
-      category: 'Electronics',
-      stock: 8,
-      maxStock: 25,
-      status: 'Low Stock',
-      statusColor: 'text-tertiary',
-      barColor: 'bg-tertiary',
-      variants: 1,
-      price: '₦180,000.00',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBktttkpU-Cq1-_IrJEpZo7KTeKLQDF64E0N9_YE_Y9KOjN2c3TTjbhg4l-JPXVeu0LiQS44xENIPtxSGHOGPsDJ3x2SV5cnDsEBfkVGP_LJFbbnYNNfP8l_Son9npY_eXUdXclug3XzXxoPqKtVN7tYlNili5fxZShn7lLXpQxVRQfClgbfvxiTNBJapoTLJGJYIlUotaZpxWctWBbOwDANbpu63tiCg_YFSfdxj2fE2sPC__ObqzkOT1c-nKVpIaNAGzYtT8t1oEp'
+    }else{
+      setInventoryItems([])
+      console.log(inventory)
+
     }
-  ];
+  }
+  useEffect(() => {
+    loadData()
+  }, [])
 
   const stats = [
     {
       label: 'Total Items',
-      value: '1,240',
+      value: inventoryItems.length,
       change: '+4.5% vs last month',
       icon: Package,
       color: 'text-primary bg-secondary-container'
     },
     {
       label: 'Low Stock Alerts',
-      value: '12',
+      value: (inventoryItems.filter(item => item.stock <= item.maxStock * 0.4 && item.stock > 0).length),
       change: 'Requires urgent attention',
       icon: AlertTriangle,
       color: 'text-tertiary bg-tertiary-fixed'
     },
     {
       label: 'Out of Stock',
-      value: '4',
+      value: (inventoryItems.filter(item => item.stock === 0).length),
       change: 'Impacts conversion rates',
       icon: XCircle,
       color: 'text-error bg-error-container'
     },
     {
       label: 'Total Inventory Value',
-      value: '₦4,500,000.00',
+      value: "₦" + inventoryItems.reduce((acc, item) => acc + (Number(String(item.price).replace(/[^0-9.]/g, '')) || 0) * (item.stock || 0), 0).toLocaleString(),
       change: 'Estimated retail value',
       icon: DollarSign,
       color: 'text-primary bg-secondary-container'
     }
   ];
 
+  const getStockStatus = (item) => {
+    if (item.stock === 0) return { label: 'Out of Stock', statusColor: 'text-[#ba1a1a]', barColor: 'bg-[#ba1a1a]' };
+    if (item.stock <= (item.maxStock || item.stock) * 0.4) return { label: 'Low Stock', statusColor: 'text-[#e6820a]', barColor: 'bg-[#e6820a]' };
+    return { label: 'In Stock', statusColor: 'text-[#0050cb]', barColor: 'bg-[#0050cb]' };
+  };
+
   const getStockPercentage = (stock, maxStock) => {
+    if (!maxStock) return 100;
     return Math.min((stock / maxStock) * 100, 100);
   };
 
-  const getRowBg = (status) => {
-    return status === 'Out of Stock' ? 'bg-error/5' : '';
+  const getRowBg = (stock) => {
+    return stock === 0 ? 'bg-red-50' : '';
   };
 
   const toggleSelectAll = (e) => {
@@ -232,12 +175,12 @@ const DesktopInventory = ({initialInventory}) => {
                 <span className="text-[#0050cb] font-bold">Inventory</span>
               </nav>
             </div>
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <button className="flex items-center gap-2 px-6 py-3 border border-[#c2c6d8] text-[#0050cb] font-bold rounded-lg hover:bg-[#f3f3f6] transition-colors">
                 <Download size={20} />
                 Export Inventory
               </button>
-              <button className="flex items-center gap-2 px-6 py-3 bg-[#0066ff] text-white font-bold rounded-lg hover:shadow-lg hover:-translate-y-0.5 transition-all active:scale-95">
+              <button className="flex tems-center gap-2 px-6 py-3 bg-[#0066ff] text-white font-bold rounded-lg hover:shadow-lg hover:-translate-y-0.5 transition-all active:scale-95">
                 <RefreshCw size={20} />
                 + Update Stock
               </button>
@@ -249,7 +192,10 @@ const DesktopInventory = ({initialInventory}) => {
             {stats.map((stat, index) => {
               const Icon = stat.icon;
               return (
-                <div key={index} className="bg-white p-6 rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-[#c2c6d8]/30">
+                <div
+                  key={index}
+                  className="bg-white p-6 border border-[#c2c6d8]"
+                >
                   <div className="flex justify-between items-start mb-2">
                     <span className="text-[#424656] font-medium">{stat.label}</span>
                     <span className={`${stat.color} p-1 rounded`}>
@@ -311,20 +257,20 @@ const DesktopInventory = ({initialInventory}) => {
                   <th className="p-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase tracking-wider">Category</th>
                   <th className="p-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase tracking-wider">Stock Level</th>
                   <th className="p-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase tracking-wider">Variants</th>
-                  <th className="p-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase tracking-wider">Unit Price</th>
+                  <th className="p-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase tracking-wider">Unit Price(₦)</th>
                   <th className="p-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687] uppercase tracking-wider text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#c2c6d8]/30">
-                {inventoryItems.map((item) => {
+                {inventoryItems && inventoryItems.map((item, index) => {
                   const isSelected = selectedItems.includes(item.id);
+                  const stockStatus = getStockStatus(item);
                   const stockPercentage = getStockPercentage(item.stock, item.maxStock);
-                  const isOutOfStock = item.status === 'Out of Stock';
 
                   return (
                     <tr
-                      key={item.id}
-                      className={`hover:bg-[#f9f9fc] transition-colors group ${getRowBg(item.status)}`}
+                      key={index}
+                      className={`hover:bg-[#f9f9fc] transition-colors group ${getRowBg(item.stock)}`}
                       onClick={(e) => {
                         if (e.target.type !== 'checkbox' && !e.target.closest('button')) {
                           toggleSelectItem(item.id);
@@ -347,7 +293,7 @@ const DesktopInventory = ({initialInventory}) => {
                           </div>
                           <div>
                             <div className="font-bold text-[#1a1c1e]">{item.name}</div>
-                            <div className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687]">Deep Purple, 256GB</div>
+                            <div className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#727687]">{item.category}</div>
                           </div>
                         </div>
                       </td>
@@ -358,16 +304,16 @@ const DesktopInventory = ({initialInventory}) => {
                       <td className="p-4">
                         <div className="w-full max-w-[120px]">
                           <div className="flex justify-between text-xs mb-1">
-                            <span className={`font-bold ${item.statusColor}`}>{item.stock} left</span>
-                            <span className={`${item.statusColor}`}>{item.status}</span>
+                            <span className={`font-bold ${stockStatus.statusColor}`}>{item.stock} left</span>
+                            <span className={`${stockStatus.statusColor}`}>{stockStatus.label}</span>
                           </div>
                           <div className="w-full h-1.5 bg-[#d9e3f2] rounded-full overflow-hidden">
-                            <div className={`h-full ${item.barColor}`} style={{ width: `${stockPercentage}%` }}></div>
+                            <div className={`h-full ${stockStatus.barColor}`} style={{ width: `${stockPercentage}%` }}></div>
                           </div>
                         </div>
                       </td>
-                      <td className="p-4 text-center font-medium">{item.variants}</td>
-                      <td className="p-4 font-semibold">{item.price}</td>
+                      <td className="p-4 text-center font-medium">{item.variants ?? '—'}</td>
+                      <td className="p-4 font-semibold"> {item.price}</td>
                       <td className="p-4 text-right">
                         <button className="p-2 hover:bg-[#e8e8ea] rounded-full text-[#727687] hover:text-[#0050cb] transition-colors">
                           <Edit size={20} />

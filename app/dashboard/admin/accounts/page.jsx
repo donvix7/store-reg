@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   LayoutDashboard,
   Package,
@@ -27,48 +27,35 @@ import {
   AlertCircle,
   ChevronRight
 } from 'lucide-react';
+import { getPayoutAccounts, getPayouts } from '@/lib/service';
 
 const page = () => {
    const [showModal, setShowModal] = useState(false);
   const [selectedBank, setSelectedBank] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
+  const [banks, setBanks] = useState([]);
+  const [recentPayouts, setRecentPayouts] = useState([]);
 
-  const navItems = [
-    { icon: LayoutDashboard, label: 'Dashboard' },
-    { icon: Package, label: 'Products' },
-    { icon: ShoppingCart, label: 'Orders' },
-    { icon: Users, label: 'Customers' },
-    { icon: BarChart3, label: 'Analytics' },
-    { icon: Wallet, label: 'Wallet' },
-    { icon: Store, label: 'Store Setup', active: true }
-  ];
-
-  const banks = [
-    {
-      id: 1,
-      name: 'Access Bank',
-      accountNumber: '0123456789',
-      accountName: 'TAYO OLOWU ENTERPRISES',
-      isPrimary: true,
-      verified: true,
-      logo: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDlvLcYLFTWT_-lmhSqAzLmyvtHisvx-bbRmhjCuuC0O5dyuDGp3G6_nRCIei5LoO6SIz7brC9FVb_5R7so2PkmILosncnPO8RUeORCTWIk8G9TLL4uDhIuGwXmbQY4b-oo89x_E9bSRJShFvcQerYIPV9eBKgsCouzd-UO4qneLz4IOQ_VQMsys704GWxVoHBf8qoF-jt1_WcJwVTAlRr93aeu2CAdRYbPX4tZsZxV4qCx8mTBSeQdnoHcv1wPZpJiwFrXxLmLVNZK'
-    },
-    {
-      id: 2,
-      name: 'GTBank',
-      accountNumber: '0048123992',
-      accountName: 'TAYO OLOWU VENTURES',
-      isPrimary: false,
-      verified: true,
-      logo: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD4U4ulJyZCw0F3hZRw5rS58APjTPRZ2c7V4PIePGt6tXaW--jPLT0Lp_Ph5ZwGx8jLtGSCCS816acafLPuxAqyVk838TcH5hF48hO8HaWojtZlJ4VAE1_Fc1RqnulEbTu8TqUZlrT937o577uUfb-q8-RSfYrFCP2eHtoYnSkdcWwB1w0BVykyWJDBgw14I6ozhB-l5CC0L0C4LJWB8uSKrcZeBKyL9Bx_XqTYbrN2nefdSXtY01p9SNVGoCyzOQJ_tKN17F82emtB'
+  const loadData = async() => {
+    const res = await getPayoutAccounts();
+    if(res.success){
+      setBanks(res.data);
     }
-  ];
+    else{
+      console.log(res.message)
+    }
+      const res2 = await getPayouts();
+      if(res2.success){
+        setRecentPayouts(res2.data);
+      }else{
+        console.log(res2.message)
+      }
+  }
+  useEffect(() => {
+    loadData();
+  }, []);
 
-  const recentPayouts = [
-    { date: 'Oct 12, 2023', reference: 'BUMP-98231-X', bank: 'Access Bank', amount: '₦245,000.00', status: 'SUCCESSFUL' },
-    { date: 'Oct 11, 2023', reference: 'BUMP-97120-P', bank: 'Access Bank', amount: '₦12,400.00', status: 'SUCCESSFUL' },
-    { date: 'Oct 10, 2023', reference: 'BUMP-96555-K', bank: 'GTBank', amount: '₦502,000.00', status: 'SUCCESSFUL' }
-  ];
+
 
   const toggleModal = () => {
     setShowModal(!showModal);
@@ -267,7 +254,7 @@ const page = () => {
 
       {/* Add Bank Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-[60] bg-black bg-opacity-50 flex items-center justify-center p-4" onClick={toggleModal}>
+        <div className="fixed inset-0 z-[60] bg-black/20 backdrop-blur-sm flex items-center justify-center p-4" onClick={toggleModal}>
           <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300" onClick={(e) => e.stopPropagation()}>
             <div className="p-6 border-b border-[#c2c6d8] flex justify-between items-center">
               <h3 className="text-[20px] leading-[28px] font-semibold">Add Bank Account</h3>

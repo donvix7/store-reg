@@ -80,6 +80,7 @@ export default function AdminLayout({ children }) {
     },
     
   ]
+  
   const inventoryLinks = [
     {
       title: "Inventory",

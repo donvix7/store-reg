@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   LayoutDashboard,
   Package,
@@ -30,84 +30,38 @@ import {
   CircleCheck,
   CircleAlert
 } from 'lucide-react';
+import { getNotifications } from '@/lib/service';
 
 const NotificationList = () => {
  const [currentPage, setCurrentPage] = useState(1);
   const [filterUnread, setFilterUnread] = useState(false);
   const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      title: 'New Order #82741 Received',
-      description: 'Customer "James Carter" just purchased 3 items totaling ₦45,000.',
-      category: 'Order',
-      categoryColor: 'bg-blue-50 text-blue-700 border-blue-100',
-      date: 'Oct 24, 2023',
-      time: '09:45 AM',
-      unread: true,
-      type: 'order'
-    },
-    {
-      id: 2,
-      title: 'Platform Update: Version 2.4.0',
-      description: 'New inventory tracking features are now live in your store dashboard.',
-      category: 'System',
-      categoryColor: 'bg-purple-50 text-purple-700 border-purple-100',
-      date: 'Oct 23, 2023',
-      time: '02:15 PM',
-      unread: false,
-      type: 'system'
-    },
-    {
-      id: 3,
-      title: 'Payment Settlement Successful',
-      description: 'Your weekly payout of ₦214,000 has been credited to your inventory Wallet.',
-      category: 'Payment',
-      categoryColor: 'bg-green-50 text-green-700 border-green-100',
-      date: 'Oct 22, 2023',
-      time: '11:00 AM',
-      unread: true,
-      type: 'payment'
-    },
-    {
-      id: 4,
-      title: 'Stock Alert: Critical Level',
-      description: '5 items in "Summer Collection" are running extremely low on stock.',
-      category: 'System',
-      categoryColor: 'bg-red-50 text-red-700 border-red-100',
-      date: 'Oct 22, 2023',
-      time: '08:30 AM',
-      unread: true,
-      type: 'alert'
-    },
-    {
-      id: 5,
-      title: 'New Customer Registered',
-      description: 'Sarah Benson just created an account and added items to her cart.',
-      category: 'Order',
-      categoryColor: 'bg-blue-50 text-blue-700 border-blue-100',
-      date: 'Oct 21, 2023',
-      time: '04:45 PM',
-      unread: false,
-      type: 'order'
-    }
+    
   ]);
 
-  const navItems = [
-    { icon: LayoutDashboard, label: 'Dashboard' },
-    { icon: Package, label: 'Products' },
-    { icon: ShoppingCart, label: 'Orders' },
-    { icon: Users, label: 'Customers' },
-    { icon: BarChart3, label: 'Analytics' },
-    { icon: Wallet, label: 'inventory Wallet' },
-    { icon: Megaphone, label: 'Sales & Marketing' },
-    { icon: Puzzle, label: 'Extensions' },
-    { icon: Store, label: 'Store Setup' }
-  ];
+  const loadData = async () => {
+    const res = await getNotifications()
+    if(res.success){
+      setNotifications(res.data)
+    }else{
+      setNotifications([])
+    }
+  }
+
+  useEffect(()=>{
+    loadData()
+  },[])
+ const unreadCount = notifications.filter(n => n.unread).length;
+  const orderCount = notifications.filter(n => n.type === 'order').length;
+  const systemCount = notifications.filter(n => n.type === 'system');
+  const status = systemCount.length > 0 ? "Warning" : "Optimal";
+  const paymentCount = notifications.filter(n => n.type === 'payment').length;
+  
 
   const stats = [
-    { label: 'Unread Alerts', value: '12', icon: Mail, color: 'bg-primary/5 text-primary' },
-    { label: 'System Status', value: 'Optimal', icon: CheckCircle, color: 'bg-green-50 text-green-600' },
-    { label: 'Order Alerts', value: '8 New', icon: ShoppingBag, color: 'bg-orange-50 text-orange-600' }
+    { label: 'Unread Alerts', value: unreadCount, icon: Mail, color: 'bg-primary/5 text-primary' },
+    { label: 'System Status', value: status, icon: status==="Optimal"? CheckCircle :CircleAlert, color: status==="Optimal"? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600' },
+    { label: 'Order Alerts', value: orderCount, icon: ShoppingBag, color: 'bg-orange-50 text-orange-600' }
   ];
 
   const getStatusIcon = (unread, type) => {
@@ -131,13 +85,12 @@ const NotificationList = () => {
   const filteredNotifications = filterUnread
     ? notifications.filter(n => n.unread)
     : notifications;
-
-  const totalPages = Math.ceil(filteredNotifications.length / 5);
+ const totalPages = Math.ceil(filteredNotifications.length / 5);
   const displayedNotifications = filteredNotifications.slice(0, 5);
 
 
   return (
-    <div className='p-4 sm:p-10 flex flex-col gap-8 max-w-6xl mx-auto'>
+    <div className='sm:p-10 flex flex-col gap-8 max-w-6xl mx-auto'>
            {/* Top Navigation Bar */}
       <header className="fixed top-0 right-0 w-[calc(100%-260px)] h-16 bg-[#f9f9fc] border-b border-[#c2c6d8] flex justify-between items-center px-6 z-40">
         <div className="flex items-center flex-1 max-w-xl">
@@ -176,7 +129,7 @@ const NotificationList = () => {
       </header>
 
       {/* Main Content Canvas */}
-      <main className="pt-24 px-6 pb-12">
+      <main className="pt-16 px-4 pb-12">
         <div className="max-w-6xl mx-auto">
           {/* Page Header Section */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -213,7 +166,7 @@ const NotificationList = () => {
               return (
                 <div
                   key={index}
-                  className="bg-white p-6 rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-[#c2c6d8] flex items-center justify-between group hover:border-[#0050cb] transition-colors cursor-default"
+                  className="bg-white p-6  border border-[#c2c6d8] flex items-center justify-between group  transition-colors cursor-default"
                 >
                   <div>
                     <p className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#555f6c] uppercase mb-1">{stat.label}</p>

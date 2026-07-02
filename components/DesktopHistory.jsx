@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   LayoutDashboard,
   Package,
@@ -38,54 +38,43 @@ import {
   MinusCircle,
 
 } from 'lucide-react';
+import { getHistory, getTransactions } from '@/lib/service';
 
-const DesktopHistory = ({history}) => {
+const ICON_MAP = {
+  Sparkles,
+  Zap,
+  Mail,
+  RefreshCw,
+  Package,
+  AlertCircle,
+  CreditCard,
+  ShoppingCart,
+};
+
+const DesktopHistory = () => {
   const [activeFilter, setActiveFilter] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
 
-  const transactions = [
-    {
-      id: 1,
-      date: 'Oct 24, 2023',
-      description: 'Bumpa Pro - Annual Subscription',
-      amount: '₦328,000.00',
-      status: 'Success',
-      statusColor: 'bg-green-100 text-green-700',
-      icon: Sparkles,
-      iconBg: 'bg-[#dae1ff]/50 text-[#0050cb]'
-    },
-    {
-      id: 2,
-      date: 'Sep 12, 2023',
-      description: 'SMS Bundle - 5000 units',
-      amount: '₦12,500.00',
-      status: 'Success',
-      statusColor: 'bg-green-100 text-green-700',
-      icon: Zap,
-      iconBg: 'bg-[#d9e3f2]/50 text-[#555f6c]'
-    },
-    {
-      id: 3,
-      date: 'Aug 24, 2023',
-      description: 'Bumpa Pro - Annual Subscription',
-      amount: '₦328,000.00',
-      status: 'Success',
-      statusColor: 'bg-green-100 text-green-700',
-      icon: Sparkles,
-      iconBg: 'bg-[#dae1ff]/50 text-[#0050cb]'
-    },
-    {
-      id: 4,
-      date: 'Jul 10, 2023',
-      description: 'Email Marketing Add-on',
-      amount: '₦4,500.00',
-      status: 'Pending',
-      statusColor: 'bg-blue-100 text-[#0050cb]',
-      icon: Mail,
-      iconBg: 'bg-[#d9e3f2]/50 text-[#555f6c]',
-      isPending: true
+  const [transactions, setTransactions] = useState([])
+  const [history, setHistory] = useState([])
+  const loadData = async () => {
+    const res = await getHistory();
+    const res2 = await getTransactions();
+    if(res.success){
+      setHistory(res.data)
+    }else{
+      setHistory([])
     }
-  ];
+    if(res2.success){
+      setTransactions(res2.data)
+    }else{
+      setTransactions([])
+    }
+  }
+
+  useEffect(() => {
+    loadData()
+  }, [])
 
   const filters = ['All', 'Subscriptions', 'Add-ons'];
 
@@ -147,10 +136,10 @@ const DesktopHistory = ({history}) => {
       
 
       {/* Main Content Canvas */}
-      <main className="  min-h-screen px-4">
+      <main className="  min-h-screen px-4 pt-16">
         <div className="p-6  mx-auto">
-          {/* Page Header */}
-        
+          <h1 className="font-bold text-3xl"> Activity History </h1>   
+          <p className="text-base mb-8 text-gray-500"> Comprehensive logs for all inventory adjustments, stock movements, and SKU modifications. </p>     
 
           {/* Summary Bento Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
@@ -158,24 +147,22 @@ const DesktopHistory = ({history}) => {
               const Icon = stat.icon;
               const isNegative = stat.value.startsWith('-');
               return (
-                <div key={index} className="bg-white p-6 rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-[#c2c6d8]/50 relative overflow-hidden group">
-                  <div className="relative z-10">
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-[#555f6c] text-[14px] leading-[20px]">{stat.label}</span>
-                      <div className={`w-10 h-10 ${stat.bgColor} rounded-full flex items-center justify-center ${stat.color}`}>
-                        <Icon size={20} />
-                      </div>
-                    </div>
-                    <h3 className={`text-[48px] leading-[56px] tracking-[-0.02em] font-bold leading-none mb-1 ${isNegative ? 'text-[#ba1a1a]' : 'text-[#1a1c1e]'}`}>
+  <div
+                  key={index}
+                  className="bg-white p-6  border border-[#c2c6d8] flex items-center justify-between group transition-colors cursor-default"
+                >
+                     <div className='w-full flex justify-between items-center'>
+                    <div className="flex flex-col justify-between gap-4">
+                      <span className="text-[#555f6c] text-sm font-semibold uppercase leading-[20px]">{stat.label}</span>
+                        <h3 className={`text-2xl leading-[56px] tracking-[-0.02em] font-bold leading-none  ${isNegative ? 'text-[#ba1a1a]' : 'text-[#1a1c1e]'}`}>
                       {stat.value}
                     </h3>
-                    <p className="text-[#555f6c] text-[14px] leading-[20px] flex items-center gap-1">
-                      {stat.trend === 'up' && <TrendingUp size={16} className="text-green-600" />}
-                      {stat.change}
-                    </p>
-                  </div>
-                  <div className="absolute -right-4 -bottom-4 opacity-5 text-[#0050cb] group-hover:scale-110 transition-transform duration-500">
-                    <Icon size={120} />
+                    </div>
+                   
+                     <div className={`w-12 h-12 rounded-lg bg-${stat.bgColor} text-${stat.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                        <Icon size={24} className='' />
+                      </div>
+                  
                   </div>
                 </div>
               );
@@ -194,17 +181,14 @@ const DesktopHistory = ({history}) => {
                 <Calendar size={18} />
               </button>
               <select className="px-3 py-2 bg-[#f3f3f6] border border-[#c2c6d8] rounded-lg text-[14px] leading-[20px] text-[#1a1c1e] focus:ring-[#0050cb] focus:border-[#0050cb] outline-none">
-                <option>All Actions</option>
-                <option>Restock</option>
-                <option>Sale</option>
-                <option>Manual Adjustment</option>
-                <option>Return</option>
+                {["All Actions", "Restock", "Sale", "Manual Adjustment", "Return"].map((action) => (
+                  <option key={action}>{action}</option>
+                ))}
               </select>
               <select className="px-3 py-2 bg-[#f3f3f6] border border-[#c2c6d8] rounded-lg text-[14px] leading-[20px] text-[#1a1c1e] focus:ring-[#0050cb] focus:border-[#0050cb] outline-none">
-                <option>All Staff</option>
-                <option>Chidi Benson</option>
-                <option>Sarah Miller</option>
-                <option>John Doe</option>
+                {["All Staff", "Chidi Benson", "Sarah Miller", "John Doe"].map((staff) => (
+                  <option key={staff}>{staff}</option>
+                ))}
               </select>
             </div>
             <div className="ml-auto flex items-center gap-2">
@@ -218,17 +202,24 @@ const DesktopHistory = ({history}) => {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-[#f3f3f6] border-b border-[#c2c6d8]">
-                    <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#424656] uppercase tracking-wider">Date</th>
+                    {["Date", "Product", "Quantity", "Source/Reason", "Staff", ""].map((h, i)=>{
+
+                      return(
+                        <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#424656] uppercase tracking-wider" key={i}>{h}</th>
+                      )
+                    })}
+
+                    {/* <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#424656] uppercase tracking-wider">Date</th>
                     <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#424656] uppercase tracking-wider">Product</th>
                     <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#424656] uppercase tracking-wider">Action</th>
                     <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#424656] uppercase tracking-wider text-right">Quantity</th>
                     <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#424656] uppercase tracking-wider">Source/Reason</th>
                     <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#424656] uppercase tracking-wider">Staff</th>
-                    <th className="px-6 py-4"></th>
+                    <th className="px-6 py-4"></th> */}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#c2c6d8]/30">
-                  {transactions.map((tx) => (
+                  {history.map((tx) => (
                     <tr key={tx.id} className="hover:bg-[#f8fafc] transition-colors duration-150">
                       <td className="px-6 py-4">
                         <div className="flex flex-col">
@@ -251,13 +242,8 @@ const DesktopHistory = ({history}) => {
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-bold uppercase ${tx.actionColor}`}>
-                          <span className={`w-1.5 h-1.5 rounded-full ${getActionDot(tx.action)}`}></span>
-                          {tx.action}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-right">
+                      
+                      <td className="px-6 py-4 text-center">
                         <span className={`text-[24px] leading-[32px] font-bold ${tx.quantityColor}`}>{tx.quantity}</span>
                       </td>
                       <td className="px-6 py-4">
@@ -336,25 +322,25 @@ const DesktopHistory = ({history}) => {
         </header>
 
         {/* Content Area */}
-        <div className=" px-6 pb-6 max-w-6xl mx-auto">
+        <div className=" px-6 pb-6 mt-8 max-w-6xl mx-auto">
           {/* Header Section */}
           <div className="mb-10">
-            <h1 className="text-[32px] leading-[40px] tracking-[-0.01em] font-bold text-[#1a1c1e] mb-2">Billing &amp; Payment History</h1>
-            <p className="text-[16px] leading-[24px] text-[#555f6c]">Manage your subscription billing and view previous transaction receipts.</p>
+            <h1 className="text-3xl font-bold text-[#1a1c1e] mb-2">Billing &amp; Payment History</h1>
+            <p className="text-base text-[#555f6c]">Manage your subscription billing and view previous transaction receipts.</p>
           </div>
 
           {/* Bento Layout Content */}
           <div className="grid grid-cols-12 gap-6">
             {/* Current Plan Card */}
             <div className="col-span-12 lg:col-span-4 flex flex-col">
-              <div className="bg-white rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] p-6 h-full flex flex-col justify-between border border-[#0050cb]/10 relative overflow-hidden">
+              <div className="bg-white rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] p-4 h-full flex flex-col justify-between border border-[#0050cb]/10 relative overflow-hidden">
                 <div className="absolute -right-10 -top-10 w-40 h-40 bg-[#0050cb]/5 rounded-full blur-3xl"></div>
                 <div>
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="px-3 py-1 bg-[#dae1ff] text-[#001849] rounded-full text-[12px] leading-[16px] tracking-[0.05em] font-bold uppercase tracking-wider">Active Plan</div>
+                  <div className="flex justify-between items-start ">
+                    <div className="px-3 bg-[#dae1ff] text-[#001849] rounded-full text-[12px] leading-[16px] tracking-[0.05em] font-bold uppercase tracking-wider">Active Plan</div>
                     <CheckCircle size={20} className="text-[#0050cb]" fill="#0050cb" />
                   </div>
-                  <h2 className="text-[48px] leading-[56px] tracking-[-0.02em] font-bold text-[#0050cb] mb-1">Bumpa Pro</h2>
+                  <h2 className="text-2xl leading-[56px] tracking-[-0.02em] font-bold text-[#0050cb] ">Inventory Pro</h2>
                   <p className="text-[14px] leading-[20px] text-[#555f6c] mb-6">Annual Billing Cycle</p>
                   <div className="space-y-4 pt-4 border-t border-[#c2c6d8]">
                     <div className="flex items-center gap-3">
@@ -364,7 +350,7 @@ const DesktopHistory = ({history}) => {
                         <p className="text-[14px] leading-[20px] font-bold text-[#1a1c1e]">Oct 24, 2024</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <CreditCard size={20} className="text-[#727687]" />
                       <div>
                         <p className="text-[12px] leading-[16px] tracking-[0.05em] font-medium text-[#555f6c]">Payment Method</p>
@@ -373,7 +359,7 @@ const DesktopHistory = ({history}) => {
                     </div>
                   </div>
                 </div>
-                <div className="mt-8 flex flex-col gap-3">
+                <div className="mt-8 flex flex-col gap-4">
                   <button className="w-full py-3 bg-[#0050cb] text-white rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-[#0066ff] transition-colors shadow-lg active:scale-95">
                     Change Plan
                   </button>
@@ -414,24 +400,26 @@ const DesktopHistory = ({history}) => {
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="bg-[#f3f3f6] border-b border-[#c2c6d8]">
-                      <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-widest text-[#555f6c] font-semibold">Date</th>
+                      {["Date", "Description", "Amount", "Status", "Action"].map((h, i)=>{
+                        return(
+                          <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-widest text-[#555f6c] font-semibold" key={i}>{h}</th>
+                        )
+                      })}
+                      {/* <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-widest text-[#555f6c] font-semibold">Date</th>
                       <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-widest text-[#555f6c] font-semibold">Description</th>
                       <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-widest text-[#555f6c] font-semibold">Amount</th>
                       <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-widest text-[#555f6c] font-semibold">Status</th>
-                      <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-widest text-[#555f6c] font-semibold text-right">Action</th>
+                      <th className="px-6 py-4 text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-widest text-[#555f6c] font-semibold text-right">Action</th> */}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#c2c6d8]/50">
                     {transactions.map((tx) => {
-                      const Icon = tx.icon;
+                      const Icon = typeof tx.icon === 'string' ? ICON_MAP[tx.icon] : tx.icon;
                       return (
                         <tr key={tx.id} className="hover:bg-[#f9f9fc] transition-colors">
                           <td className="px-6 py-5 text-[14px] leading-[20px] text-[#1a1c1e] font-medium">{tx.date}</td>
                           <td className="px-6 py-5">
                             <div className="flex items-center gap-3">
-                              <div className={`w-8 h-8 rounded-lg ${tx.iconBg} flex items-center justify-center`}>
-                                <Icon size={16} />
-                              </div>
                               <span className="text-[14px] leading-[20px] font-bold text-[#1a1c1e]">{tx.description}</span>
                             </div>
                           </td>

@@ -1,7 +1,7 @@
 'use client';
 
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   LayoutDashboard,
   Package,
@@ -31,9 +31,14 @@ import {
   Tag,
   Store
 } from 'lucide-react';
+import getProducts from '@/lib/service';
 
 const DesktopRecordSale = () => {
+      const [products, setProducts] = useState([]);
+      
+        
 const [cartItems, setCartItems] = useState([
+   /*
     {
       id: 1,
       name: 'Noise Cancelling Pods',
@@ -48,57 +53,34 @@ const [cartItems, setCartItems] = useState([
       quantity: 1,
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAFrNnp9p0EK59sPoShqKaHvalkppq8Wf-9_GI7iyNwFIS8o0jaxzo0-zac9nLq4V9cMgmJZ7BdTc2qT6JN0u_6acL8nULIOhQTbT5bWOxHmzzthKD9FbNuwQt0Tg2C91H6w9_TNOQrQUNaZcYaxAjMf5MbbJGQr4C0TGp922joa1vwoi-FU2O09h71Qg_nl-i9W9UbqazAN4YxfHKlZu6h3eRNEmce6z4yE64SSNQ_oA0798EvRnlOPOLK1HSJ8CdHp3wDdvgRYmdp'
     }
+   */
   ]);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [isProcessing, setIsProcessing] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [inventory, setInventory] = useState([]);
 
-  const products = [
-    {
-      id: 1,
-      name: 'Premium Leather Wallet',
-      price: 12500,
-      stock: 24,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCzWkOwjYpPIf2EWhKIkiKCrOELZRl3ol6R5Jpfm4GI_uDQHz5n0USAWTfwAyM-7f50Xpwe6Mr49MFWs4c4Fg9ogGKxzP3S73WY1DVXmD1Lirvz1y35yKfqTC4UKLuTzKnegPtSCx5sDUrLQ8cJFKqTkA21QwlMj_AlWD9revgx777gme-so6RXULYMcYigkFZk2myVzmBzOH6eUWnwmI0voHXIjNDC2tWGZq9zdrn9y6fcRdoiYBosldgog0nBTa_u1vrfahT_Gey-'
-    },
-    {
-      id: 2,
-      name: 'Noise Cancelling Pods',
-      price: 45000,
-      stock: 5,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDxyJQazl7k2wAq6564qPHS_WAqeK61Tw3YYyLcdieUb6ymGctToOTGXyedpzOzTlClOep9hcKGkBXvkFfb7D1P7ari6Vb266wnHWChz7wVZBGQyMTsindMMTTw44Vz8U_XYif7N_LGG0c52XOOI4stCZPlQPtmLvW807AK7tuJQO9SkLAMjN0oaGhTcey4S1IoGgWoDExIcoJIIeITlw-IaFI8NwOFs8qY6HMDPNhwwc_6LYsVF1E-pqSWGyPVX5q-ZW5kxWglH8yo'
-    },
-    {
-      id: 3,
-      name: 'Lavender Essence Oil',
-      price: 8200,
-      stock: 112,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAvyA-bXUrxOslkJkEHXE_E4PhoO-7R_KWU4e3_hbgaUu2_H1rW7E2mIDKmdHAPrISFUkDjUuJa2Q_KglRzFWdWDFQqFxebq1E915rp61dg2c1GAxpYKkhqpVZvz0jdwuC9g8O0gUQIQ8UMr0KeDBgetQq0RddJa30rEyHy3A2X66uVN8zpIkTRn-ISllvA22vgSINBSDKm7nrf3tTbCs5mY5TB2kX_oGSDJt7fbmLganpc5US4fpxpa0iM2HmP01EpBVTNYQJ17e-0'
-    },
-    {
-      id: 4,
-      name: 'Ceramic Minimalist Mug',
-      price: 4500,
-      stock: 89,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDKQxsJMOieBCcRv3qlRe4zOUFwR0UFxZv1ylG71AG536GISl4ASNoGa3F_onpBE42hottOS9IX7-cWrUlzPwE5Fuvj9NmiuYzknRu8m_ST8qd1lKbTjvhw5xwILnSPITzApZWR0YERwbBEIq5Is9ZjeL5LR3npR9HY2njt2oZAsTy98VdIimAkQFpMzBf9o5g9ZeMAt8aUWxN4HLOKAtt_CXsXydMpWk0uUI883Re6o78yRr22HJ9vzZP6uobQURD9hfpLtiTO37uS'
-    },
-    {
-      id: 5,
-      name: 'Classic White Tee',
-      price: 15000,
-      stock: 15,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAE0Cyy-oG9cbicoUcOJm8CQJrxWgWBNIVZG3sGgoQCQU3MjshHeiapF4TKKUZQSuDrUnNjhtwQiYBDbUqEbRXouVcu_BSRUuxJ1Nfo-0LFdWNWG2K-ooDdJhJLqdhoAPqTeoDE9AFmZ8eAU3EUn2uln5sjVp8gv_nbaPjWrMXtGSfZN_vx8l0u8uOn1FogDYOFVWjIFLVztgaf0fqG7l2Sw8CUUinIKCoz0QTO_56etyd9OLepc__1Pz2JdHvrGmtWvCd25c5NAnwK'
-    },
-    {
-      id: 6,
-      name: 'Steel Hydro Flask',
-      price: 22000,
-      stock: 32,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDoEYbMtYPc2796CPjVnuDI3UgbAud3VRSbWdFJZxc20glGyY6aOTGJbsBWvGru-8-01NOa9eNqfOXIKbLtgQ7T8gRl1MQ-xpRV6n88CXtaQDAfh5M3E8ND9JIW2CVx6EGxNyHc-HiIBVympX6SAnCwB3iQJJzUafvj2hIcMBYd14TndigXEvLGzjYSKV-9YG9g--bXQuAtoJH2H-2vvJ25GeIwL6dECQu0IKcjI60hqvED_kYVAB6zWyD0XXmCHuMUiNUbfHc5di5F'
+  
+    const loadProducts = async () => {
+            const inventory = await getProducts();
+            if(inventory.success){
+              setInventory(inventory.data);
+              setProducts(inventory.data);
+
+            }
+            else{
+            setInventory([]);
+            setProducts([]);
+
+            }
     }
-  ];
+    useEffect(() => {
+        loadProducts();
+    }, []);
+
+
 
   const navItems = [
     { icon: LayoutDashboard, label: 'Dashboard' },
@@ -109,7 +91,7 @@ const [cartItems, setCartItems] = useState([
   ];
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const shipping = 1500;
+  const shipping = 0;
   const discount = 0;
   const total = subtotal + shipping - discount;
 
@@ -155,33 +137,7 @@ const [cartItems, setCartItems] = useState([
   };
   return (
     <div className="">
-        <header className="h-16 fixed top-0 right-0 left-[260px] border-b border-[#c2c6d8] flex justify-between items-center px-6 z-40 bg-[#f9f9fc]/80 backdrop-blur-md">
-        <div className="flex items-center gap-4 flex-1">
-          <div className="relative w-full max-w-md">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#727687]" />
-            <input
-              className="w-full pl-10 pr-4 py-2 bg-[#f3f3f6] border-none rounded-full text-[14px] leading-[20px] focus:ring-2 focus:ring-[#0050cb]/20 transition-all outline-none"
-              placeholder="Search orders, customers or products..."
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2">
-            <Bell size={20} className="text-[#555f6c] cursor-pointer hover:text-[#0050cb] transition-colors" />
-            <HelpCircle size={20} className="text-[#555f6c] cursor-pointer hover:text-[#0050cb] transition-colors" />
-          </div>
-          <div className="h-8 w-8 rounded-full bg-[#0066ff] flex items-center justify-center overflow-hidden border border-[#c2c6d8]">
-            <img
-              className="h-full w-full object-cover"
-              alt="Profile"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcnJzObtYxztRvqtJ41zqRv1zk62kxx8-AdG9mBslj7grvxCOri7n24f559tQ9D4mnu7gQ2knNpsVzJR58xZlJcfmYmo5uptkUU73tvJoGDHmjGDaiLgHOqDQ-UDxPIG0G5fAHtQS00aW9_r6B8A1fnkBMrk_Mmr8HsOJF4B-r7j3mskdNqFCLyUjFFYthSMmUytX7Qp28nw1trGlOirMtmTdLjmFLBVA02lbtLag9Qj_GduCsHP-rz6T_fJA0imE91CaVqyrxIQo2"
-            />
-          </div>
-        </div>
-      </header>
+        
 
       {/* Main Content */}
       <main className=" pt-16 min-h-screen p-6">
@@ -239,7 +195,9 @@ const [cartItems, setCartItems] = useState([
                       className="bg-white p-3 rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-transparent hover:border-[#0050cb] transition-all cursor-pointer group active:scale-[0.97]"
                       onClick={() => addToCart(product)}
                     >
-                      <div className="h-40 rounded-lg overflow-hidden bg-[#eeeef0] mb-3">
+                      <div className="h-40 relative rounded-lg overflow-hidden bg-[#eeeef0] mb-3">
+                        <span className={`px-2 py-0.5 rounded absolute top-2 right-2 text-[10px] ${stockColor}`}>{product.stock} in stock</span>
+
                         <img
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           alt={product.name}
@@ -248,8 +206,7 @@ const [cartItems, setCartItems] = useState([
                       </div>
                       <h3 className="text-[16px] leading-[24px] font-semibold text-[#1a1c1e] truncate mb-1">{product.name}</h3>
                       <div className="flex justify-between items-center">
-                        <span className="text-[18px] font-bold text-[#0050cb]">₦{product.price.toLocaleString()}</span>
-                        <span className={`px-2 py-0.5 rounded text-[10px] ${stockColor}`}>{product.stock} in stock</span>
+                        <span className="text-[18px] font-bold text-[#0050cb]">₦ {product.price.toLocaleString()}</span>
                       </div>
                     </div>
                   );
@@ -332,7 +289,7 @@ const [cartItems, setCartItems] = useState([
                   </div>
                   <div className="flex justify-between items-center text-[14px] leading-[20px] text-[#424656]">
                     <span>Shipping</span>
-                    <span>₦{shipping.toLocaleString()}</span>
+                    <span>₦ {shipping.toLocaleString()}</span>
                   </div>
                   <div className="pt-2 flex justify-between items-center">
                     <span className="text-[20px] leading-[28px] font-semibold text-[#1a1c1e]">Total Amount</span>

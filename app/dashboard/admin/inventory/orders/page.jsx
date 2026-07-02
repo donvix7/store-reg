@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   LayoutDashboard,
   Package,
@@ -26,12 +26,15 @@ import {
   Plus,
   Eye,
   FileText,
-  MoreVertical
+  MoreVertical,
+  ListOrdered
 } from 'lucide-react';
+import { getOrders } from '@/lib/service';
 
 const page = () => {
  const [activeFilter, setActiveFilter] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
+  const [orders, setorders] = useState([])
 
   const navItems = [
     { icon: LayoutDashboard, label: 'Dashboard' },
@@ -45,44 +48,26 @@ const page = () => {
 
   const filters = ['Paid', 'Partially Paid', 'Pending', 'Unpaid', 'All'];
 
-  const orders = [
-    {
-      id: '#00002',
-      name: 'Book',
-      total: '₦ 2,000.00',
-      status: 'Completed',
-      statusColor: 'bg-green-100 text-green-700',
-      payment: 'Paid',
-      paymentColor: 'bg-blue-100 text-blue-700',
-      shipping: 'Picked Up',
-      shippingColor: 'bg-blue-100 text-blue-700',
-      date: 'June 25, 2026 6:50 AM',
-      downloads: 0,
-      icon: Store,
-      iconBg: 'bg-blue-50 border-blue-100 text-blue-600'
-    },
-    {
-      id: '#00001',
-      name: 'Book',
-      total: '₦ 1,000.00',
-      status: 'Processing',
-      statusColor: 'bg-[#e2e2e5] text-[#424656]',
-      payment: 'Paid',
-      paymentColor: 'bg-blue-100 text-blue-700',
-      shipping: 'Unfulfilled',
-      shippingColor: 'bg-orange-100 text-orange-700',
-      date: 'June 24, 2026 4:57 PM',
-      downloads: 0,
-      icon: ShoppingBag,
-      iconBg: 'bg-pink-50 border-pink-100 text-pink-600'
+  
+  const loadData = async() => {
+    const res = await getOrders()
+    if(res.success){
+      setorders(res.data)
     }
-  ];
+    else{
+      setorders([])
+    }
+  }
+
+  useEffect(()=>{
+    loadData()
+  },[])
 
   const kpis = [
-    { label: 'Total Orders', value: '2', icon: ShoppingBag, color: 'bg-green-50 text-green-600 border-green-100' },
-    { label: 'Amount Owed', value: '₦0.00', icon: CreditCard, color: 'bg-red-50 text-red-600 border-red-100' },
-    { label: 'Completed Orders', value: '1', icon: CheckCircle, color: 'bg-blue-50 text-blue-600 border-blue-100' },
-    { label: 'Unpaid Orders', value: '0', icon: Clock, color: 'bg-yellow-50 text-yellow-600 border-yellow-100' }
+    { label: 'Total Orders', value: orders.length, icon: ShoppingBag, color: 'bg-green-50 text-green-600 border-green-100' },
+    { label: 'Amount Owed', value: orders.reduce((acc, order) => acc + Number(order.total.replace('₦', '').replace(',', '')), 0), icon: CreditCard, color: 'bg-red-50 text-red-600 border-red-100' },
+    { label: 'Completed Orders', value: orders.filter(order => order.status === 'completed').length, icon: CheckCircle, color: 'bg-blue-50 text-blue-600 border-blue-100' },
+    { label: 'Unpaid Orders', value: orders.filter(order => order.status === 'processing').length, icon: Clock, color: 'bg-yellow-50 text-yellow-600 border-yellow-100' }
   ];
   return (
     <div className="flex flex-col gap-8 rounded-2xl border border-outline-variant/10 overflow-hidden">
@@ -141,18 +126,21 @@ const page = () => {
           </div>
 
           {/* KPI Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             {kpis.map((kpi, index) => {
               const Icon = kpi.icon;
               return (
-                <div key={index} className="bg-white p-5 rounded-xl border border-[#c2c6d8] shadow-sm hover:shadow-md transition-shadow">
-                  <div className="flex justify-between items-start mb-4">
+                <div
+                  key={index}
+                  className="bg-white p-6 border border-[#c2c6d8]"
+                > 
+                  <div className="flex justify-between items-start">
                     <span className="text-[14px] leading-[20px] text-[#424656]">{kpi.label}</span>
                     <div className={`w-10 h-10 rounded-lg ${kpi.color} flex items-center justify-center border`}>
                       <Icon size={20} />
                     </div>
                   </div>
-                  <div className="text-[24px] leading-[32px] font-bold">{kpi.value}</div>
+                  <div className="text-[24px] leading-[32px] font-bold">{kpi.label === 'Amount Owed' ? '₦ ' + kpi.value.toLocaleString() : kpi.value}</div>
                 </div>
               );
             })}
@@ -216,9 +204,21 @@ const page = () => {
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="bg-[#f3f3f6] border-y border-[#c2c6d8]">
-                    <th className="w-12 px-6 py-3 text-left">
-                      <input className="rounded text-[#0050cb] border-[#c2c6d8] focus:ring-[#0050cb]" type="checkbox" />
-                    </th>
+                  
+                    {[
+                      "",
+                    "Order Number & Name",
+                    "Total (₦)",
+                    "Status",
+                    "Payment",
+                    "Shipping",
+                    "Date",
+                    "Downloads",
+                    "Actions"
+                    ].map((header, index) => (
+                      <th key={index} className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656]">{header}</th>
+                    ))}
+                    {/*
                     <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656]">Order Number &amp; Name</th>
                     <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656]">Total</th>
                     <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656]">Status</th>
@@ -226,7 +226,8 @@ const page = () => {
                     <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656]">Shipping</th>
                     <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656] whitespace-nowrap">Date</th>
                     <th className="px-6 py-3 text-left text-[12px] leading-[16px] tracking-[0.05em] font-medium uppercase tracking-wider text-[#424656]">Downloads</th>
-                  </tr>
+                    */}
+                    </tr>
                 </thead>
                 <tbody className="divide-y divide-[#c2c6d8]">
                   {orders.map((order, index) => {
@@ -238,9 +239,7 @@ const page = () => {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-lg ${order.iconBg} flex items-center justify-center border`}>
-                              <Icon size={20} />
-                            </div>
+                           
                             <div>
                               <div className="text-[14px] leading-[20px] font-bold text-[#1a1c1e]">{order.id}</div>
                               <div className="text-[14px] leading-[20px] text-[#424656]">{order.name}</div>
@@ -265,6 +264,13 @@ const page = () => {
                         </td>
                         <td className="px-6 py-4 text-[14px] leading-[20px] text-[#424656] whitespace-nowrap">{order.date}</td>
                         <td className="px-6 py-4 text-center text-[14px] leading-[20px] text-[#424656]">{order.downloads}</td>
+
+                        <td className="px-6 py-4 text-center text-[14px] leading-[20px] text-[#424656]">
+                          <button className="p-1 rounded-full hover:bg-gray-100">
+                            <MoreVertical size={20} className="text-[#424656]" />
+                          </button>
+                        </td>
+
                       </tr>
                     );
                   })}

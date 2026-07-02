@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   LayoutDashboard,
   Package,
@@ -38,9 +38,16 @@ import {
   MapPin,
   Bell
 } from 'lucide-react';
+import Link from 'next/link';
+import getProducts, { getAnalytics, getCustomers, getOrders, getTransactions } from '@/lib/service';
 
 export default function DashboardAdminPage() {
 const [showBalance, setShowBalance] = useState(false);
+const [orders, setOrders] = useState([]);
+const [products, setProducts] = useState([]);
+const [customers, setCustomers] = useState([]);
+const [analytics, setAnalytics] = useState([]);
+const [transactions, setTransactions] = useState([]);
 
   const navItems = [
     { icon: LayoutDashboard, label: 'Dashboard', active: true },
@@ -64,12 +71,80 @@ const [showBalance, setShowBalance] = useState(false);
     { icon: FileText, label: 'Add a tagline for your store' }
   ];
 
+  const loadData = async () => {
+    const orders = await getOrders();
+    const products = await getProducts();
+    const customers = await getCustomers();
+    const analytics = await getAnalytics();
+    const transactions = await getTransactions();
+
+    if(transactions.success){
+      setTransactions(transactions.data);
+    }
+    else {
+      console.log(transactions.message || "Failed to load transactions")
+    }
+
+    if(orders.success){
+      setOrders(orders.data);
+    }
+    else {
+      console.log(orders.message || "Failed to load orders")
+    }
+
+    if(products.success){
+      setProducts(products.data);
+    }
+    else {
+      console.log(products.message || "Failed to load products")
+    }
+
+    if(customers.success){
+      setCustomers(customers.data);
+    }
+
+    if(analytics.success){
+        setAnalytics(analytics.data);
+    }
+    else {
+      console.log(analytics.message || "Failed to load analytics")
+    }
+
+    if(orders.success){
+      setOrders(orders.data);
+    }   
+    else {
+      console.log(orders.message || "Failed to load orders")
+    }
+    if(products.success){
+      setProducts(products.data);
+    }   
+    else {
+      console.log(products.message || "Failed to load products")
+    }
+    if(customers.success){
+      setCustomers(customers.data);
+    }   
+    else {
+      console.log(customers.message || "Failed to load customers")
+    }  
+  }
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
   const kpis = [
-    { value: '2', label: 'Orders', icon: ShoppingBag, color: 'bg-[#E6F0FF]', iconColor: 'text-[#189241]' },
-    { value: '3', label: 'Products sold', icon: Tag, color: 'bg-[#F0F4FF]', iconColor: 'text-[#0050cb]' },
-    { value: '0', label: 'New Customers', icon: User, color: 'bg-[#FFF9E6]', iconColor: 'text-[#F59E0B]' },
-    { value: '0', label: 'Website Visits', icon: Globe, color: 'bg-[#FFE6E6]', iconColor: 'text-[#EF4444]' }
+    { value: orders?.length, label: 'Orders', icon: ShoppingBag, color: 'bg-[#E6F0FF]', iconColor: 'text-[#189241]' },
+    { value: products?.length, label: 'Products sold', icon: Tag, color: 'bg-[#F0F4FF]', iconColor: 'text-[#0050cb]' },
+    { value: customers?.length, label: 'New Customers', icon: User, color: 'bg-[#FFF9E6]', iconColor: 'text-[#F59E0B]' },
+    { value: analytics?.datasets?.length, label: 'Website Visits', icon: Globe, color: 'bg-[#FFE6E6]', iconColor: 'text-[#EF4444]' }
   ];
+
+  const totalSales = transactions.reduce((total, invoice) => total + parseFloat(invoice.amount), 0);
+  const totalSettled = orders.filter(invoice => invoice.status === 'completed').reduce((total, invoice) => total + parseFloat(invoice.total), 0);
+  const totalOwed = orders.filter(transaction => transaction.status === 'processing').reduce((total, transaction) => total + parseFloat(transaction.total), 0);
+  const totalOfflineSales = transactions.filter(transaction => transaction.payment_method === 'cash').reduce((total, transaction) => total + parseFloat(transaction.amount), 0);
 
   const salesChannels = [
     { label: 'Walk-in', percentage: 67, color: '#8A3FFC' },
@@ -299,30 +374,30 @@ const [showBalance, setShowBalance] = useState(false);
             <div className="space-y-1">
               <div className="flex items-center gap-1.5 text-[#727687]">
                 <span className="text-[18px]">💰</span>
-                <p className="text-[11px] font-bold uppercase">Total Sales</p>
+                <p className="font-bold uppercase">Total Sales</p>
               </div>
-              <p className="text-[24px] leading-[32px] font-bold text-[20px]">₦3,000.00</p>
+              <p className="leading-[32px] font-bold ">₦ {totalSales.toLocaleString()}</p>
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-1.5 text-[#727687]">
                 <TrendingUp size={18} />
-                <p className="text-[11px] font-bold uppercase">Total Settled</p>
+                <p className=" font-bold uppercase">Total Settled</p>
               </div>
-              <p className="text-[24px] leading-[32px] font-bold text-[20px]">₦0.00</p>
+              <p className="leading-[32px] font-bold ">₦ {totalSettled.toLocaleString()}</p>
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-1.5 text-[#727687]">
                 <span className="text-[18px]">💳</span>
-                <p className="text-[11px] font-bold uppercase">Total Owed</p>
+                <p className="font-bold uppercase">Total Owed</p>
               </div>
-              <p className="text-[24px] leading-[32px] font-bold text-[20px]">₦0.00</p>
+              <p className="leading-[32px] font-bold ">₦ {totalOwed.toLocaleString()}</p>
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-1.5 text-[#727687]">
                 <Handshake size={18} />
-                <p className="text-[11px] font-bold uppercase">Offline Sales</p>
+                <p className="font-bold uppercase">Offline Sales</p>
               </div>
-              <p className="text-[24px] leading-[32px] font-bold text-[20px]">₦3,000.00</p>
+              <p className="leading-[32px] font-bold ">₦{totalOfflineSales}</p>
             </div>
           </div>
         </div>
@@ -381,9 +456,11 @@ const [showBalance, setShowBalance] = useState(false);
               <div className="relative z-10">
                 <h2 className="text-[48px] leading-[56px] tracking-[-0.02em] font-bold mb-2">Grow with Ease.</h2>
                 <p className="text-[16px] leading-[24px] opacity-90 max-w-md">Our advanced analytics tools give you real-time insights into customer behavior and stock levels.</p>
+                <Link href={'/auth/subscriptions'}>
                 <button className="mt-6 bg-white text-[#0050cb] px-8 py-3 rounded-lg font-bold hover:bg-[#f9f9fc] transition-colors">
                   Upgrade Plan
                 </button>
+                </Link>
               </div>
               {/* Decorative Abstract Elements */}
               <div className="absolute -right-20 -top-20 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
